@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>Administration — Saveurs du Mboa</title>
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --brun:#40200E; --brun-2:#5A2D14; --terracotta:#A8481C;
+  --or:#E3A32E; --or-clair:#F2C25E; --creme:#FBF1E0; --encre:#2B1608; --blanc:#fff;
+  --radius:16px; --shadow:0 12px 32px rgba(64,32,14,.16);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Instrument Sans',sans-serif;background:var(--creme);color:var(--encre);line-height:1.55;padding-bottom:6rem}
+h1,h2,h3{font-family:'Bricolage Grotesque',sans-serif}
+img{max-width:100%;display:block}
+button{font-family:inherit;cursor:pointer}
+input,textarea{font-family:inherit;font-size:1rem}
+.entete{background:var(--brun);color:var(--creme);padding:1.2rem 1.5rem;text-align:center}
+.entete .s{font-family:'Great Vibes',cursive;font-size:1.6rem}
+.entete .m{font-weight:800;color:var(--or);letter-spacing:2px;font-size:1.4rem}
+.entete p{font-size:.9rem;opacity:.85;margin-top:.2rem}
+.conteneur{max-width:720px;margin:0 auto;padding:1.5rem 1.2rem}
+.carte{background:var(--blanc);border-radius:var(--radius);box-shadow:var(--shadow);padding:1.5rem;margin-bottom:1.3rem}
+.carte h2{font-size:1.2rem;margin-bottom:.8rem;color:var(--brun)}
+.carte h2 .puce{color:var(--terracotta)}
+label{display:block;font-weight:700;font-size:.88rem;margin:.8rem 0 .25rem}
+input[type=text],input[type=number],input[type=password],textarea{
+  width:100%;padding:.7rem .85rem;border:1.5px solid #d9c5a6;border-radius:10px;background:#fff;
+}
+textarea{resize:vertical;min-height:70px}
+.photo-ligne{display:flex;gap:1rem;align-items:center;margin-top:.8rem}
+.photo-apercu{width:110px;height:83px;border-radius:10px;object-fit:cover;border:3px solid var(--creme);box-shadow:var(--shadow);flex-shrink:0;background:#e8dcc6}
+.btn{border:none;border-radius:999px;padding:.75rem 1.5rem;font-weight:700;font-size:.95rem}
+.btn-or{background:var(--or);color:var(--brun)}
+.btn-or:hover{background:var(--or-clair)}
+.btn-brun{background:var(--brun);color:var(--or)}
+.btn-photo{background:var(--terracotta);color:#fff;padding:.6rem 1.1rem}
+.btn-publier{
+  position:fixed;bottom:0;left:0;right:0;z-index:50;background:var(--brun);padding:1rem 1.2rem;
+  display:flex;gap:1rem;align-items:center;justify-content:center;box-shadow:0 -8px 24px rgba(0,0,0,.2);
+}
+.btn-publier button{background:var(--or);color:var(--brun);font-size:1.05rem;padding:.9rem 2.4rem;border-radius:999px;border:none;font-weight:800}
+.btn-publier button:disabled{opacity:.55;cursor:wait}
+.statut{font-size:.9rem;color:var(--creme)}
+.info{background:rgba(227,163,46,.15);border:1.5px solid rgba(227,163,46,.5);border-radius:12px;padding:.9rem 1.1rem;font-size:.92rem;margin-bottom:1.3rem}
+.erreur{background:#fdecea;border:1.5px solid #e5533d;color:#8f2013;border-radius:12px;padding:.9rem 1.1rem;font-size:.92rem;margin-bottom:1.3rem;display:none}
+.ok{background:#e8f6ec;border:1.5px solid #2e9e4f;color:#14522a}
+.cache{display:none!important}
+.grille-prix{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.modif{outline:3px solid var(--or);outline-offset:2px;border-radius:var(--radius)}
+.pied-note{text-align:center;font-size:.82rem;color:#8a7355;margin-top:1rem}
+</style>
+</head>
+<body>
+
+<div class="entete">
+  <div><span class="s">Saveurs du</span> <span class="m">MBOA</span></div>
+  <p>Espace de gestion du menu — réservé à l'équipe</p>
+</div>
+
+<div class="conteneur">
+
+  <!-- ===== ÉCRAN DE CONNEXION ===== -->
+  <div id="ecran-connexion">
+    <div class="carte">
+      <h2>🔐 Connexion</h2>
+      <p style="font-size:.92rem;color:#6d5236">Entrez votre code d'accès pour gérer le menu. Il vous a été remis lors de l'installation du site.</p>
+      <label for="jeton">Code d'accès</label>
+      <input type="password" id="jeton" placeholder="github_pat_...">
+      <label style="display:flex;align-items:center;gap:.5rem;font-weight:600;margin-top:.9rem">
+        <input type="checkbox" id="retenir" checked style="width:auto"> Se souvenir de moi sur cet appareil
+      </label>
+      <div class="erreur" id="err-connexion"></div>
+      <button class="btn btn-or" style="margin-top:1rem;width:100%" onclick="connecter()">Ouvrir le tableau de bord</button>
+    </div>
+  </div>
+
+  <!-- ===== TABLEAU DE BORD ===== -->
+  <div id="ecran-admin" class="cache">
+    <div class="info">👋 Modifiez ce que vous voulez ci-dessous, puis appuyez sur <strong>Publier les changements</strong> tout en bas. Le site se met à jour en 1 à 2 minutes.</div>
+    <div class="erreur" id="err-admin"></div>
+    <div id="zone-menu"></div>
+
+    <div class="carte">
+      <h2>⚙️ <span class="puce">Réglages</span> généraux</h2>
+      <label>Numéro WhatsApp (format international sans +)</label>
+      <input type="text" id="g-whatsapp">
+      <label>IBAN pour l'acompte</label>
+      <input type="text" id="g-iban">
+      <div class="grille-prix">
+        <div><label>Acompte (%)</label><input type="number" id="g-acompte" min="0" max="100"></div>
+        <div><label>Km gratuits</label><input type="number" id="g-km" min="0"></div>
+      </div>
+      <label>Prix par km au-delà (€)</label>
+      <input type="number" id="g-frais" step="0.05" min="0">
+    </div>
+
+    <p class="pied-note">Connecté · <a href="#" onclick="deconnecter();return false">se déconnecter de cet appareil</a></p>
+  </div>
+</div>
+
+<div class="btn-publier cache" id="barre-publier">
+  <button id="btn-pub" onclick="publier()">📤 Publier les changements</button>
+  <span class="statut" id="statut"></span>
+</div>
+
+<script>
+/* ================== CONFIGURATION TECHNIQUE ================== */
+const OWNER = "oblack917";          // Compte GitHub
+const REPO  = "saveurs-du-mboa";    // Nom du dépôt
+const BRANCH = "main";
+/* ============================================================= */
+
+let jeton = null;
+let etat = null;        // { config: {...}, MENU: [...] }
+let photosModifiees = {}; // id -> dataURL jpeg
+const API = `https://api.github.com/repos/${OWNER}/${REPO}/contents/`;
+
+function entetes(){
+  return { "Authorization": "Bearer " + jeton, "Accept": "application/vnd.github+json" };
+}
+
+async function apiGet(chemin){
+  const r = await fetch(API + chemin + "?ref=" + BRANCH, { headers: entetes() });
+  if(!r.ok) throw new Error("GET " + chemin + " : " + r.status);
+  return r.json();
+}
+
+async function apiPut(chemin, contenuB64, sha, message){
+  const corps = { message, content: contenuB64, branch: BRANCH };
+  if(sha) corps.sha = sha;
+  const r = await fetch(API + chemin, { method:"PUT", headers: entetes(), body: JSON.stringify(corps) });
+  if(!r.ok){
+    const d = await r.json().catch(() => ({}));
+    throw new Error("Échec d'envoi de " + chemin + " (" + r.status + ") " + (d.message || ""));
+  }
+  return r.json();
+}
+
+/* ================== CONNEXION ================== */
+window.addEventListener("load", () => {
+  const sauve = localStorage.getItem("mboa_jeton");
+  if(sauve){ document.getElementById("jeton").value = sauve; connecter(); }
+});
+
+async function connecter(){
+  const champ = document.getElementById("jeton").value.trim();
+  const err = document.getElementById("err-connexion");
+  err.style.display = "none";
+  if(!champ){ err.textContent = "Entrez votre code d'accès."; err.style.display = "block"; return; }
+  jeton = champ;
+  try{
+    await chargerConfig();
+  }catch(e){
+    jeton = null;
+    err.textContent = "Connexion impossible : code d'accès invalide ou expiré. " + e.message;
+    err.style.display = "block";
+    return;
+  }
+  if(document.getElementById("retenir").checked) localStorage.setItem("mboa_jeton", champ);
+  document.getElementById("ecran-connexion").classList.add("cache");
+  document.getElementById("ecran-admin").classList.remove("cache");
+  document.getElementById("barre-publier").classList.remove("cache");
+}
+
+function deconnecter(){
+  localStorage.removeItem("mboa_jeton");
+  location.reload();
+}
+
+/* ================== CHARGEMENT ================== */
+async function chargerConfig(){
+  const f = await apiGet("config.js");
+  const texte = decodeURIComponent(escape(atob(f.content.replace(/\n/g,""))));
+  const lire = new Function(texte + `
+    ; return { NUMERO_WHATSAPP, IBAN, ACOMPTE_POURCENT, FRAIS_KM, KM_GRATUITS, MENU };`);
+  etat = lire();
+  etat._shaConfig = f.sha;
+  afficher();
+}
+
+const PHOTO_VIDE = "data:image/svg+xml;base64," + btoa('<svg xmlns="http://www.w3.org/2000/svg" width="220" height="166"><rect width="100%" height="100%" fill="#e8dcc6"/><text x="50%" y="52%" text-anchor="middle" font-family="sans-serif" font-size="14" fill="#8a7355">Photo à ajouter</text></svg>');
+
+function afficher(){
+  document.getElementById("g-whatsapp").value = etat.NUMERO_WHATSAPP;
+  document.getElementById("g-iban").value = etat.IBAN;
+  document.getElementById("g-acompte").value = etat.ACOMPTE_POURCENT;
+  document.getElementById("g-km").value = etat.KM_GRATUITS;
+  document.getElementById("g-frais").value = etat.FRAIS_KM;
+  afficherMenu();
+}
+
+function afficherMenu(){
+  const zone = document.getElementById("zone-menu");
+  const bloc = (titre, cat, items, libelleAjout) => `
+    <div class="carte">
+      <h2>🍽️ <span class="puce">${titre}</span></h2>
+      ${items.length === 0 ? '<p style="font-size:.9rem;color:#8a7355;padding:.5rem 0">Aucun élément pour le moment.</p>' : ''}
+      ${items.map(p => `
+        <div style="border-bottom:1.5px dashed #e4d3b6;padding:1rem 0" id="item-${p.id}" class="${photosModifiees[p.id] || p._nouveau ? 'modif' : ''}">
+          <div class="photo-ligne">
+            <img class="photo-apercu" id="photo-${p.id}" src="${photosModifiees[p.id] || (p._nouveau ? PHOTO_VIDE : p.photo)}" alt="">
+            <div>
+              <button class="btn btn-photo" onclick="document.getElementById('fichier-${p.id}').click()">📷 ${p._nouveau ? 'Ajouter la photo' : 'Changer la photo'}</button>
+              <input type="file" id="fichier-${p.id}" accept="image/*" style="display:none" onchange="changerPhoto('${p.id}', this)">
+              <p style="font-size:.78rem;color:#8a7355;margin-top:.4rem">Depuis la galerie ou l'appareil photo</p>
+            </div>
+          </div>
+          <label>Nom du plat</label>
+          <input type="text" id="nom-${p.id}" value="${p.nom.replace(/"/g,'&quot;')}" placeholder="Ex : Poulet DG">
+          <label>Description</label>
+          <textarea id="desc-${p.id}" placeholder="Décrivez le plat en une ou deux phrases">${p.desc}</textarea>
+          <label>Prix (€)</label>
+          <input type="number" id="prix-${p.id}" step="0.50" min="0" value="${p.prix}">
+          <button class="btn" style="background:#fdecea;color:#8f2013;margin-top:.8rem;font-size:.85rem;padding:.5rem 1rem" onclick="supprimerItem('${p.id}')">🗑 Supprimer ${p.nom ? '« ' + p.nom.replace(/"/g,'&quot;') + ' »' : 'ce plat'}</button>
+        </div>`).join("")}
+      <button class="btn btn-brun" style="margin-top:1rem;width:100%" onclick="ajouterItem('${cat}')">➕ ${libelleAjout}</button>
+    </div>`;
+  zone.innerHTML =
+    bloc("Les plats de la semaine", "plat", etat.MENU.filter(p => p.cat === "plat"), "Ajouter un plat") +
+    bloc("Les accompagnements", "accomp", etat.MENU.filter(p => p.cat === "accomp"), "Ajouter un accompagnement");
+}
+
+/* Récupère les valeurs tapées dans le formulaire avant tout ré-affichage */
+function lireFormulaire(){
+  etat.MENU.forEach(p => {
+    const nom = document.getElementById("nom-" + p.id);
+    if(!nom) return;
+    p.nom  = nom.value;
+    p.desc = document.getElementById("desc-" + p.id).value;
+    p.prix = parseFloat(document.getElementById("prix-" + p.id).value) || 0;
+  });
+}
+
+function ajouterItem(cat){
+  lireFormulaire();
+  const id = "p" + Date.now();
+  etat.MENU.push({ id, cat, nom:"", desc:"", prix: cat === "plat" ? 15.00 : 5.00,
+                   photo:"photos/" + id + ".jpg", _nouveau:true });
+  afficherMenu();
+  document.getElementById("item-" + id).scrollIntoView({behavior:"smooth", block:"center"});
+}
+
+function supprimerItem(id){
+  const p = etat.MENU.find(m => m.id === id);
+  if(!confirm("Supprimer « " + (document.getElementById("nom-"+id)?.value || p.nom || "ce plat") + " » du menu ?")) return;
+  lireFormulaire();
+  etat.MENU = etat.MENU.filter(m => m.id !== id);
+  delete photosModifiees[id];
+  afficherMenu();
+}
+
+/* ================== PHOTOS ================== */
+function changerPhoto(id, input){
+  const fichier = input.files[0];
+  if(!fichier) return;
+  const lecteur = new FileReader();
+  lecteur.onload = e => {
+    const img = new Image();
+    img.onload = () => {
+      // Redimensionne à 900px max et compresse en JPEG
+      const MAX = 900;
+      const echelle = Math.min(1, MAX / img.width);
+      const c = document.createElement("canvas");
+      c.width = Math.round(img.width * echelle);
+      c.height = Math.round(img.height * echelle);
+      c.getContext("2d").drawImage(img, 0, 0, c.width, c.height);
+      const dataUrl = c.toDataURL("image/jpeg", 0.8);
+      photosModifiees[id] = dataUrl;
+      document.getElementById("photo-" + id).src = dataUrl;
+      document.getElementById("item-" + id).classList.add("modif");
+    };
+    img.src = e.target.result;
+  };
+  lecteur.readAsDataURL(fichier);
+}
+
+/* ================== PUBLICATION ================== */
+function texteConfig(){
+  const s = v => '"' + String(v).replace(/\\/g,"\\\\").replace(/"/g,'\\"') + '"';
+  const lignes = etat.MENU.map(p =>
+    `  { id:${s(p.id)}, cat:${s(p.cat)}, nom:${s(p.nom.trim())}, prix:${p.prix.toFixed(2)}, photo:${s(p.photo)},\n    desc:${s(p.desc.trim())} }`
+  ).join(",\n\n");
+  return `/* Fichier généré par la page d'administration — ${new Date().toLocaleString("fr-BE")} */
+const NUMERO_WHATSAPP = ${s(document.getElementById("g-whatsapp").value.trim())};
+const IBAN = ${s(document.getElementById("g-iban").value.trim())};
+const ACOMPTE_POURCENT = ${parseFloat(document.getElementById("g-acompte").value) || 0};
+const FRAIS_KM = ${parseFloat(document.getElementById("g-frais").value) || 0};
+const KM_GRATUITS = ${parseFloat(document.getElementById("g-km").value) || 0};
+
+const MENU = [
+${lignes}
+];
+`;
+}
+
+async function publier(){
+  const btn = document.getElementById("btn-pub");
+  const statut = document.getElementById("statut");
+  const err = document.getElementById("err-admin");
+  err.style.display = "none";
+  btn.disabled = true;
+  lireFormulaire();
+
+  // Vérifications avant envoi
+  const sansPhoto = etat.MENU.find(p => p._nouveau && !photosModifiees[p.id]);
+  const sansNom = etat.MENU.find(p => !p.nom.trim());
+  if(sansPhoto || sansNom){
+    err.className = "erreur";
+    err.textContent = sansPhoto
+      ? "❌ Ajoutez une photo pour « " + (sansPhoto.nom || "le nouveau plat") + " » avant de publier."
+      : "❌ Un plat n'a pas de nom — remplissez-le ou supprimez-le avant de publier.";
+    err.style.display = "block";
+    btn.disabled = false;
+    document.getElementById("item-" + (sansPhoto || sansNom).id).scrollIntoView({behavior:"smooth", block:"center"});
+    return;
+  }
+
+  try{
+    // 1. Photos modifiées
+    const ids = Object.keys(photosModifiees);
+    for(let i = 0; i < ids.length; i++){
+      const id = ids[i];
+      statut.textContent = `Envoi de la photo ${i+1}/${ids.length}…`;
+      const p = etat.MENU.find(m => m.id === id);
+      const b64 = photosModifiees[id].split(",")[1];
+      let sha = null;
+      try{ sha = (await apiGet(p.photo)).sha; }catch(e){}
+      await apiPut(p.photo, b64, sha, "Mise à jour photo " + p.nom);
+    }
+    // 2. config.js
+    statut.textContent = "Enregistrement du menu…";
+    const contenu = btoa(unescape(encodeURIComponent(texteConfig())));
+    const res = await apiPut("config.js", contenu, etat._shaConfig, "Mise à jour du menu de la semaine");
+    etat._shaConfig = res.content.sha;
+    photosModifiees = {};
+    etat.MENU.forEach(p => delete p._nouveau);
+    afficherMenu();
+    statut.textContent = "";
+    err.className = "erreur ok";
+    err.textContent = "✅ Publié ! Le site se met à jour dans 1 à 2 minutes.";
+    err.style.display = "block";
+    window.scrollTo({top:0, behavior:"smooth"});
+  }catch(e){
+    err.className = "erreur";
+    err.textContent = "❌ Une erreur est survenue : " + e.message + " — Réessayez, ou contactez Yann.";
+    err.style.display = "block";
+    statut.textContent = "";
+  }
+  btn.disabled = false;
+}
+</script>
+</body>
+</html>

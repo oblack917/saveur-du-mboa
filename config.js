@@ -1,0 +1,40 @@
+/* ================================================================
+   SAVEURS DU MBOA — CONFIGURATION DU SITE
+   ================================================================
+   👉 C'EST ICI QUE VOUS CHANGEZ LE MENU CHAQUE SEMAINE.
+   Modifiez uniquement les textes entre guillemets "..." et les prix.
+   Ne touchez pas aux virgules, accolades { } ni crochets [ ].
+   ================================================================ */
+
+// --- Vos coordonnées ---
+const NUMERO_WHATSAPP = "32489765828";        // Format international, sans le +
+const IBAN = "BE00 0000 0000 0000";           // Votre IBAN pour l'acompte
+const ACOMPTE_POURCENT = 30;                  // Pourcentage d'acompte demandé
+
+// --- Livraison ---
+const FRAIS_KM = 0.30;                        // Prix par km au-delà de la zone gratuite
+const KM_GRATUITS = 5;                        // Rayon de livraison gratuite (km)
+
+// --- MENU DE LA SEMAINE ---
+// Pour changer une PHOTO : mettez la nouvelle photo dans le dossier "photos"
+// avec EXACTEMENT le même nom (ex: ndole.jpg remplace l'ancienne ndole.jpg).
+// Pour changer un PLAT : modifiez "nom", "desc" (description) et "prix".
+const MENU = [
+  { id:"plat1", cat:"plat", nom:"Ndolé Royale", prix:15.00, photo:"photos/ndole.jpg",
+    desc:"Le plat national : feuilles de ndolè mijotées aux arachides, crevettes et viande. Un classique généreux et parfumé." },
+
+  { id:"plat2", cat:"plat", nom:"Porc Braisé", prix:15.00, photo:"photos/porc.jpg",
+    desc:"Morceaux de porc marinés aux épices maison puis braisés, fondants et savoureux, servis avec oignons rouges." },
+
+  { id:"plat3", cat:"plat", nom:"Maquereau Braisé", prix:15.00, photo:"photos/maquereau.jpg",
+    desc:"Maquereau entier mariné aux épices vertes et braisé comme au pays, relevé juste ce qu'il faut." },
+
+  { id:"accomp1", cat:"accomp", nom:"Bâtons de manioc", prix:5.00, photo:"photos/manioc.jpg",
+    desc:"Bâtons de manioc traditionnels (bobolo), l'accompagnement parfait du poisson braisé." },
+
+  { id:"accomp2", cat:"accomp", nom:"Banane vapeur", prix:5.00, photo:"photos/banane-vapeur.jpg",
+    desc:"Plantains mûrs cuits à la vapeur, doux et moelleux, comme à la maison." },
+
+  { id:"accomp3", cat:"accomp", nom:"Banane plantain", prix:5.00, photo:"photos/banane-plantain.jpg",
+    desc:"Plantains mûrs frits et dorés, caramélisés à souhait. Irrésistibles." }
+];
