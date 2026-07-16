@@ -1,5 +1,5 @@
-/* Fichier généré par la page d'administration — 16/07/2026 05:53:10 */
-const CONFIG_VERSION = 1752631200000;
+/* Fichier généré par la page d'administration — 16/07/2026 08:41:30 */
+const CONFIG_VERSION = 1784184090585;
 const NUMERO_WHATSAPP = "32489765828";
 const IBAN = "BE00 0000 0000 0000";
 const ACOMPTE_POURCENT = 50;
@@ -7,7 +7,7 @@ const FRAIS_KM = 0.3;
 const KM_GRATUITS = 5;
 
 const MENU = [
-  { id:"plat1", cat:"plat", nom:"Ndolé Royale", prix:15.00, photo:"photos/ndole.jpg",
+  { id:"plat1", cat:"plat", nom:"Ndolé Royale", prix:16.00, photo:"photos/ndole.jpg",
     desc:"Le plat national : feuilles de ndolè mijotées aux arachides, crevettes et viande. Un classique généreux et parfumé.", allergenes:"Arachides, Crustacés" },
 
   { id:"plat2", cat:"plat", nom:"Porc Braisé", prix:15.00, photo:"photos/porc.jpg",
