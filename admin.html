@@ -289,6 +289,7 @@ function texteConfig(){
     `  { id:${s(p.id)}, cat:${s(p.cat)}, nom:${s(p.nom.trim())}, prix:${p.prix.toFixed(2)}, photo:${s(p.photo)},\n    desc:${s(p.desc.trim())}, allergenes:${s((p.allergenes || '').trim())} }`
   ).join(",\n\n");
   return `/* Fichier généré par la page d'administration — ${new Date().toLocaleString("fr-BE")} */
+const CONFIG_VERSION = ${Date.now()};
 const NUMERO_WHATSAPP = ${s(document.getElementById("g-whatsapp").value.trim())};
 const IBAN = ${s(document.getElementById("g-iban").value.trim())};
 const ACOMPTE_POURCENT = ${parseFloat(document.getElementById("g-acompte").value) || 0};

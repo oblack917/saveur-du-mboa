@@ -1,4 +1,5 @@
 /* Fichier généré par la page d'administration — 16/07/2026 05:53:10 */
+const CONFIG_VERSION = 1752631200000;
 const NUMERO_WHATSAPP = "32489765828";
 const IBAN = "BE00 0000 0000 0000";
 const ACOMPTE_POURCENT = 50;

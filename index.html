@@ -843,6 +843,17 @@ const panier = {};
 function euro(n){ return n.toFixed(2).replace('.', ',') + " €"; }
 function euroCourt(n){ return Number.isInteger(n) ? n + " €" : euro(n); }
 
+/* Anti-cache : ajoute la version de config à l'URL d'une photo pour forcer
+   le navigateur à recharger une image mise à jour (même nom de fichier). */
+function photoUrl(path){
+  try{
+    if(typeof CONFIG_VERSION !== 'undefined' && CONFIG_VERSION){
+      return path + (path.indexOf('?') >= 0 ? '&' : '?') + 'v=' + CONFIG_VERSION;
+    }
+  }catch(e){}
+  return path;
+}
+
 /* ===== Valeurs de config injectées dans les textes du site ===== */
 function telNat(num){
   let n = String(num || '').replace(/\D/g, '');
@@ -886,7 +897,7 @@ function carte(p){
     : `Aucun allergène majeur connu`;
   return `
     <article class="plat">
-      <div class="plat-photo"><img src="${p.photo}" alt="${p.nom}" loading="lazy"></div>
+      <div class="plat-photo"><img src="${photoUrl(p.photo)}" alt="${p.nom}" loading="lazy"></div>
       <div class="plat-corps">
         <h3>${p.nom}</h3>
         <p class="desc">${p.desc}</p>
@@ -900,7 +911,7 @@ function carte(p){
 function carteTeaser(p){
   return `
     <article class="plat">
-      <div class="plat-photo"><img src="${p.photo}" alt="${p.nom}" loading="lazy"></div>
+      <div class="plat-photo"><img src="${photoUrl(p.photo)}" alt="${p.nom}" loading="lazy"></div>
       <div class="plat-corps">
         <h3>${p.nom}</h3>
         <p class="desc">${p.desc}</p>
