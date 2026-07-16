@@ -1,5 +1,5 @@
-/* Fichier généré par la page d'administration — 16/07/2026 09:40:58 */
-const CONFIG_VERSION = 1784187658389;
+/* Fichier généré par la page d'administration — 16/07/2026 09:45:00 */
+const CONFIG_VERSION = 1784187900556;
 const NUMERO_WHATSAPP = "32489765828";
 const IBAN = "BE00 0000 0000 0000";
 const ACOMPTE_POURCENT = 50;
