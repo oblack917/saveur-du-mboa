@@ -1200,9 +1200,9 @@ calculerFrais();
 
 <!-- ===== Cookie consent: full-page blocking modal + banner ===== -->
 <style>
-/* Fullscreen cookie overlay that blurs the site but lets the page scroll behind */
-.cookie-fullscreen{position:fixed;inset:0;z-index:220;display:none;align-items:center;justify-content:center;background:rgba(255,255,255,.15);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);pointer-events:none}
-.cookie-fullscreen .cookie-card{pointer-events:auto;background:#fff;border-radius:12px;padding:1.4rem;max-width:800px;width:92%;max-height:85vh;overflow:auto;box-shadow:0 30px 60px rgba(0,0,0,.28)}
+/* Fullscreen cookie overlay that blurs the site and blocks interactions until user choice */
+.cookie-fullscreen{position:fixed;inset:0;z-index:220;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.35);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);pointer-events:auto}
+.cookie-fullscreen .cookie-card{pointer-events:auto;background:#fff;border-radius:12px;padding:1.2rem;max-width:760px;width:94%;max-height:88vh;overflow:auto;box-shadow:0 30px 60px rgba(0,0,0,.28)}
 .cookie-fullscreen h2{margin-top:0;color:var(--brun)}
 .cookie-fullscreen p{color:#3b2b1b}
 .cookie-fullscreen .cookie-actions{display:flex;gap:.6rem;justify-content:flex-end;margin-top:1rem}
@@ -1216,13 +1216,15 @@ calculerFrais();
 /* Small banner fallback (if we don't block) */
 .cookie-banner{position:fixed;left:1rem;right:1rem;bottom:1rem;z-index:210;background:#fff;border:1px solid rgba(0,0,0,.06);box-shadow:0 12px 30px rgba(0,0,0,.18);border-radius:12px;padding:1rem;display:none;align-items:center;gap:1rem;flex-wrap:wrap}
 .cookie-banner .btn{margin-left:.4rem}
+/* cookie icon */
+.cookie-icon{position:fixed;right:1rem;bottom:1rem;z-index:230;width:48px;height:48px;border-radius:50%;background:var(--brun);color:var(--or);display:flex;align-items:center;justify-content:center;font-size:1.2rem;box-shadow:0 10px 30px rgba(0,0,0,.18);cursor:pointer}
 @media(max-width:520px){.cookie-fullscreen .cookie-card{padding:1rem;width:96%}}
 </style>
 
 <div id="cookie-fullscreen" class="cookie-fullscreen" role="dialog" aria-modal="true" aria-hidden="true">
   <div class="cookie-card" role="document" aria-labelledby="cookie-title">
     <h2 id="cookie-title">Paramètres des cookies</h2>
-    <p>Bienvenue sur Saveurs du MBOA. Pour continuer, choisissez vos préférences de cookies. Vous pouvez accepter tous les cookies, tout refuser, ou personnaliser les catégories. Le site restera visible (flouté) mais l'accès aux fonctions restera bloqué tant que vous n'aurez pas fait un choix.</p>
+    <p>Bienvenue sur Saveurs du MBOA. Pour continuer, choisissez vos préférences de cookies. Vous pouvez accepter tous les cookies, tout refuser, ou personnaliser les catégories. Le site est flouté en arrière-plan et l'accès aux fonctions est temporairement restreint jusqu'à votre choix.</p>
 
     <div class="cookie-cats">
       <h4>Catégories de cookies</h4>
@@ -1248,45 +1250,42 @@ calculerFrais();
   </div>
 </div>
 
+<button id="cookie-icon" class="cookie-icon" aria-label="Paramètres cookies">🍪</button>
+
 <script>
 const COOKIE_KEY = 'saveur_cookie_consent_v1';
 function getCookieConsent(){try{const v=localStorage.getItem(COOKIE_KEY);return v?JSON.parse(v):null}catch(e){return null}}
 function setCookieConsent(o){try{localStorage.setItem(COOKIE_KEY,JSON.stringify(o))}catch(e){}}
 function applyPrefs(p){ if(!p) return; if(p.analytics){ if(!window._analyticsLoaded){ console.log('Load analytics (placeholder)'); window._analyticsLoaded=true; } } }
 
-function showFullscreen(){ const el=document.getElementById('cookie-fullscreen'); if(!el) return; el.style.display='flex'; el.setAttribute('aria-hidden','false'); document.getElementById('cookie-banner') && (document.getElementById('cookie-banner').style.display='none'); }
-function hideFullscreen(){ const el=document.getElementById('cookie-fullscreen'); if(!el) return; el.style.display='none'; el.setAttribute('aria-hidden','true'); }
+function showFullscreen(){ const el=document.getElementById('cookie-fullscreen'); if(!el) return; el.style.display='flex'; el.setAttribute('aria-hidden','false'); document.getElementById('cookie-banner') && (document.getElementById('cookie-banner').style.display='none'); document.body.style.overflow='hidden'; }
+function hideFullscreen(){ const el=document.getElementById('cookie-fullscreen'); if(!el) return; el.style.display='none'; el.setAttribute('aria-hidden','true'); document.body.style.overflow='auto'; }
 
 function acceptAll(){ const pref={essential:true,analytics:true,marketing:true,ts:Date.now()}; setCookieConsent(pref); applyPrefs(pref); hideFullscreen(); }
 function rejectAll(){ const pref={essential:true,analytics:false,marketing:false,ts:Date.now()}; setCookieConsent(pref); applyPrefs(pref); hideFullscreen(); }
-function openCustomize(){ // open the customize view inside modal (we already show checkboxes)
-  // nothing special: the checkboxes are visible; focus first checkbox
-  document.getElementById('cf-analytics').focus(); }
+function openCustomize(){ // focus the first editable checkbox and ensure it's visible
+  const el = document.getElementById('cf-analytics'); if(el){ el.focus(); el.scrollIntoView({behavior:'smooth', block:'center'}); }
+}
 function saveCustomize(){ const analytics=!!document.getElementById('cf-analytics').checked; const marketing=!!document.getElementById('cf-marketing').checked; const pref={essential:true,analytics,marketing,ts:Date.now()}; setCookieConsent(pref); applyPrefs(pref); hideFullscreen(); }
 
-function initCookiePage(){ const pref=getCookieConsent(); if(pref){ applyPrefs(pref); document.getElementById('cookie-banner') && (document.getElementById('cookie-banner').style.display='none'); } else { // show full page modal
-    // small delay to ensure content loaded
-    setTimeout(()=> showFullscreen(), 300);
-  }
+function initCookiePage(){ const pref=getCookieConsent(); if(pref){ applyPrefs(pref); document.getElementById('cookie-banner') && (document.getElementById('cookie-banner').style.display='none'); } else { setTimeout(()=> showFullscreen(), 250); }
   // bind actions
-  document.getElementById('cf-accept').addEventListener('click', acceptAll);
-  document.getElementById('cf-reject').addEventListener('click', rejectAll);
-  document.getElementById('cf-customize').addEventListener('click', openCustomize);
+  const elAccept = document.getElementById('cf-accept'); if(elAccept) elAccept.addEventListener('click', acceptAll);
+  const elReject = document.getElementById('cf-reject'); if(elReject) elReject.addEventListener('click', rejectAll);
+  const elCustomize = document.getElementById('cf-customize'); if(elCustomize) elCustomize.addEventListener('click', openCustomize);
   // banner buttons
   document.getElementById('banner-accept') && document.getElementById('banner-accept').addEventListener('click', ()=>{ acceptAll(); });
   document.getElementById('banner-reject') && document.getElementById('banner-reject').addEventListener('click', ()=>{ rejectAll(); });
   document.getElementById('banner-settings') && document.getElementById('banner-settings').addEventListener('click', (e)=>{ e.preventDefault(); showFullscreen(); });
+  // cookie icon
+  const icon = document.getElementById('cookie-icon'); if(icon){ icon.addEventListener('click', ()=>{ showFullscreen(); }); }
   // footer link
   const footer=document.querySelector('footer'); if(footer && !document.getElementById('cookie-settings-link')){ const a=document.createElement('a'); a.id='cookie-settings-link'; a.textContent='Paramètres cookies'; a.href='#'; a.className='footer-cookie-link'; a.addEventListener('click',(e)=>{ e.preventDefault(); showFullscreen(); }); const fb=footer.querySelector('.footer-bas')||footer; fb.appendChild(a); }
-  // save on modal close via pressing Enter on custom save if any
-  // add save action (double use of CF)
-  const saveBtn = document.createElement('button'); saveBtn.style.display='none'; document.body.appendChild(saveBtn);
+  // add a visible "Sauvegarder" button to modal actions if not present
+  const actions = document.querySelector('.cookie-actions'); if(actions && !document.getElementById('cf-save')){ const save=document.createElement('button'); save.id='cf-save'; save.className='btn primary'; save.textContent='Sauvegarder'; save.style.marginLeft='6px'; save.addEventListener('click', saveCustomize); actions.appendChild(save); }
 }
 
-document.addEventListener('DOMContentLoaded', ()=>{ initCookiePage(); document.getElementById('cf-analytics') && document.getElementById('cf-analytics').addEventListener('change', ()=>{}); // noop
-  // Add explicit save for customize inside modal
-  const actions = document.querySelector('.cookie-actions'); if(actions){ const save = document.createElement('button'); save.className='btn primary'; save.textContent='Sauvegarder'; save.style.marginLeft='8px'; save.addEventListener('click', saveCustomize); actions.appendChild(save); }
-});
+document.addEventListener('DOMContentLoaded', ()=>{ initCookiePage(); });
 </script>
 
 </body>
