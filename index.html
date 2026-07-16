@@ -385,7 +385,7 @@ button:active, .btn-whatsapp:active, .btn-ajouter:active{transform:translateY(1p
       <div class="ruban-item"><span class="ic">🗓️</span><strong>Commande en semaine</strong><span>jusqu'au vendredi 12h</span></div>
       <div class="ruban-item"><span class="ic">🚚</span><strong>Livraison le week-end</strong><span>à partir de 10h</span></div>
       <div class="ruban-item"><span class="ic">📍</span><strong>Liège &amp; Luxembourg</strong><span>provinces desservies</span></div>
-      <div class="ruban-item"><span class="ic">💶</span><strong>Livraison gratuite</strong><span>jusqu'à 5 km — puis 0,30 €/km</span></div>
+      <div class="ruban-item"><span class="ic">💶</span><strong>Livraison gratuite</strong><span>jusqu'à <span class="js-km-gratuits">5</span> km — puis <span class="js-frais-km">0,30</span> €/km</span></div>
     </div>
   </div>
 
@@ -393,7 +393,7 @@ button:active, .btn-whatsapp:active, .btn-ajouter:active{transform:translateY(1p
     <div class="container centre">
       <span class="badge">Cette semaine</span>
       <h2 class="section-titre">Le menu du <span class="accent">week-end</span></h2>
-      <p class="section-sous" style="margin-left:auto;margin-right:auto">Trois plats emblématiques à 15 €, et leurs accompagnements à 5 €.</p>
+      <p class="section-sous" style="margin-left:auto;margin-right:auto">Trois plats emblématiques à <span class="js-prix-plat">15 €</span>, et leurs accompagnements à <span class="js-prix-accomp">5 €</span>.</p>
       <div class="plats" id="teaser-plats" style="text-align:left"></div>
       <a class="btn btn-terre" href="#/menu" style="margin-top:2.2rem">Voir tout le menu &amp; commander</a>
     </div>
@@ -430,11 +430,11 @@ button:active, .btn-whatsapp:active, .btn-ajouter:active{transform:translateY(1p
   <section class="fond-blanc" style="background:var(--blanc)">
     <div class="container">
       <span class="badge">⏰ Commandes jusqu'au vendredi 12h</span>
-      <h2 class="section-titre">Les plats — <span class="accent">15 €</span></h2>
+      <h2 class="section-titre">Les plats — <span class="accent js-prix-plat">15 €</span></h2>
       <p class="section-sous">Portions généreuses, préparées avec amour et le respect des recettes traditionnelles.</p>
       <div class="plats" id="liste-plats"></div>
       <div class="sous-menu">
-        <span class="badge or">Accompagnements — 5 €</span>
+        <span class="badge or">Accompagnements — <span class="js-prix-accomp">5 €</span></span>
         <h2 class="section-titre" style="font-size:clamp(1.4rem,3vw,1.9rem)">Pour aller avec</h2>
         <p class="section-sous">Complétez votre plat comme au pays.</p>
         <div class="plats" id="liste-accomp"></div>
@@ -516,7 +516,7 @@ button:active, .btn-whatsapp:active, .btn-ajouter:active{transform:translateY(1p
       <p class="section-sous">Pour garantir votre commande et éviter le gaspillage, un acompte de <span class="pct-acompte">30</span> % est demandé à la confirmation.</p>
       <div class="carte-info" style="max-width:760px">
         <p>💳 <strong>Acompte de <span class="pct-acompte">30</span> %</strong> du montant total, par virement bancaire dès la confirmation de votre commande sur WhatsApp :</p>
-        <p class="iban">BE00 0000 0000 0000 — Saveurs du Mboa</p>
+        <p class="iban"><span class="js-iban">BE00 0000 0000 0000</span> — Saveurs du Mboa</p>
         <p style="font-size:.92rem;color:#6d5236">Communication : votre nom + date de livraison. La commande est définitivement réservée à la réception de l'acompte. En cas de désistement après confirmation, l'acompte reste acquis.</p>
         <p>💶 <strong>Le solde</strong> se règle à la livraison, en espèces ou par virement instantané.</p>
       </div>
@@ -544,8 +544,8 @@ button:active, .btn-whatsapp:active, .btn-ajouter:active{transform:translateY(1p
           <li><strong>Province de Liège</strong> — toutes communes</li>
           <li><strong>Province du Luxembourg</strong> — toutes communes</li>
           <li>Livraison le <strong>samedi et dimanche à partir de 10h</strong></li>
-          <li><strong>Gratuite jusqu'à 5 km</strong> de notre cuisine</li>
-          <li>Au-delà : <strong>0,30 € par kilomètre</strong></li>
+          <li><strong>Gratuite jusqu'à <span class="js-km-gratuits">5</span> km</strong> de notre cuisine</li>
+          <li>Au-delà : <strong><span class="js-frais-km">0,30</span> € par kilomètre</strong></li>
           <li>Créneau confirmé la veille par WhatsApp</li>
           <li>Plats livrés en contenants hermétiques, prêts à réchauffer</li>
         </ul>
@@ -582,20 +582,20 @@ button:active, .btn-whatsapp:active, .btn-ajouter:active{transform:translateY(1p
   <section>
     <div class="faq-liste">
       <details class="faq"><summary>Jusqu'à quand puis-je commander ?</summary><div class="rep">Les commandes sont ouvertes toute la semaine, jusqu'au <strong>vendredi 12h</strong>. Passé ce délai, il faudra attendre le menu de la semaine suivante — nos plats sont préparés en quantité juste, avec des produits frais.</div></details>
-      <details class="faq"><summary>Où livrez-vous exactement ?</summary><div class="rep">Dans les <strong>provinces de Liège et du Luxembourg</strong>. La livraison est gratuite jusqu'à 5 km de notre cuisine, puis 0,30 € par kilomètre supplémentaire. Utilisez le calculateur sur la page Livraison pour estimer vos frais.</div></details>
+      <details class="faq"><summary>Où livrez-vous exactement ?</summary><div class="rep">Dans les <strong>provinces de Liège et du Luxembourg</strong>. La livraison est gratuite jusqu'à <span class="js-km-gratuits">5</span> km de notre cuisine, puis <span class="js-frais-km">0,30</span> € par kilomètre supplémentaire. Utilisez le calculateur sur la page Livraison pour estimer vos frais.</div></details>
       <details class="faq"><summary>Quand suis-je livré ?</summary><div class="rep">Le <strong>week-end, samedi ou dimanche à partir de 10h</strong> — vous choisissez le jour au moment de la commande. Nous confirmons le créneau précis la veille par WhatsApp.</div></details>
       <details class="faq"><summary>Pourquoi un acompte de <span class="pct-acompte">30</span> % ?</summary><div class="rep">Nos plats sont cuisinés sur commande, en petite quantité, avec des produits frais. L'acompte confirme votre réservation et nous évite le gaspillage. Il se verse par virement bancaire après confirmation sur WhatsApp. <strong>En cas de désistement après confirmation, l'acompte reste acquis.</strong> Le solde se règle à la livraison.</div></details>
       <details class="faq"><summary>Comment payer le solde ?</summary><div class="rep">À la livraison, en <strong>espèces</strong> ou par <strong>virement instantané</strong>. Simple et sans surprise : le montant exact figure dans votre récapitulatif de commande.</div></details>
       <details class="faq"><summary>Le menu change-t-il chaque semaine ?</summary><div class="rep">Oui ! Chaque semaine, Caroline et Viviane sélectionnent <strong>3 plats emblématiques</strong> du Cameroun. Suivez-nous sur Instagram et TikTok pour découvrir le menu dès sa publication.</div></details>
       <details class="faq"><summary>Comment réchauffer les plats ?</summary><div class="rep">Vos plats arrivent en contenants hermétiques. Réchauffez-les à la casserole à feu doux ou au micro-ondes quelques minutes. Ils se conservent <strong>2 à 3 jours au réfrigérateur</strong>.</div></details>
       <details class="faq"><summary>Avez-vous des options pour les allergies ?</summary><div class="rep">Certains plats contiennent des arachides, du poisson ou des crustacés. Indiquez vos allergies dans le champ « Remarques » de la commande : nous vous confirmerons si le plat convient ou vous proposerons une alternative.</div></details>
-      <details class="faq"><summary>Puis-je commander pour un événement ou en grande quantité ?</summary><div class="rep">Avec plaisir ! Pour les commandes de groupe, fêtes ou événements, contactez-nous directement sur <strong>WhatsApp au 0489 76 58 28</strong> — nous préparerons un devis sur mesure.</div></details>
+      <details class="faq"><summary>Puis-je commander pour un événement ou en grande quantité ?</summary><div class="rep">Avec plaisir ! Pour les commandes de groupe, fêtes ou événements, contactez-nous directement sur <strong>WhatsApp au <span class="js-phone">0489 76 58 28</span></strong> — nous préparerons un devis sur mesure.</div></details>
     </div>
   </section>
   <section class="cta-final wax-bg">
     <h2>Une autre <span>question</span> ?</h2>
     <p>Écrivez-nous, on répond vite.</p>
-    <a class="btn btn-primaire" href="https://wa.me/32489765828">Nous écrire sur WhatsApp</a>
+    <a class="btn btn-primaire js-wa" href="https://wa.me/32489765828">Nous écrire sur WhatsApp</a>
   </section>
 </div>
 
@@ -620,7 +620,7 @@ button:active, .btn-whatsapp:active, .btn-ajouter:active{transform:translateY(1p
           <mark style="background:#fdeccb">[adresse à compléter]</mark>.<br>
           <strong>Contact :</strong>
           <mark style="background:#fdeccb">[e-mail de contact à compléter]</mark> —
-          WhatsApp 0489 76 58 28.<br>
+          WhatsApp <span class="js-phone">0489 76 58 28</span>.<br>
           <strong>Hébergement :</strong> GitHub Pages, fourni par GitHub, Inc.
           (88 Colin P. Kelly Jr. Street, San Francisco, CA 94107, États-Unis).
         </p>
@@ -630,8 +630,8 @@ button:active, .btn-whatsapp:active, .btn-ajouter:active{transform:translateY(1p
           passent via WhatsApp jusqu'au <strong>vendredi 12h</strong> pour une
           livraison le week-end suivant. Nos plats sont cuisinés sur commande, en
           quantité limitée, avec des produits frais.</p>
-        <p style="margin:.4rem 0"><strong>Prix.</strong> Plats à 15 € et
-          accompagnements à 5 €. Les prix sont indiqués en euros, TVA comprise le
+        <p style="margin:.4rem 0"><strong>Prix.</strong> Plats à <span class="js-prix-plat">15 €</span> et
+          accompagnements à <span class="js-prix-accomp">5 €</span>. Les prix sont indiqués en euros, TVA comprise le
           cas échéant.</p>
         <p style="margin:.4rem 0"><strong>Acompte &amp; paiement.</strong> Un acompte
           de <span class="pct-acompte">30</span> % est demandé par virement pour confirmer et réserver la commande.
@@ -640,7 +640,7 @@ button:active, .btn-whatsapp:active, .btn-ajouter:active{transform:translateY(1p
           acquis</strong> (denrées déjà engagées).</p>
         <p style="margin:.4rem 0"><strong>Livraison.</strong> Le samedi ou le
           dimanche à partir de 10h, en provinces de Liège et du Luxembourg.
-          Gratuite jusqu'à 5 km de la cuisine, puis 0,30 €/km. Le créneau est
+          Gratuite jusqu'à <span class="js-km-gratuits">5</span> km de la cuisine, puis <span class="js-frais-km">0,30</span> €/km. Le créneau est
           confirmé la veille par WhatsApp.</p>
         <p style="margin:.4rem 0"><strong>Droit de rétractation.</strong> S'agissant
           de <strong>denrées alimentaires périssables préparées sur commande</strong>,
@@ -706,8 +706,8 @@ button:active, .btn-whatsapp:active, .btn-ajouter:active{transform:translateY(1p
     </div>
     <div>
       <h4>Contact</h4>
-      <p>📞 <a href="tel:+32489765828">0489 76 58 28</a></p>
-      <p>💬 <a href="https://wa.me/32489765828">WhatsApp</a></p>
+      <p>📞 <a class="js-tel" href="tel:+32489765828">0489 76 58 28</a></p>
+      <p>💬 <a class="js-wa" href="https://wa.me/32489765828">WhatsApp</a></p>
       <p>📸 <a href="#">Instagram</a> · 🎵 <a href="#">TikTok</a></p>
     </div>
     <div>
@@ -725,7 +725,7 @@ button:active, .btn-whatsapp:active, .btn-ajouter:active{transform:translateY(1p
   </div>
 </footer>
 
-<a class="wa-flottant" href="https://wa.me/32489765828" aria-label="Nous contacter sur WhatsApp">💬</a>
+<a class="wa-flottant js-wa" href="https://wa.me/32489765828" aria-label="Nous contacter sur WhatsApp">💬</a>
 
 <!-- ===== PANIER ===== -->
 <div id="overlay" onclick="fermerPanier()"></div>
@@ -769,7 +769,7 @@ button:active, .btn-whatsapp:active, .btn-ajouter:active{transform:translateY(1p
       <div class="r acompte"><span>Acompte à verser (<span class="pct-acompte">30</span> %)</span><span id="r-acompte">0,00 €</span></div>
       <div class="r"><span>Solde à la livraison</span><span id="r-solde">0,00 €</span></div>
       <div class="r total"><span>Total</span><span id="r-grand">0,00 €</span></div>
-      <p class="mini">Livraison gratuite jusqu'à 5 km, 0,30 €/km au-delà — les frais éventuels sont confirmés sur WhatsApp.</p>
+      <p class="mini">Livraison gratuite jusqu'à <span class="js-km-gratuits">5</span> km, <span class="js-frais-km">0,30</span> €/km au-delà — les frais éventuels sont confirmés sur WhatsApp.</p>
     </div>
     <div class="form" id="form-cmd" style="display:none">
       <label for="f-nom">Nom complet *</label>
@@ -841,6 +841,32 @@ function toggleNav(){ document.getElementById("nav").classList.toggle("ouvert");
 const panier = {};
 
 function euro(n){ return n.toFixed(2).replace('.', ',') + " €"; }
+function euroCourt(n){ return Number.isInteger(n) ? n + " €" : euro(n); }
+
+/* ===== Valeurs de config injectées dans les textes du site ===== */
+function telNat(num){
+  let n = String(num || '').replace(/\D/g, '');
+  if(n.startsWith('32')) n = '0' + n.slice(2);
+  if(/^0\d{9}$/.test(n)) return n.replace(/^(\d{4})(\d{2})(\d{2})(\d{2})$/, '$1 $2 $3 $4');
+  return n;
+}
+function prixCat(cat){
+  const arr = MENU.filter(p => p.cat === cat).map(p => p.prix);
+  if(!arr.length) return '';
+  const mn = Math.min(...arr), mx = Math.max(...arr);
+  return mn === mx ? euroCourt(mn) : 'dès ' + euroCourt(mn);
+}
+function majTextesConfig(){
+  const wa = 'https://wa.me/' + NUMERO_WHATSAPP;
+  document.querySelectorAll('.js-wa').forEach(a => a.href = wa);
+  document.querySelectorAll('.js-tel').forEach(a => { a.href = 'tel:+' + NUMERO_WHATSAPP; a.textContent = telNat(NUMERO_WHATSAPP); });
+  document.querySelectorAll('.js-phone').forEach(el => el.textContent = telNat(NUMERO_WHATSAPP));
+  document.querySelectorAll('.js-iban').forEach(el => el.textContent = IBAN);
+  document.querySelectorAll('.js-km-gratuits').forEach(el => el.textContent = KM_GRATUITS);
+  document.querySelectorAll('.js-frais-km').forEach(el => el.textContent = FRAIS_KM.toFixed(2).replace('.', ','));
+  document.querySelectorAll('.js-prix-plat').forEach(el => el.textContent = prixCat('plat'));
+  document.querySelectorAll('.js-prix-accomp').forEach(el => el.textContent = prixCat('accomp'));
+}
 
 function actionHtml(p){
   const q = panier[p.id] || 0;
@@ -981,7 +1007,7 @@ function remplirMarquee(attempt = 0){
 
   const plats = MENU.filter(p => p.cat === "plat").map(p => p.nom).join(" · ") || 'Nos plats';
   const messages = [
-    `🍽️ Menu de la semaine : ${plats} — 15 €`,
+    `🍽️ Menu de la semaine : ${plats} — ${prixCat('plat')}`,
     `⏰ Commandes ouvertes jusqu'au vendredi 12h`,
     `🚚 Livraison le week-end à partir de 10h — Liège & Luxembourg`,
     `💛 Le goût authentique, fait maison avec amour`
@@ -1411,6 +1437,7 @@ function majPourcentAcompte(){
 remplirMarquee();
 rendreMenu();
 majPourcentAcompte();
+majTextesConfig();
 majTout();
 router();
 majCompteur();
