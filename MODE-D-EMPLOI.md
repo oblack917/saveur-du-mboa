@@ -5,7 +5,7 @@
 **Vous n'avez besoin d'aucune connaissance en informatique.** Tout se fait
 depuis une page du site, sur votre téléphone :
 
-1. Ouvrez la page : **https://oblack917.github.io/saveurs-du-mboa/admin.html**
+1. Ouvrez la page : **https://oblack917.github.io/saveur-du-mboa/admin.html**
    💡 Ajoutez-la à l'écran d'accueil de votre téléphone pour la retrouver facilement
 2. La première fois : entrez le **code d'accès** que Yann vous a remis,
    cochez "Se souvenir de moi" → vous ne le retaperez plus jamais
@@ -34,19 +34,19 @@ l'itinéraire pour la livraison.
 ## Pour Yann : installation (une seule fois) 🔧
 
 ### 1. Mettre le site en ligne
-1. github.com → New repository → `saveurs-du-mboa` → Public → Create
+1. github.com → New repository → `saveur-du-mboa` → Public → Create
 2. Add file → Upload files → envoyer : `index.html`, `admin.html`, `config.js`,
    `MODE-D-EMPLOI.md` et le dossier `photos/` complet → Commit
 3. Settings → Pages → Branch : `main` + `/ (root)` → Save
-4. Site en ligne sur `https://oblack917.github.io/saveurs-du-mboa/`
+4. Site en ligne sur `https://oblack917.github.io/saveur-du-mboa/`
 
 ### 2. Créer le "code d'accès" (jeton GitHub à accès limité)
 1. GitHub → photo de profil → **Settings** → tout en bas **Developer settings**
 2. **Personal access tokens → Fine-grained tokens → Generate new token**
 3. Réglages :
-   - Token name : `admin-saveurs-du-mboa`
+   - Token name : `admin-saveur-du-mboa`
    - Expiration : la plus longue possible (pense à le renouveler à l'échéance)
-   - Repository access : **Only select repositories** → coche `saveurs-du-mboa`
+   - Repository access : **Only select repositories** → coche `saveur-du-mboa`
    - Permissions → Repository permissions → **Contents : Read and write**
      (rien d'autre)
 4. **Generate token** → copie le code `github_pat_…`
