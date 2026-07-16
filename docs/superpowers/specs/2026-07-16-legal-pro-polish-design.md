@@ -37,7 +37,7 @@ Une page/section unique liée depuis le pied de page, en trois blocs :
   Droits RGPD (accès, rectification, effacement) + canal d'exercice.
 - **Cookies** — reflète la réalité : **aucun cookie de pistage**. Seuls des
   éléments techniques strictement nécessaires (préférence de consentement en
-  local) sont utilisés.
+  local) sont utilisés. Les polices sont auto-hébergées (plus d'appel Google).
 
 ### 2. Bandeau cookies — honnête et léger
 Décision utilisateur : **bandeau discret** plutôt que pop-up bloquante.
@@ -53,11 +53,25 @@ Décision utilisateur : **bandeau discret** plutôt que pop-up bloquante.
 réel est `saveur-du-mboa`. Le lien admin remis aux gérantes serait cassé.
 → corriger toutes les occurrences vers `saveur-du-mboa`.
 
-### 4. Finition « pro » (polish ciblé, PAS une refonte)
+### 4. Polices auto-hébergées (RGPD)
+Le site charge actuellement Google Fonts depuis `fonts.googleapis.com` /
+`fonts.gstatic.com` (dans `index.html` **et** `admin.html`). Cela transmet l'IP
+de chaque visiteur à Google sans consentement — jugé contraire au RGPD (LG
+München, 2022). Décision utilisateur : **auto-héberger les polices**.
+
+- Télécharger les `.woff2` des familles utilisées : Great Vibes, Bricolage
+  Grotesque (600/800), Instrument Sans (400/500/600/700).
+- Les placer dans `fonts/`, déclarer via `@font-face` local, avec
+  `font-display:swap`.
+- Retirer les `<link>` Google et les `preconnect` dans les deux fichiers.
+- Apparence identique, zéro appel externe pour les polices.
+
+### 5. Finition « pro » (polish ciblé, PAS une refonte)
 - Cohérence typographique et espacements.
 - **Balises méta de partage** (Open Graph / Twitter Card) : titre, description,
   image → bel aperçu quand le lien est partagé sur WhatsApp / Instagram.
-- `<title>`, `<meta name="description">`, `lang="fr"`, favicon si absent.
+- `<title>` (déjà présent), `<meta name="description">` (déjà présent),
+  `lang="fr"` (déjà présent), favicon si absent.
 - Petites finitions visuelles du pied de page (bloc légal qui renforce la
   crédibilité).
 
@@ -72,8 +86,10 @@ réel est `saveur-du-mboa`. Le lien admin remis aux gérantes serait cassé.
 - Flux de commande WhatsApp (`wa.me`), génération du message et du lien Maps.
 - Autocomplétion Nominatim + calcul de distance / frais de livraison.
 - `admin.html` et le mécanisme de publication par jeton GitHub.
-- Politique CSP de fait : **aucune ressource externe** (images/scripts) — tout
-  reste local/inline (cohérent avec l'existant).
+- Après auto-hébergement des polices, l'objectif est **aucune ressource externe
+  passive** : images, polices, scripts restent locaux/inline. (Restent des
+  appels *actifs* déclenchés par l'utilisateur : Nominatim à la frappe, liens
+  WhatsApp/Maps au clic — fonctionnels, documentés dans la confidentialité.)
 
 ## Sauvegarde
 
