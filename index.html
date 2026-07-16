@@ -776,8 +776,26 @@ function fermerPanier(){
 document.addEventListener('keydown', e => { if(e.key === 'Escape') fermerPanier(); });
 
 /* ============ BANNIÈRE AUTO ============ */
-function remplirMarquee(){
-  const plats = MENU.filter(p => p.cat === "plat").map(p => p.nom).join(" · ");
+function remplirMarquee(attempt = 0){
+  // Wait for MENU to be available (loaded from config.js). Retry a few times if needed.
+  if(typeof MENU === 'undefined' || !Array.isArray(MENU) || MENU.length === 0){
+    if(attempt < 10){
+      setTimeout(() => remplirMarquee(attempt + 1), 200);
+      return;
+    } else {
+      // fallback static messages
+      const fallback = [
+        `🍽️ Menu à découvrir`,
+        `⏰ Commandes ouvertes`,
+        `🚚 Livraison ce week-end`,
+      ];
+      const blocFb = fallback.map(m => `<span>${m}</span><span class="sep">✦</span>`).join('');
+      document.getElementById('marquee-track').innerHTML = blocFb + blocFb;
+      return;
+    }
+  }
+
+  const plats = MENU.filter(p => p.cat === "plat").map(p => p.nom).join(" · ") || 'Nos plats';
   const messages = [
     `🍽️ Menu de la semaine : ${plats} — 15 €`,
     `⏰ Commandes ouvertes jusqu'au vendredi 12h`,
@@ -786,8 +804,12 @@ function remplirMarquee(){
   ];
   const bloc = messages.map(m => `<span>${m}</span><span class="sep">✦</span>`).join('');
   // Contenu doublé pour un défilement continu sans coupure
-  document.getElementById('marquee-track').innerHTML = bloc + bloc;
+  const track = document.getElementById('marquee-track');
+  if(track){
+    track.innerHTML = bloc + bloc;
+  }
 }
+
 
 /* ============ LIEN CARTE (adresse client) ============ */
 function urlCarte(adresse){
