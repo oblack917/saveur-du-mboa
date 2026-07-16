@@ -262,55 +262,14 @@ footer p{font-size:.95rem}
 /* Autocomplete adresses - Dropdown stylisé */
 #suggestions-adresse{animation:slideDown .25s ease-out}
 @keyframes slideDown{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
-#suggestions-adresse > .addr-item, #suggestions-adresse > div{padding:.95rem 1rem;border-bottom:1px solid #e4d3b6;cursor:pointer;transition:all .12s;display:flex;align-items:flex-start;gap:.7rem}
-#suggestions-adresse > .addr-item:hover, #suggestions-adresse > div:hover{background:rgba(227,163,46,.08);border-left:4px solid var(--or);padding-left:calc(1rem - 4px)}
-#suggestions-adresse > .addr-item:last-child, #suggestions-adresse > div:last-child{border-bottom:none}
+#suggestions-adresse > div{padding:.85rem 1rem;border-bottom:1px solid #e4d3b6;cursor:pointer;transition:all .15s;display:flex;align-items:flex-start;gap:.7rem}
+#suggestions-adresse > div:hover{background:rgba(227,163,46,.08);border-left:4px solid var(--or);padding-left:calc(1rem - 4px)}
+#suggestions-adresse > div:last-child{border-bottom:none}
 #suggestions-adresse .addr-icon{color:var(--terracotta);font-size:1.2rem;flex-shrink:0;margin-top:.05rem}
-#suggestions-adresse .addr-info strong{display:block;color:var(--encre);font-weight:700;font-size:.98rem;line-height:1.25}
-#suggestions-adresse .addr-info small{display:block;color:#8a7355;font-size:.82rem;margin-top:.18rem}
-#suggestions-adresse .loading{padding:1.2rem;text-align:center;color:#8a7355;font-size:.92rem}
-#suggestions-adresse .no-results{padding:1.2rem;text-align:center;color:#8a7355;font-size:.92rem}
-
-/* Active / keyboard focused state */
-#suggestions-adresse .addr-item.active{background:rgba(227,163,46,.12);border-left:4px solid var(--or);padding-left:calc(1rem - 4px)}
-#suggestions-adresse .addr-item[aria-selected="true"]{outline:2px solid rgba(227,163,46,.12)}
-
-/* Highlight matched text */
-#suggestions-adresse mark{background:var(--or);color:#fff;padding:0 .15rem;border-radius:2px}
-
-/* Scrollbar & mobile touch improvements */
-#suggestions-adresse{max-height:300px;overflow-y:auto;-webkit-overflow-scrolling:touch;box-sizing:border-box}
-#suggestions-adresse::-webkit-scrollbar{width:10px}
-#suggestions-adresse::-webkit-scrollbar-track{background:transparent}
-#suggestions-adresse::-webkit-scrollbar-thumb{background:rgba(0,0,0,.12);border-radius:8px}
-
-/* Larger tap targets on small screens */
-@media(max-width:520px){
-  #suggestions-adresse > .addr-item, #suggestions-adresse > div{padding:1rem 1rem;font-size:1rem}
-  #suggestions-adresse .addr-info strong{font-size:1rem}
-}
-
-/* Respect reduced motion */
-@media(prefers-reduced-motion:reduce){
-  #suggestions-adresse{animation:none}
-}
-
-/* Mini cart floating button (mobile) */
-.mini-cart-flottant{position:fixed;bottom:1.2rem;left:1.2rem;z-index:110;background:var(--brun);color:var(--or);padding:.7rem 1rem;border-radius:999px;display:flex;align-items:center;gap:.6rem;box-shadow:0 10px 30px rgba(0,0,0,.18);font-weight:800;border:3px solid rgba(255,255,255,.06);cursor:pointer}
-.mini-cart-flottant .count{background:var(--or);color:var(--brun);padding:.12rem .5rem;border-radius:6px;font-size:.95rem}
-@media(min-width:800px){.mini-cart-flottant{display:none}}
-
-/* Buttons and interactive polish */
-button, .btn-whatsapp, .btn-ajouter{transition:transform .12s ease, box-shadow .12s ease}
-button:active, .btn-whatsapp:active, .btn-ajouter:active{transform:translateY(1px)}
-
-/* Respect reduced motion */
-@media(prefers-reduced-motion:reduce){
-  #suggestions-adresse{animation:none}
-  .mini-cart-flottant{transition:none}
-}
-
-
+#suggestions-adresse .addr-info strong{display:block;color:var(--encre);font-weight:700;font-size:.96rem;line-height:1.3}
+#suggestions-adresse .addr-info small{display:block;color:#8a7355;font-size:.8rem;margin-top:.2rem}
+#suggestions-adresse .loading{padding:1.2rem;text-align:center;color:#8a7355;font-size:.9rem}
+#suggestions-adresse .no-results{padding:1.2rem;text-align:center;color:#8a7355;font-size:.9rem}
 .form textarea{resize:vertical;min-height:64px}
 .drawer-pied{padding:1rem 1.3rem;border-top:1px solid #e4d3b6;background:#fff}
 .btn-whatsapp{width:100%;background:#25D366;color:#fff;border:none;border-radius:999px;padding:.95rem;font-weight:800;font-size:1.03rem;display:flex;align-items:center;justify-content:center;gap:.5rem}
@@ -791,26 +750,8 @@ function fermerPanier(){
 document.addEventListener('keydown', e => { if(e.key === 'Escape') fermerPanier(); });
 
 /* ============ BANNIÈRE AUTO ============ */
-function remplirMarquee(attempt = 0){
-  // Wait for MENU to be available (loaded from config.js). Retry a few times if needed.
-  if(typeof MENU === 'undefined' || !Array.isArray(MENU) || MENU.length === 0){
-    if(attempt < 10){
-      setTimeout(() => remplirMarquee(attempt + 1), 200);
-      return;
-    } else {
-      // fallback static messages
-      const fallback = [
-        `🍽️ Menu à découvrir`,
-        `⏰ Commandes ouvertes`,
-        `🚚 Livraison ce week-end`,
-      ];
-      const blocFb = fallback.map(m => `<span>${m}</span><span class="sep">✦</span>`).join('');
-      document.getElementById('marquee-track').innerHTML = blocFb + blocFb;
-      return;
-    }
-  }
-
-  const plats = MENU.filter(p => p.cat === "plat").map(p => p.nom).join(" · ") || 'Nos plats';
+function remplirMarquee(){
+  const plats = MENU.filter(p => p.cat === "plat").map(p => p.nom).join(" · ");
   const messages = [
     `🍽️ Menu de la semaine : ${plats} — 15 €`,
     `⏰ Commandes ouvertes jusqu'au vendredi 12h`,
@@ -819,12 +760,8 @@ function remplirMarquee(attempt = 0){
   ];
   const bloc = messages.map(m => `<span>${m}</span><span class="sep">✦</span>`).join('');
   // Contenu doublé pour un défilement continu sans coupure
-  const track = document.getElementById('marquee-track');
-  if(track){
-    track.innerHTML = bloc + bloc;
-  }
+  document.getElementById('marquee-track').innerHTML = bloc + bloc;
 }
-
 
 /* ============ LIEN CARTE (adresse client) ============ */
 function urlCarte(adresse){
@@ -921,29 +858,13 @@ function renderSuggestions(query, items){
   const liste = document.getElementById('suggestions-adresse');
   const q = query.trim();
   const html = items.map((r, idx) => {
-    // Compose precise lines: main = "rue + num" ; second = "CP + ville" (ensure street stays when API returns number first)
+    // Compose precise lines: main = "num + rue" ; second = "CP + ville"
     const num = r.address?.house_number || '';
     const road = r.address?.road || r.address?.pedestrian || r.address?.residential || r.address?.footway || r.address?.village || r.display_name?.split(',')[0] || '';
     const ville = r.address?.city || r.address?.town || r.address?.village || r.address?.municipality || '';
     const cp = r.address?.postcode || '';
 
-    // If API returns display_name starting with number (e.g. "2, Place du Marché ...") and road is empty,
-    // rebuild as "Place du Marché 2" so the street name remains visible when user adds number.
-    let mainLineRaw = '';
-    if(road){
-      mainLineRaw = `${road}${road && num ? ' ' + num : ''}`.trim();
-    } else if(r.display_name){
-      const parts = r.display_name.split(',').map(p=>p.trim()).filter(Boolean);
-      if(parts.length > 1 && /^\d/.test(parts[0])){
-        // first part is number, second is street name -> swap
-        mainLineRaw = `${parts[1]}${parts[0] ? ' ' + parts[0] : ''}`.trim();
-      } else {
-        mainLineRaw = parts[0] || 'Adresse';
-      }
-    } else {
-      mainLineRaw = 'Adresse';
-    }
-
+    const mainLineRaw = `${num}${num ? ' ' : ''}${road}`.trim() || (r.display_name ? r.display_name.split(',')[0] : 'Adresse');
     const secondLineRaw = `${cp}${cp && ville ? ' ' : ''}${ville}`.trim();
 
     const mainLine = highlightMatch(mainLineRaw, q);
@@ -1069,93 +990,45 @@ document.addEventListener('DOMContentLoaded', ()=>{
 });
 
 function envoyerCommande(){
-  // Clear previous field errors
-  document.querySelectorAll('.field-error').forEach(n=>n.remove());
+  const nom = document.getElementById('f-nom').value.trim();
+  const tel = document.getElementById('f-tel').value.trim();
+  const adresse = document.getElementById('f-adresse').value.trim();
+  const jour = document.getElementById('f-jour').value;
+  const notes = document.getElementById('f-notes').value.trim();
 
-  const nomEl = document.getElementById('f-nom');
-  const telEl = document.getElementById('f-tel');
-  const adresseEl = document.getElementById('f-adresse');
-  const jourEl = document.getElementById('f-jour');
-  const notesEl = document.getElementById('f-notes');
-
-  const nom = nomEl.value.trim();
-  const tel = telEl.value.trim();
-  const adresse = adresseEl.value.trim();
-  const jour = jourEl.value;
-  const notes = notesEl.value.trim();
-
-  let firstInvalid = null;
-
-  function showFieldError(el, msg){
-    const span = document.createElement('span');
-    span.className = 'field-error';
-    span.style.color = 'var(--terracotta)';
-    span.style.fontSize = '.88rem';
-    span.style.display = 'block';
-    span.style.marginTop = '.35rem';
-    span.textContent = msg;
-    el.parentNode.insertBefore(span, el.nextSibling);
-    if(!firstInvalid) firstInvalid = el;
-  }
-
-  // Simple validations
-  if(nom.length < 2) showFieldError(nomEl, 'Merci d\'indiquer votre nom complet');
-  const telDigits = tel.replace(/[^0-9+]/g,'');
-  if(telDigits.length < 8) showFieldError(telEl, 'Numéro incorrect — entrez au moins 8 chiffres');
-  if(adresse.length < 6) showFieldError(adresseEl, 'Adresse trop courte');
-  if(!jour) showFieldError(jourEl, 'Choisissez un jour de livraison');
-
-  if(firstInvalid){
-    firstInvalid.focus();
+  if(!nom || !tel || !adresse || !jour){
+    alert("Merci de remplir votre nom, téléphone, adresse et jour de livraison.");
     return;
   }
 
-  // Build order message
   let total = 0;
   const lignes = Object.keys(panier).map(id => {
-    const p = MENU.find(m => m.id === id) || {nom:'?'};
-    const q = panier[id] || 0;
-    total += (p.prix || 0) * q;
-    return `• ${p.nom} × ${q} — ${euro((p.prix||0) * q)}`;
+    const p = MENU.find(m => m.id === id);
+    const q = panier[id];
+    total += p.prix * q;
+    return `• ${p.nom} × ${q} — ${euro(p.prix * q)}`;
   }).join('\n');
-  const acompte = total * (ACOMPTE_POURCENT || 0) / 100;
+  const acompte = total * ACOMPTE_POURCENT / 100;
 
   const message =
-`🧺 *Nouvelle commande — Saveurs du Mboa*\n\n${lignes}\n\n*Total : ${euro(total)}*\nAcompte (${ACOMPTE_POURCENT} %) : *${euro(acompte)}* par virement au ${IBAN}\nSolde à la livraison : ${euro(total - acompte)}\n\n👤 ${nom}\n📞 ${tel}\n📍 ${adresse}\n🗺️ Localisation : ${urlCarte(adresse)}\n📅 Livraison : ${jour} (à partir de 10h)${notes ? `\n📝 ${notes}` : ''}\n\n_Je confirme ma commande et verse l'acompte pour la réserver._`;
+`🧺 *Nouvelle commande — Saveurs du Mboa*
+
+${lignes}
+
+*Total : ${euro(total)}*
+Acompte (${ACOMPTE_POURCENT} %) : *${euro(acompte)}* par virement au ${IBAN}
+Solde à la livraison : ${euro(total - acompte)}
+
+👤 ${nom}
+📞 ${tel}
+📍 ${adresse}
+🗺️ Localisation : ${urlCarte(adresse)}
+📅 Livraison : ${jour} (à partir de 10h)${notes ? `\n📝 ${notes}` : ''}
+
+_Je confirme ma commande et verse l'acompte pour la réserver._`;
 
   window.open(`https://wa.me/${NUMERO_WHATSAPP}?text=${encodeURIComponent(message)}`, '_blank');
 }
-
-// --- Mini cart floating button helpers ---
-function createMiniCartButton(){
-  if(document.querySelector('.mini-cart-flottant')) return;
-  const btn = document.createElement('button');
-  btn.className = 'mini-cart-flottant';
-  btn.type = 'button';
-  btn.innerHTML = `<span class="label">Panier</span> <span class="count" id="mini-cart-count">0</span>`;
-  btn.addEventListener('click', ()=>{ ouvrirPanier(); });
-  document.body.appendChild(btn);
-}
-
-function updateMiniCartCount(){
-  const mainCount = document.getElementById('cart-count');
-  const mini = document.getElementById('mini-cart-count');
-  if(!mini || !mainCount) return;
-  mini.textContent = mainCount.textContent || '0';
-}
-
-// Watch for cart count changes and initialize mini cart on DOM ready
-(function(){
-  document.addEventListener('DOMContentLoaded', ()=>{
-    createMiniCartButton();
-    updateMiniCartCount();
-    const target = document.getElementById('cart-count');
-    if(target){
-      const obs = new MutationObserver(()=> updateMiniCartCount());
-      obs.observe(target, {childList:true, characterData:true, subtree:true});
-    }
-  });
-})();
 
 /* ============ COMPTE À REBOURS (vendredi 12h) ============ */
 function majCompteur(){
