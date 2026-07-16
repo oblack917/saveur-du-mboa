@@ -1,5 +1,5 @@
-/* Fichier généré par la page d'administration — 16/07/2026 08:41:30 */
-const CONFIG_VERSION = 1784184090585;
+/* Fichier généré par la page d'administration — 16/07/2026 09:40:58 */
+const CONFIG_VERSION = 1784187658389;
 const NUMERO_WHATSAPP = "32489765828";
 const IBAN = "BE00 0000 0000 0000";
 const ACOMPTE_POURCENT = 50;
@@ -7,14 +7,14 @@ const FRAIS_KM = 0.3;
 const KM_GRATUITS = 5;
 
 const MENU = [
-  { id:"plat1", cat:"plat", nom:"Ndolé Royale", prix:16.00, photo:"photos/ndole.jpg",
+  { id:"plat1", cat:"plat", nom:"Ndolé Royale", prix:15.00, photo:"photos/ndole.jpg",
     desc:"Le plat national : feuilles de ndolè mijotées aux arachides, crevettes et viande. Un classique généreux et parfumé.", allergenes:"Arachides, Crustacés" },
 
   { id:"plat2", cat:"plat", nom:"Porc Braisé", prix:15.00, photo:"photos/porc.jpg",
     desc:"Morceaux de porc marinés aux épices maison puis braisés, fondants et savoureux, servis avec oignons rouges.", allergenes:"" },
 
-  { id:"plat3", cat:"plat", nom:"Maquereau Braisé", prix:15.00, photo:"photos/maquereau.jpg",
-    desc:"Maquereau entier mariné aux épices vertes et braisé comme au pays, relevé juste ce qu'il faut.", allergenes:"Poisson" },
+  { id:"plat3", cat:"plat", nom:"Poisson braisé", prix:15.00, photo:"photos/maquereau.jpg",
+    desc:"Vous avez le choix entre maquereau , bar , tilapia entier mariné aux épices vertes et braisé comme au pays, relevé juste ce qu'il faut.", allergenes:"Poisson" },
 
   { id:"accomp1", cat:"accomp", nom:"Bâtons de manioc", prix:5.00, photo:"photos/manioc.jpg",
     desc:"Bâtons de manioc traditionnels (bobolo), l'accompagnement parfait du poisson braisé.", allergenes:"" },
