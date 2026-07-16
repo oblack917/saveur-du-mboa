@@ -884,13 +884,13 @@ function renderSuggestions(query, items){
   const liste = document.getElementById('suggestions-adresse');
   const q = query.trim();
   const html = items.map((r, idx) => {
-    // Compose precise lines: main = "num + rue" ; second = "CP + ville"
+    // Compose precise lines: main = "rue + num" ; second = "CP + ville" (affiche d'abord la rue)
     const num = r.address?.house_number || '';
     const road = r.address?.road || r.address?.pedestrian || r.address?.residential || r.address?.footway || r.address?.village || r.display_name?.split(',')[0] || '';
     const ville = r.address?.city || r.address?.town || r.address?.village || r.address?.municipality || '';
     const cp = r.address?.postcode || '';
 
-    const mainLineRaw = `${num}${num ? ' ' : ''}${road}`.trim() || (r.display_name ? r.display_name.split(',')[0] : 'Adresse');
+    const mainLineRaw = `${road}${road && num ? ' ' + num : ''}`.trim() || (r.display_name ? r.display_name.split(',')[0] : 'Adresse');
     const secondLineRaw = `${cp}${cp && ville ? ' ' : ''}${ville}`.trim();
 
     const mainLine = highlightMatch(mainLineRaw, q);
