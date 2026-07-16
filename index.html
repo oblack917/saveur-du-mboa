@@ -820,7 +820,10 @@ button:active, .btn-whatsapp:active, .btn-ajouter:active{transform:translateY(1p
   </div>
 </aside>
 
-<script src="config.js"></script>
+<!-- config.js chargé avec anti-cache : force le navigateur à récupérer les
+     derniers prix/menu publiés depuis l'admin. Sans ça, une version en cache
+     (navigateur ou CDN GitHub Pages) peut continuer d'afficher d'anciens prix. -->
+<script>document.write('<script src="config.js?v=' + Date.now() + '"><\/script>');</script>
 <script>
 /* ============ ROUTEUR DE PAGES ============ */
 const PAGES = ["accueil","menu","histoire","comment","livraison","faq","legal"];
