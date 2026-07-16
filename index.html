@@ -295,6 +295,21 @@ footer p{font-size:.95rem}
   #suggestions-adresse{animation:none}
 }
 
+/* Mini cart floating button (mobile) */
+.mini-cart-flottant{position:fixed;bottom:1.2rem;left:1.2rem;z-index:110;background:var(--brun);color:var(--or);padding:.7rem 1rem;border-radius:999px;display:flex;align-items:center;gap:.6rem;box-shadow:0 10px 30px rgba(0,0,0,.18);font-weight:800;border:3px solid rgba(255,255,255,.06);cursor:pointer}
+.mini-cart-flottant .count{background:var(--or);color:var(--brun);padding:.12rem .5rem;border-radius:6px;font-size:.95rem}
+@media(min-width:800px){.mini-cart-flottant{display:none}}
+
+/* Buttons and interactive polish */
+button, .btn-whatsapp, .btn-ajouter{transition:transform .12s ease, box-shadow .12s ease}
+button:active, .btn-whatsapp:active, .btn-ajouter:active{transform:translateY(1px)}
+
+/* Respect reduced motion */
+@media(prefers-reduced-motion:reduce){
+  #suggestions-adresse{animation:none}
+  .mini-cart-flottant{transition:none}
+}
+
 
 .form textarea{resize:vertical;min-height:64px}
 .drawer-pied{padding:1rem 1.3rem;border-top:1px solid #e4d3b6;background:#fff}
@@ -1054,45 +1069,93 @@ document.addEventListener('DOMContentLoaded', ()=>{
 });
 
 function envoyerCommande(){
-  const nom = document.getElementById('f-nom').value.trim();
-  const tel = document.getElementById('f-tel').value.trim();
-  const adresse = document.getElementById('f-adresse').value.trim();
-  const jour = document.getElementById('f-jour').value;
-  const notes = document.getElementById('f-notes').value.trim();
+  // Clear previous field errors
+  document.querySelectorAll('.field-error').forEach(n=>n.remove());
 
-  if(!nom || !tel || !adresse || !jour){
-    alert("Merci de remplir votre nom, téléphone, adresse et jour de livraison.");
+  const nomEl = document.getElementById('f-nom');
+  const telEl = document.getElementById('f-tel');
+  const adresseEl = document.getElementById('f-adresse');
+  const jourEl = document.getElementById('f-jour');
+  const notesEl = document.getElementById('f-notes');
+
+  const nom = nomEl.value.trim();
+  const tel = telEl.value.trim();
+  const adresse = adresseEl.value.trim();
+  const jour = jourEl.value;
+  const notes = notesEl.value.trim();
+
+  let firstInvalid = null;
+
+  function showFieldError(el, msg){
+    const span = document.createElement('span');
+    span.className = 'field-error';
+    span.style.color = 'var(--terracotta)';
+    span.style.fontSize = '.88rem';
+    span.style.display = 'block';
+    span.style.marginTop = '.35rem';
+    span.textContent = msg;
+    el.parentNode.insertBefore(span, el.nextSibling);
+    if(!firstInvalid) firstInvalid = el;
+  }
+
+  // Simple validations
+  if(nom.length < 2) showFieldError(nomEl, 'Merci d\'indiquer votre nom complet');
+  const telDigits = tel.replace(/[^0-9+]/g,'');
+  if(telDigits.length < 8) showFieldError(telEl, 'Numéro incorrect — entrez au moins 8 chiffres');
+  if(adresse.length < 6) showFieldError(adresseEl, 'Adresse trop courte');
+  if(!jour) showFieldError(jourEl, 'Choisissez un jour de livraison');
+
+  if(firstInvalid){
+    firstInvalid.focus();
     return;
   }
 
+  // Build order message
   let total = 0;
   const lignes = Object.keys(panier).map(id => {
-    const p = MENU.find(m => m.id === id);
-    const q = panier[id];
-    total += p.prix * q;
-    return `• ${p.nom} × ${q} — ${euro(p.prix * q)}`;
+    const p = MENU.find(m => m.id === id) || {nom:'?'};
+    const q = panier[id] || 0;
+    total += (p.prix || 0) * q;
+    return `• ${p.nom} × ${q} — ${euro((p.prix||0) * q)}`;
   }).join('\n');
-  const acompte = total * ACOMPTE_POURCENT / 100;
+  const acompte = total * (ACOMPTE_POURCENT || 0) / 100;
 
   const message =
-`🧺 *Nouvelle commande — Saveurs du Mboa*
-
-${lignes}
-
-*Total : ${euro(total)}*
-Acompte (${ACOMPTE_POURCENT} %) : *${euro(acompte)}* par virement au ${IBAN}
-Solde à la livraison : ${euro(total - acompte)}
-
-👤 ${nom}
-📞 ${tel}
-📍 ${adresse}
-🗺️ Localisation : ${urlCarte(adresse)}
-📅 Livraison : ${jour} (à partir de 10h)${notes ? `\n📝 ${notes}` : ''}
-
-_Je confirme ma commande et verse l'acompte pour la réserver._`;
+`🧺 *Nouvelle commande — Saveurs du Mboa*\n\n${lignes}\n\n*Total : ${euro(total)}*\nAcompte (${ACOMPTE_POURCENT} %) : *${euro(acompte)}* par virement au ${IBAN}\nSolde à la livraison : ${euro(total - acompte)}\n\n👤 ${nom}\n📞 ${tel}\n📍 ${adresse}\n🗺️ Localisation : ${urlCarte(adresse)}\n📅 Livraison : ${jour} (à partir de 10h)${notes ? `\n📝 ${notes}` : ''}\n\n_Je confirme ma commande et verse l'acompte pour la réserver._`;
 
   window.open(`https://wa.me/${NUMERO_WHATSAPP}?text=${encodeURIComponent(message)}`, '_blank');
 }
+
+// --- Mini cart floating button helpers ---
+function createMiniCartButton(){
+  if(document.querySelector('.mini-cart-flottant')) return;
+  const btn = document.createElement('button');
+  btn.className = 'mini-cart-flottant';
+  btn.type = 'button';
+  btn.innerHTML = `<span class="label">Panier</span> <span class="count" id="mini-cart-count">0</span>`;
+  btn.addEventListener('click', ()=>{ ouvrirPanier(); });
+  document.body.appendChild(btn);
+}
+
+function updateMiniCartCount(){
+  const mainCount = document.getElementById('cart-count');
+  const mini = document.getElementById('mini-cart-count');
+  if(!mini || !mainCount) return;
+  mini.textContent = mainCount.textContent || '0';
+}
+
+// Watch for cart count changes and initialize mini cart on DOM ready
+(function(){
+  document.addEventListener('DOMContentLoaded', ()=>{
+    createMiniCartButton();
+    updateMiniCartCount();
+    const target = document.getElementById('cart-count');
+    if(target){
+      const obs = new MutationObserver(()=> updateMiniCartCount());
+      obs.observe(target, {childList:true, characterData:true, subtree:true});
+    }
+  });
+})();
 
 /* ============ COMPTE À REBOURS (vendredi 12h) ============ */
 function majCompteur(){
