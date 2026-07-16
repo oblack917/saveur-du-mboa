@@ -884,13 +884,29 @@ function renderSuggestions(query, items){
   const liste = document.getElementById('suggestions-adresse');
   const q = query.trim();
   const html = items.map((r, idx) => {
-    // Compose precise lines: main = "rue + num" ; second = "CP + ville" (affiche d'abord la rue)
+    // Compose precise lines: main = "rue + num" ; second = "CP + ville" (ensure street stays when API returns number first)
     const num = r.address?.house_number || '';
     const road = r.address?.road || r.address?.pedestrian || r.address?.residential || r.address?.footway || r.address?.village || r.display_name?.split(',')[0] || '';
     const ville = r.address?.city || r.address?.town || r.address?.village || r.address?.municipality || '';
     const cp = r.address?.postcode || '';
 
-    const mainLineRaw = `${road}${road && num ? ' ' + num : ''}`.trim() || (r.display_name ? r.display_name.split(',')[0] : 'Adresse');
+    // If API returns display_name starting with number (e.g. "2, Place du Marché ...") and road is empty,
+    // rebuild as "Place du Marché 2" so the street name remains visible when user adds number.
+    let mainLineRaw = '';
+    if(road){
+      mainLineRaw = `${road}${road && num ? ' ' + num : ''}`.trim();
+    } else if(r.display_name){
+      const parts = r.display_name.split(',').map(p=>p.trim()).filter(Boolean);
+      if(parts.length > 1 && /^\d/.test(parts[0])){
+        // first part is number, second is street name -> swap
+        mainLineRaw = `${parts[1]}${parts[0] ? ' ' + parts[0] : ''}`.trim();
+      } else {
+        mainLineRaw = parts[0] || 'Adresse';
+      }
+    } else {
+      mainLineRaw = 'Adresse';
+    }
+
     const secondLineRaw = `${cp}${cp && ville ? ' ' : ''}${ville}`.trim();
 
     const mainLine = highlightMatch(mainLineRaw, q);
