@@ -580,6 +580,76 @@ button:active, .btn-whatsapp:active, .btn-ajouter:active{transform:translateY(1p
   </section>
 </div>
 
+<!-- ============ PAGE LÉGAL ============ -->
+<div class="page" id="page-legal">
+  <section class="page-hero wax-bg">
+    <span class="fil-ariane">Informations légales</span>
+    <h1>Mentions légales <span class="fil">&amp; confidentialité</span></h1>
+    <p>Transparence sur qui nous sommes et comment vos données sont traitées.</p>
+  </section>
+  <section>
+    <div class="container" style="max-width:760px">
+      <div style="background:var(--blanc);border-radius:var(--radius);box-shadow:var(--shadow);padding:1.8rem 1.6rem">
+
+        <h2 style="color:var(--brun)">Mentions légales</h2>
+        <p style="margin:.6rem 0 1.4rem">
+          <strong>Éditeur du site :</strong> Saveurs du Mboa —
+          <mark style="background:#fdeccb">[dénomination exacte à compléter]</mark>.<br>
+          <strong>Numéro d'entreprise (BCE / TVA) :</strong>
+          <mark style="background:#fdeccb">[N° BCE à compléter]</mark>.<br>
+          <strong>Adresse :</strong>
+          <mark style="background:#fdeccb">[adresse à compléter]</mark>.<br>
+          <strong>Contact :</strong>
+          <mark style="background:#fdeccb">[e-mail de contact à compléter]</mark> —
+          WhatsApp 0489 76 58 28.<br>
+          <strong>Hébergement :</strong> GitHub Pages, fourni par GitHub, Inc.
+          (88 Colin P. Kelly Jr. Street, San Francisco, CA 94107, États-Unis).
+        </p>
+
+        <h2 style="color:var(--brun)">Politique de confidentialité</h2>
+        <p style="margin:.6rem 0 .8rem">
+          Nous attachons de l'importance à la protection de vos données
+          personnelles (conformément au RGPD).
+        </p>
+        <p style="margin:.4rem 0"><strong>Quelles données et pourquoi ?</strong>
+          Lorsque vous passez commande via WhatsApp, vous nous communiquez votre
+          <strong>nom</strong>, votre <strong>numéro de téléphone</strong> et votre
+          <strong>adresse de livraison</strong>. Ces informations servent
+          uniquement à <strong>préparer et livrer votre commande</strong> et à
+          vous contacter à son sujet.</p>
+        <p style="margin:.4rem 0"><strong>Recherche d'adresse.</strong> Lorsque vous
+          tapez votre adresse dans le champ de livraison, le texte saisi est envoyé
+          au service <strong>OpenStreetMap / Nominatim</strong> afin de vous
+          proposer des suggestions. Aucune autre donnée n'y est transmise.</p>
+        <p style="margin:.4rem 0"><strong>Conservation.</strong> Vos données de
+          commande sont conservées le temps nécessaire au traitement de la commande
+          et au respect de nos éventuelles obligations comptables, puis supprimées.</p>
+        <p style="margin:.4rem 0"><strong>Pas de revente, pas de publicité.</strong>
+          Vos données ne sont ni vendues, ni louées, ni utilisées à des fins
+          publicitaires.</p>
+        <p style="margin:.4rem 0 1.4rem"><strong>Vos droits.</strong> Vous pouvez
+          demander l'accès, la rectification ou l'effacement de vos données en nous
+          écrivant à
+          <mark style="background:#fdeccb">[e-mail de contact à compléter]</mark>.</p>
+
+        <h2 style="color:var(--brun)">Cookies</h2>
+        <p style="margin:.6rem 0 0">
+          Ce site n'utilise <strong>aucun cookie de pistage, de statistiques ni de
+          publicité</strong>. Seul un petit enregistrement technique, stocké
+          localement dans votre navigateur, peut mémoriser vos préférences
+          d'affichage. Les polices d'écriture et les images sont hébergées
+          directement sur le site : aucune ressource n'est chargée depuis un service
+          tiers au chargement de la page.
+        </p>
+
+      </div>
+      <p class="mini" style="text-align:center;margin-top:1.4rem;opacity:.7">
+        Dernière mise à jour : juillet 2026.
+      </p>
+    </div>
+  </section>
+</div>
+
 </main>
 
 <!-- ===== FOOTER ===== -->
@@ -656,7 +726,7 @@ button:active, .btn-whatsapp:active, .btn-ajouter:active{transform:translateY(1p
 <script src="config.js"></script>
 <script>
 /* ============ ROUTEUR DE PAGES ============ */
-const PAGES = ["accueil","menu","histoire","comment","livraison","faq"];
+const PAGES = ["accueil","menu","histoire","comment","livraison","faq","legal"];
 function router(){
   let cible = (location.hash || "#/accueil").replace("#/","");
   if(!PAGES.includes(cible)) cible = "accueil";
