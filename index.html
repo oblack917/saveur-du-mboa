@@ -807,33 +807,30 @@ async function rechercherAdresses(){
       if(!Array.isArray(resultats) || resultats.length === 0){
         liste.innerHTML = '<div class="no-results">❌ Aucune adresse trouvée — vérifiez l\'orthographe</div>';
       } else {
-        // Utiliser display_name (généralement plus lisible) et découper pour mise en forme
+        // Afficher précisément: "numéro + rue" en gras et "CP + ville" en petit
         liste.innerHTML = resultats.map(r => {
-          const full = r.display_name || r.name || '';
-          const parts = full.split(',').map(p => p.trim()).filter(Boolean);
-          const main = parts.shift() || '';
-          const details = parts.join(', ');
-
-          // Fallbacks si display_name absent
+          // Composants clefs fournis par Nominatim
           const num = r.address?.house_number || '';
-          const road = r.address?.road || r.address?.neighbourhood || '';
-          const ville = r.address?.city || r.address?.town || r.address?.village || '';
+          const road = r.address?.road || r.address?.pedestrian || r.address?.footway || r.address?.residential || r.address?.village || r.address?.hamlet || r.name || '';
+          const ville = r.address?.city || r.address?.town || r.address?.village || r.address?.municipality || '';
           const cp = r.address?.postcode || '';
 
-          const strongText = main || `${num ? num + ' ' : ''}${road}`.trim() || 'Adresse';
-          const smallText = details || `${ville}${cp ? ' ' + cp : ''}`.trim();
+          // Ligne principale: "<num> <rue>" (ou fallback au nom complet s'il manque)
+          const mainLine = `${num}${num ? ' ' : ''}${road}`.trim() || (r.display_name ? r.display_name.split(',')[0] : 'Adresse');
+          // Ligne secondaire: "<CP> <Ville>"
+          const secondLine = `${cp}${cp && ville ? ' ' : ''}${ville}`.trim();
 
-          // Construire valeur de sélection complète (utiliser display_name quand possible)
-          const valeurSelection = (full || `${strongText}${smallText ? ', ' + smallText : ''}`).replace(/'/g,"\\'");
+          const valeurSelection = (`${mainLine}${secondLine ? ', ' + secondLine : ''}`).replace(/'/g,"\\'");
 
           return `<div class="addr-item" onclick="selectionnerAdresse('${valeurSelection}')">
             <span class="addr-icon">📍</span>
             <div class="addr-info">
-              <strong>${escapeHtml(strongText)}</strong>
-              ${smallText ? `<small>${escapeHtml(smallText)}</small>` : ''}
+              <strong>${escapeHtml(mainLine)}</strong>
+              ${secondLine ? `<small>${escapeHtml(secondLine)}</small>` : ''}
             </div>
           </div>`;
         }).join('');
+
       }
     } catch(e){
       console.warn('Erreur recherche adresses:', e);
