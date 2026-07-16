@@ -702,6 +702,29 @@ button:active, .btn-whatsapp:active, .btn-ajouter:active{transform:translateY(1p
 
 <!-- ===== PANIER ===== -->
 <div id="overlay" onclick="fermerPanier()"></div>
+<style>
+/* ===== Confirmation de commande + suivi ===== */
+#confirmation{padding:.2rem 0}
+.conf-ok{text-align:center;padding:.4rem 0 .6rem}
+.conf-check{font-size:2.6rem;line-height:1}
+.conf-ok h3{color:var(--brun);margin:.4rem 0 .3rem}
+.conf-ref{margin:.2rem 0;font-size:.95rem}
+.conf-ref strong{color:var(--terracotta);letter-spacing:1px}
+.conf-sub{color:#5a4632;font-size:.92rem;max-width:36ch;margin:.4rem auto 0;line-height:1.45}
+.suivi{background:var(--creme);border-radius:var(--radius);padding:1rem 1.1rem;margin-top:1rem}
+.suivi h4{color:var(--brun);margin-bottom:.8rem}
+.timeline{list-style:none;margin:0;padding:0}
+.timeline li{position:relative;padding:0 0 1.05rem 1.7rem}
+.timeline li:last-child{padding-bottom:0}
+.timeline li::before{content:"";position:absolute;left:6px;top:1.1rem;bottom:0;width:2px;background:#e4d3b6}
+.timeline li:last-child::before{display:none}
+.timeline .dot{position:absolute;left:0;top:2px;width:14px;height:14px;border-radius:50%;background:#fff;border:2px solid #cdb68e}
+.timeline li.done .dot{background:var(--or);border-color:var(--or)}
+.timeline li strong{display:block;font-size:.95rem;color:#a4906f}
+.timeline li.done strong{color:var(--brun)}
+.timeline li em{font-style:normal;color:#8a7053;font-size:.82rem}
+.suivi-note{font-size:.85rem;color:#6d5236;margin-top:.9rem;line-height:1.45}
+</style>
 <aside id="drawer" aria-label="Panier">
   <div class="drawer-tete">
     <h3>Votre commande</h3>
@@ -736,9 +759,31 @@ button:active, .btn-whatsapp:active, .btn-ajouter:active{transform:translateY(1p
       <label for="f-notes">Remarques (allergies, étage, etc.)</label>
       <textarea id="f-notes" placeholder="Facultatif"></textarea>
     </div>
+
+    <div id="confirmation" style="display:none">
+      <div class="conf-ok">
+        <div class="conf-check">✅</div>
+        <h3>Commande bien enregistrée !</h3>
+        <p class="conf-ref">Référence : <strong id="conf-ref">—</strong></p>
+        <p class="conf-sub">Votre commande a été transmise sur WhatsApp. Nous vous confirmons le créneau au plus vite.</p>
+      </div>
+      <div class="suivi">
+        <h4>Suivi de votre commande</h4>
+        <ol class="timeline">
+          <li class="done"><span class="dot"></span><strong>Reçue</strong><em>À l'instant</em></li>
+          <li><span class="dot"></span><strong>Confirmée par WhatsApp</strong><em>Nous vous répondons vite</em></li>
+          <li><span class="dot"></span><strong>En préparation</strong><em>Plats frais, le week-end</em></li>
+          <li><span class="dot"></span><strong>En route vers vous</strong><em>À partir de 10h</em></li>
+          <li><span class="dot"></span><strong>Livrée</strong><em>Bon appétit !</em></li>
+        </ol>
+        <p class="suivi-note">ℹ️ L'avancée de votre commande et l'heure de passage du livreur vous sont communiquées directement sur WhatsApp.</p>
+      </div>
+      <div class="recap" id="conf-recap" style="display:block;margin-top:1rem"></div>
+    </div>
   </div>
   <div class="drawer-pied">
     <button class="btn-whatsapp" id="btn-envoyer" onclick="envoyerCommande()" disabled>Envoyer la commande sur WhatsApp</button>
+    <button class="btn-whatsapp" id="btn-nouvelle" onclick="nouvelleCommande()" style="display:none">🧺 Passer une nouvelle commande</button>
     <p class="note-cmd">Votre commande s'ouvre dans WhatsApp, prête à envoyer. L'acompte de 30 % confirme la réservation.</p>
   </div>
 </aside>
@@ -1207,11 +1252,56 @@ function envoyerCommande(){
     return `• ${p.nom} × ${q} — ${euro((p.prix||0) * q)}`;
   }).join('\n');
   const acompte = total * (ACOMPTE_POURCENT || 0) / 100;
+  const ref = genererRef();
 
   const message =
-`🧺 *Nouvelle commande — Saveurs du Mboa*\n\n${lignes}\n\n*Total : ${euro(total)}*\nAcompte (${ACOMPTE_POURCENT} %) : *${euro(acompte)}* par virement au ${IBAN}\nSolde à la livraison : ${euro(total - acompte)}\n\n👤 ${nom}\n📞 ${tel}\n📍 ${adresse}\n🗺️ Localisation : ${urlCarte(adresse)}\n📅 Livraison : ${jour} (à partir de 10h)${notes ? `\n📝 ${notes}` : ''}\n\n_Je confirme ma commande et verse l'acompte pour la réserver._`;
+`🧺 *Nouvelle commande — Saveurs du Mboa*\nRéf. ${ref}\n\n${lignes}\n\n*Total : ${euro(total)}*\nAcompte (${ACOMPTE_POURCENT} %) : *${euro(acompte)}* par virement au ${IBAN}\nSolde à la livraison : ${euro(total - acompte)}\n\n👤 ${nom}\n📞 ${tel}\n📍 ${adresse}\n🗺️ Localisation : ${urlCarte(adresse)}\n📅 Livraison : ${jour} (à partir de 10h)${notes ? `\n📝 ${notes}` : ''}\n\n_Je confirme ma commande et verse l'acompte pour la réserver._`;
 
   window.open(`https://wa.me/${NUMERO_WHATSAPP}?text=${encodeURIComponent(message)}`, '_blank');
+  afficherConfirmation(ref, total, acompte);
+}
+
+/* ============ CONFIRMATION + SUIVI DE COMMANDE ============ */
+function genererRef(){
+  const c = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  let s = '';
+  for(let i=0;i<4;i++) s += c[Math.floor(Math.random()*c.length)];
+  return 'MB-' + s;
+}
+
+function afficherConfirmation(ref, total, acompte){
+  document.getElementById('conf-ref').textContent = ref;
+
+  const lignesHtml = Object.keys(panier).map(id => {
+    const p = MENU.find(m => m.id === id) || {nom:'?', prix:0};
+    const q = panier[id] || 0;
+    return `<div class="r"><span>${p.nom} × ${q}</span><span>${euro(p.prix * q)}</span></div>`;
+  }).join('');
+  document.getElementById('conf-recap').innerHTML =
+    lignesHtml +
+    `<div class="r total"><span>Total</span><span>${euro(total)}</span></div>` +
+    `<div class="r acompte"><span>Acompte (${ACOMPTE_POURCENT} %)</span><span>${euro(acompte)}</span></div>`;
+
+  ['lignes','recap','form-cmd'].forEach(id => document.getElementById(id).style.display = 'none');
+  document.getElementById('btn-envoyer').style.display = 'none';
+  document.querySelector('.drawer-pied .note-cmd').style.display = 'none';
+  document.getElementById('confirmation').style.display = 'block';
+  document.getElementById('btn-nouvelle').style.display = 'block';
+
+  ouvrirPanier();
+  document.querySelector('.drawer-corps').scrollTop = 0;
+}
+
+function nouvelleCommande(){
+  Object.keys(panier).forEach(k => delete panier[k]);
+  document.getElementById('confirmation').style.display = 'none';
+  document.getElementById('btn-nouvelle').style.display = 'none';
+  document.getElementById('btn-envoyer').style.display = '';
+  document.querySelector('.drawer-pied .note-cmd').style.display = '';
+  document.getElementById('lignes').style.display = '';
+  majTout();
+  fermerPanier();
+  location.hash = '#/menu';
 }
 
 // --- Mini cart floating button helpers ---
