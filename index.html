@@ -258,6 +258,11 @@ footer p{font-size:.95rem}
 .vide{text-align:center;color:#8a7355;padding:2rem 0}
 .form label{display:block;font-weight:700;font-size:.88rem;margin:.8rem 0 .25rem}
 .form input,.form select,.form textarea{width:100%;padding:.65rem .8rem;border:1.5px solid #d9c5a6;border-radius:10px;font-family:var(--body);font-size:.95rem;background:#fff}
+/* Autocomplete adresses */
+#suggestions-adresse li{padding:.7rem .8rem;border-bottom:1px solid #e4d3b6;cursor:pointer;font-size:.9rem;transition:background .15s}
+#suggestions-adresse li:hover{background:rgba(227,163,46,.12)}
+#suggestions-adresse li:last-child{border-bottom:none}
+#suggestions-adresse li strong{color:var(--terracotta);font-weight:700}
 .form textarea{resize:vertical;min-height:64px}
 .drawer-pied{padding:1rem 1.3rem;border-top:1px solid #e4d3b6;background:#fff}
 .btn-whatsapp{width:100%;background:#25D366;color:#fff;border:none;border-radius:999px;padding:.95rem;font-weight:800;font-size:1.03rem;display:flex;align-items:center;justify-content:center;gap:.5rem}
@@ -581,8 +586,11 @@ footer p{font-size:.95rem}
       <label for="f-tel">Téléphone *</label>
       <input id="f-tel" type="tel" placeholder="04XX XX XX XX" autocomplete="tel">
       <label for="f-adresse">Adresse de livraison *</label>
-      <input id="f-adresse" type="text" placeholder="Rue, numéro, commune" autocomplete="street-address" oninput="majLienCarte()">
-      <a id="lien-carte" href="#" target="_blank" rel="noopener" style="display:none;font-size:.85rem;color:var(--terracotta);font-weight:700;margin-top:.3rem;display:none">🗺️ Vérifier cette adresse sur la carte</a>
+      <div style="position:relative">
+        <input id="f-adresse" type="text" placeholder="Rue, numéro, commune" autocomplete="street-address" oninput="majLienCarte();rechercherAdresses()" onblur="fermerSuggestions()">
+        <ul id="suggestions-adresse" style="display:none;list-style:none;position:absolute;top:100%;left:0;right:0;background:#fff;border:1.5px solid #d9c5a6;border-top:none;border-radius:0 0 10px 10px;margin:0;padding:0;z-index:10;max-height:200px;overflow-y:auto;box-shadow:0 8px 16px rgba(0,0,0,.1)"></ul>
+      </div>
+      <a id="lien-carte" href="#" target="_blank" rel="noopener" style="display:none;font-size:.85rem;color:var(--terracotta);font-weight:700;margin-top:.3rem">🗺️ Vérifier cette adresse sur la carte</a>
       <label for="f-jour">Jour de livraison *</label>
       <select id="f-jour">
         <option value="">— Choisir —</option>
@@ -761,6 +769,62 @@ function majLienCarte(){
   } else {
     lien.style.display = "none";
   }
+}
+
+/* ============ AUTOCOMPLETE ADRESSES (Nominatim/OpenStreetMap) ============ */
+let timerRecherche = null;
+async function rechercherAdresses(){
+  const input = document.getElementById('f-adresse');
+  const liste = document.getElementById('suggestions-adresse');
+  const texte = input.value.trim();
+
+  // Fermer si moins de 3 caractères
+  if(texte.length < 3){
+    liste.style.display = "none";
+    return;
+  }
+
+  // Délai avant recherche (évite trop d'appels API)
+  clearTimeout(timerRecherche);
+  timerRecherche = setTimeout(async () => {
+    try {
+      // Recherche via Nominatim (OpenStreetMap) — limitée à la Belgique
+      const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(texte)},Belgique&format=json&limit=6&countrycodes=be`;
+      const response = await fetch(url);
+      const resultats = await response.json();
+
+      if(resultats.length === 0){
+        liste.innerHTML = '<li style="color:#8a7355;padding:.7rem .8rem">Aucune adresse trouvée</li>';
+      } else {
+        liste.innerHTML = resultats.map(r => {
+          // Formater l'adresse
+          const addr = (r.address?.road || r.address?.neighbourhood || r.name || '');
+          const num = r.address?.house_number || '';
+          const ville = r.address?.city || r.address?.town || r.address?.village || '';
+          const codepostal = r.address?.postcode || '';
+          const display = `${num ? num + ' ' : ''}${addr}${ville ? ', ' + ville : ''}${codepostal ? ' (' + codepostal + ')' : ''}`;
+          return `<li onclick="selectionnerAdresse('${display.replace(/'/g,'\\\'')}')" title="${display}"><strong>${num ? num + ' ' : ''}${addr}</strong><br><span style="font-size:.8rem;color:#6d5236">${ville}${codepostal ? ' ' + codepostal : ''}</span></li>`;
+        }).join('');
+      }
+      liste.style.display = "block";
+    } catch(e){
+      console.warn('Erreur recherche adresses:', e);
+      liste.innerHTML = '<li style="color:#8a7355;padding:.7rem .8rem">Erreur de connexion</li>';
+    }
+  }, 300);
+}
+
+function selectionnerAdresse(adresse){
+  document.getElementById('f-adresse').value = adresse;
+  document.getElementById('suggestions-adresse').style.display = "none";
+  majLienCarte();
+}
+
+function fermerSuggestions(){
+  // Ferme après un délai pour permettre le clic
+  setTimeout(() => {
+    document.getElementById('suggestions-adresse').style.display = "none";
+  }, 150);
 }
 
 function envoyerCommande(){
