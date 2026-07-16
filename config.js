@@ -19,22 +19,30 @@ const KM_GRATUITS = 5;                        // Rayon de livraison gratuite (km
 // Pour changer une PHOTO : mettez la nouvelle photo dans le dossier "photos"
 // avec EXACTEMENT le même nom (ex: ndole.jpg remplace l'ancienne ndole.jpg).
 // Pour changer un PLAT : modifiez "nom", "desc" (description) et "prix".
+// Champ "allergenes" : liste indicative séparée par des virgules, À FAIRE VALIDER
+// par la cuisine. Laisser vide ("") si aucun allergène majeur connu.
 const MENU = [
   { id:"plat1", cat:"plat", nom:"Ndolé Royale", prix:15.00, photo:"photos/ndole.jpg",
-    desc:"Le plat national : feuilles de ndolè mijotées aux arachides, crevettes et viande. Un classique généreux et parfumé." },
+    desc:"Le plat national : feuilles de ndolè mijotées aux arachides, crevettes et viande. Un classique généreux et parfumé.",
+    allergenes:"Arachides, Crustacés" },
 
   { id:"plat2", cat:"plat", nom:"Porc Braisé", prix:15.00, photo:"photos/porc.jpg",
-    desc:"Morceaux de porc marinés aux épices maison puis braisés, fondants et savoureux, servis avec oignons rouges." },
+    desc:"Morceaux de porc marinés aux épices maison puis braisés, fondants et savoureux, servis avec oignons rouges.",
+    allergenes:"" },
 
   { id:"plat3", cat:"plat", nom:"Maquereau Braisé", prix:15.00, photo:"photos/maquereau.jpg",
-    desc:"Maquereau entier mariné aux épices vertes et braisé comme au pays, relevé juste ce qu'il faut." },
+    desc:"Maquereau entier mariné aux épices vertes et braisé comme au pays, relevé juste ce qu'il faut.",
+    allergenes:"Poisson" },
 
   { id:"accomp1", cat:"accomp", nom:"Bâtons de manioc", prix:5.00, photo:"photos/manioc.jpg",
-    desc:"Bâtons de manioc traditionnels (bobolo), l'accompagnement parfait du poisson braisé." },
+    desc:"Bâtons de manioc traditionnels (bobolo), l'accompagnement parfait du poisson braisé.",
+    allergenes:"" },
 
   { id:"accomp2", cat:"accomp", nom:"Banane vapeur", prix:5.00, photo:"photos/banane-vapeur.jpg",
-    desc:"Plantains mûrs cuits à la vapeur, doux et moelleux, comme à la maison." },
+    desc:"Plantains mûrs cuits à la vapeur, doux et moelleux, comme à la maison.",
+    allergenes:"" },
 
   { id:"accomp3", cat:"accomp", nom:"Banane plantain", prix:5.00, photo:"photos/banane-plantain.jpg",
-    desc:"Plantains mûrs frits et dorés, caramélisés à souhait. Irrésistibles." }
+    desc:"Plantains mûrs frits et dorés, caramélisés à souhait. Irrésistibles.",
+    allergenes:"" }
 ];

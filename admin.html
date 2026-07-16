@@ -215,6 +215,8 @@ function afficherMenu(){
           <textarea id="desc-${p.id}" placeholder="Décrivez le plat en une ou deux phrases">${p.desc}</textarea>
           <label>Prix (€)</label>
           <input type="number" id="prix-${p.id}" step="0.50" min="0" value="${p.prix}">
+          <label>Allergènes <span style="font-weight:400;color:#8a7355">(séparés par des virgules — ex : Arachides, Poisson. Laissez vide si aucun.)</span></label>
+          <input type="text" id="allerg-${p.id}" value="${(p.allergenes || '').replace(/"/g,'&quot;')}" placeholder="Ex : Arachides, Crustacés">
           <button class="btn" style="background:#fdecea;color:#8f2013;margin-top:.8rem;font-size:.85rem;padding:.5rem 1rem" onclick="supprimerItem('${p.id}')">🗑 Supprimer ${p.nom ? '« ' + p.nom.replace(/"/g,'&quot;') + ' »' : 'ce plat'}</button>
         </div>`).join("")}
       <button class="btn btn-brun" style="margin-top:1rem;width:100%" onclick="ajouterItem('${cat}')">➕ ${libelleAjout}</button>
@@ -232,6 +234,8 @@ function lireFormulaire(){
     p.nom  = nom.value;
     p.desc = document.getElementById("desc-" + p.id).value;
     p.prix = parseFloat(document.getElementById("prix-" + p.id).value) || 0;
+    const al = document.getElementById("allerg-" + p.id);
+    p.allergenes = al ? al.value.trim() : (p.allergenes || "");
   });
 }
 
@@ -239,7 +243,7 @@ function ajouterItem(cat){
   lireFormulaire();
   const id = "p" + Date.now();
   etat.MENU.push({ id, cat, nom:"", desc:"", prix: cat === "plat" ? 15.00 : 5.00,
-                   photo:"photos/" + id + ".jpg", _nouveau:true });
+                   photo:"photos/" + id + ".jpg", allergenes:"", _nouveau:true });
   afficherMenu();
   document.getElementById("item-" + id).scrollIntoView({behavior:"smooth", block:"center"});
 }
@@ -282,7 +286,7 @@ function changerPhoto(id, input){
 function texteConfig(){
   const s = v => '"' + String(v).replace(/\\/g,"\\\\").replace(/"/g,'\\"') + '"';
   const lignes = etat.MENU.map(p =>
-    `  { id:${s(p.id)}, cat:${s(p.cat)}, nom:${s(p.nom.trim())}, prix:${p.prix.toFixed(2)}, photo:${s(p.photo)},\n    desc:${s(p.desc.trim())} }`
+    `  { id:${s(p.id)}, cat:${s(p.cat)}, nom:${s(p.nom.trim())}, prix:${p.prix.toFixed(2)}, photo:${s(p.photo)},\n    desc:${s(p.desc.trim())}, allergenes:${s((p.allergenes || '').trim())} }`
   ).join(",\n\n");
   return `/* Fichier généré par la page d'administration — ${new Date().toLocaleString("fr-BE")} */
 const NUMERO_WHATSAPP = ${s(document.getElementById("g-whatsapp").value.trim())};

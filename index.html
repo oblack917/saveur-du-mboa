@@ -439,6 +439,7 @@ button:active, .btn-whatsapp:active, .btn-ajouter:active{transform:translateY(1p
         <p class="section-sous">Complétez votre plat comme au pays.</p>
         <div class="plats" id="liste-accomp"></div>
       </div>
+      <p class="avertissement-allergenes">⚠️ <strong>Allergènes :</strong> les informations sont fournies à titre indicatif et confirmées par la cuisine. Nos plats sont préparés dans une cuisine qui manipule arachides, poisson, crustacés et autres allergènes — des traces sont possibles. <strong>En cas d'allergie, signalez-le impérativement dans les remarques de votre commande.</strong></p>
     </div>
   </section>
   <section class="cta-final wax-bg">
@@ -624,6 +625,32 @@ button:active, .btn-whatsapp:active, .btn-ajouter:active{transform:translateY(1p
           (88 Colin P. Kelly Jr. Street, San Francisco, CA 94107, États-Unis).
         </p>
 
+        <h2 style="color:var(--brun)">Conditions de vente</h2>
+        <p style="margin:.6rem 0 .4rem"><strong>Commandes.</strong> Les commandes se
+          passent via WhatsApp jusqu'au <strong>vendredi 12h</strong> pour une
+          livraison le week-end suivant. Nos plats sont cuisinés sur commande, en
+          quantité limitée, avec des produits frais.</p>
+        <p style="margin:.4rem 0"><strong>Prix.</strong> Plats à 15 € et
+          accompagnements à 5 €. Les prix sont indiqués en euros, TVA comprise le
+          cas échéant.</p>
+        <p style="margin:.4rem 0"><strong>Acompte &amp; paiement.</strong> Un acompte
+          de 30 % est demandé par virement pour confirmer et réserver la commande.
+          Le solde se règle à la livraison, en espèces ou par virement.
+          <strong>En cas de désistement après confirmation, l'acompte reste
+          acquis</strong> (denrées déjà engagées).</p>
+        <p style="margin:.4rem 0"><strong>Livraison.</strong> Le samedi ou le
+          dimanche à partir de 10h, en provinces de Liège et du Luxembourg.
+          Gratuite jusqu'à 5 km de la cuisine, puis 0,30 €/km. Le créneau est
+          confirmé la veille par WhatsApp.</p>
+        <p style="margin:.4rem 0"><strong>Droit de rétractation.</strong> S'agissant
+          de <strong>denrées alimentaires périssables préparées sur commande</strong>,
+          le droit de rétractation de 14 jours ne s'applique pas (exception légale
+          prévue pour ce type de produits).</p>
+        <p style="margin:.4rem 0 1.4rem"><strong>Allergies.</strong> Les informations
+          sur les allergènes sont indiquées à titre indicatif sur la page menu.
+          Nos plats sont préparés dans une cuisine manipulant divers allergènes :
+          en cas d'allergie, signalez-le impérativement lors de la commande.</p>
+
         <h2 style="color:var(--brun)">Politique de confidentialité</h2>
         <p style="margin:.6rem 0 .8rem">
           Nous attachons de l'importance à la protection de vos données
@@ -703,6 +730,11 @@ button:active, .btn-whatsapp:active, .btn-ajouter:active{transform:translateY(1p
 <!-- ===== PANIER ===== -->
 <div id="overlay" onclick="fermerPanier()"></div>
 <style>
+/* ===== Allergènes ===== */
+.allergenes{font-size:.82rem;color:#7a6144;background:var(--creme);border-radius:8px;padding:.35rem .6rem;margin:.2rem 0 .6rem;line-height:1.4}
+.allergenes strong{color:var(--brun)}
+.avertissement-allergenes{font-size:.86rem;color:#6d5236;line-height:1.5;background:#fdf3e0;border:1px solid #efd9ac;border-radius:var(--radius);padding:.9rem 1.1rem;margin-top:1.6rem}
+.avertissement-allergenes strong{color:var(--brun)}
 /* ===== Confirmation de commande + suivi ===== */
 #confirmation{padding:.2rem 0}
 .conf-ok{text-align:center;padding:.4rem 0 .6rem}
@@ -823,12 +855,16 @@ function actionHtml(p){
 }
 
 function carte(p){
+  const allerg = (p.allergenes && p.allergenes.trim())
+    ? `<strong>Allergènes :</strong> ${p.allergenes.trim()}`
+    : `Aucun allergène majeur connu`;
   return `
     <article class="plat">
       <div class="plat-photo"><img src="${p.photo}" alt="${p.nom}" loading="lazy"></div>
       <div class="plat-corps">
         <h3>${p.nom}</h3>
         <p class="desc">${p.desc}</p>
+        <p class="allergenes">🥜 ${allerg}</p>
         <div class="plat-pied"><span class="prix">${euro(p.prix)}</span></div>
         <div id="action-${p.id}"></div>
       </div>
