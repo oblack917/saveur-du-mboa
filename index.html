@@ -804,22 +804,33 @@ async function rechercherAdresses(){
       const response = await fetch(url);
       const resultats = await response.json();
 
-      if(resultats.length === 0){
+      if(!Array.isArray(resultats) || resultats.length === 0){
         liste.innerHTML = '<div class="no-results">❌ Aucune adresse trouvée — vérifiez l\'orthographe</div>';
       } else {
+        // Utiliser display_name (généralement plus lisible) et découper pour mise en forme
         liste.innerHTML = resultats.map(r => {
-          // Formater l'adresse
+          const full = r.display_name || r.name || '';
+          const parts = full.split(',').map(p => p.trim()).filter(Boolean);
+          const main = parts.shift() || '';
+          const details = parts.join(', ');
+
+          // Fallbacks si display_name absent
           const num = r.address?.house_number || '';
-          const addr = (r.address?.road || r.address?.neighbourhood || r.name || 'Adresse');
+          const road = r.address?.road || r.address?.neighbourhood || '';
           const ville = r.address?.city || r.address?.town || r.address?.village || '';
           const cp = r.address?.postcode || '';
-          const display = `${num ? num + ' ' : ''}${addr}${ville ? ', ' + ville : ''}${cp ? ' (' + cp + ')' : ''}`.trim();
-          const sousInfo = `${ville}${cp ? ' ' + cp : ''}`;
-          return `<div onclick="selectionnerAdresse('${display.replace(/'/g,'\\\'')}')">
+
+          const strongText = main || `${num ? num + ' ' : ''}${road}`.trim() || 'Adresse';
+          const smallText = details || `${ville}${cp ? ' ' + cp : ''}`.trim();
+
+          // Construire valeur de sélection complète (utiliser display_name quand possible)
+          const valeurSelection = (full || `${strongText}${smallText ? ', ' + smallText : ''}`).replace(/'/g,"\\'");
+
+          return `<div class="addr-item" onclick="selectionnerAdresse('${valeurSelection}')">
             <span class="addr-icon">📍</span>
             <div class="addr-info">
-              <strong>${num ? num + ' ' : ''}${addr}</strong>
-              <small>${sousInfo}</small>
+              <strong>${escapeHtml(strongText)}</strong>
+              ${smallText ? `<small>${escapeHtml(smallText)}</small>` : ''}
             </div>
           </div>`;
         }).join('');
@@ -849,6 +860,14 @@ function fermerSuggestions(){
   setTimeout(() => {
     document.getElementById('suggestions-adresse').style.display = "none";
   }, 150);
+}
+
+// Petit utilitaire pour échapper le HTML quand on injecte du texte utilisateur
+function escapeHtml(str){
+  if(!str) return '';
+  return str.replace(/[&<>\"]+/g, function(c){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;', '"':'&quot;'}[c] || c;
+  });
 }
 
 function envoyerCommande(){
