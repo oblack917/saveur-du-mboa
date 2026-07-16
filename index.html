@@ -258,11 +258,18 @@ footer p{font-size:.95rem}
 .vide{text-align:center;color:#8a7355;padding:2rem 0}
 .form label{display:block;font-weight:700;font-size:.88rem;margin:.8rem 0 .25rem}
 .form input,.form select,.form textarea{width:100%;padding:.65rem .8rem;border:1.5px solid #d9c5a6;border-radius:10px;font-family:var(--body);font-size:.95rem;background:#fff}
-/* Autocomplete adresses */
-#suggestions-adresse li{padding:.7rem .8rem;border-bottom:1px solid #e4d3b6;cursor:pointer;font-size:.9rem;transition:background .15s}
-#suggestions-adresse li:hover{background:rgba(227,163,46,.12)}
-#suggestions-adresse li:last-child{border-bottom:none}
-#suggestions-adresse li strong{color:var(--terracotta);font-weight:700}
+.form input:focus{outline:none;border-color:var(--or);box-shadow:0 0 0 3px rgba(227,163,46,.15)}
+/* Autocomplete adresses - Dropdown stylisé */
+#suggestions-adresse{animation:slideDown .25s ease-out}
+@keyframes slideDown{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
+#suggestions-adresse > div{padding:.85rem 1rem;border-bottom:1px solid #e4d3b6;cursor:pointer;transition:all .15s;display:flex;align-items:flex-start;gap:.7rem}
+#suggestions-adresse > div:hover{background:rgba(227,163,46,.08);border-left:4px solid var(--or);padding-left:calc(1rem - 4px)}
+#suggestions-adresse > div:last-child{border-bottom:none}
+#suggestions-adresse .addr-icon{color:var(--terracotta);font-size:1.2rem;flex-shrink:0;margin-top:.05rem}
+#suggestions-adresse .addr-info strong{display:block;color:var(--encre);font-weight:700;font-size:.96rem;line-height:1.3}
+#suggestions-adresse .addr-info small{display:block;color:#8a7355;font-size:.8rem;margin-top:.2rem}
+#suggestions-adresse .loading{padding:1.2rem;text-align:center;color:#8a7355;font-size:.9rem}
+#suggestions-adresse .no-results{padding:1.2rem;text-align:center;color:#8a7355;font-size:.9rem}
 .form textarea{resize:vertical;min-height:64px}
 .drawer-pied{padding:1rem 1.3rem;border-top:1px solid #e4d3b6;background:#fff}
 .btn-whatsapp{width:100%;background:#25D366;color:#fff;border:none;border-radius:999px;padding:.95rem;font-weight:800;font-size:1.03rem;display:flex;align-items:center;justify-content:center;gap:.5rem}
@@ -586,9 +593,9 @@ footer p{font-size:.95rem}
       <label for="f-tel">Téléphone *</label>
       <input id="f-tel" type="tel" placeholder="04XX XX XX XX" autocomplete="tel">
       <label for="f-adresse">Adresse de livraison *</label>
-      <div style="position:relative">
-        <input id="f-adresse" type="text" placeholder="Rue, numéro, commune" autocomplete="street-address" oninput="majLienCarte();rechercherAdresses()" onblur="fermerSuggestions()">
-        <ul id="suggestions-adresse" style="display:none;list-style:none;position:absolute;top:100%;left:0;right:0;background:#fff;border:1.5px solid #d9c5a6;border-top:none;border-radius:0 0 10px 10px;margin:0;padding:0;z-index:10;max-height:200px;overflow-y:auto;box-shadow:0 8px 16px rgba(0,0,0,.1)"></ul>
+      <div style="position:relative;z-index:20">
+        <input id="f-adresse" type="text" placeholder="Rue, numéro, commune" autocomplete="off" oninput="majLienCarte();rechercherAdresses()" onblur="fermerSuggestions()" onfocus="afficherSuggestionsIfExists()">
+        <div id="suggestions-adresse" style="display:none;position:absolute;top:100%;left:0;right:0;background:#fff;border:2px solid var(--or);border-top:none;border-radius:0 0 12px 12px;margin:0;padding:0;z-index:10;max-height:280px;overflow-y:auto;box-shadow:0 12px 32px rgba(64,32,14,.2);list-style:none"></div>
       </div>
       <a id="lien-carte" href="#" target="_blank" rel="noopener" style="display:none;font-size:.85rem;color:var(--terracotta);font-weight:700;margin-top:.3rem">🗺️ Vérifier cette adresse sur la carte</a>
       <label for="f-jour">Jour de livraison *</label>
@@ -784,40 +791,57 @@ async function rechercherAdresses(){
     return;
   }
 
+  // Afficher "Recherche..." pendant l'appel API
+  liste.innerHTML = '<div class="loading">🔍 Recherche en cours...</div>';
+  liste.style.display = "block";
+
   // Délai avant recherche (évite trop d'appels API)
   clearTimeout(timerRecherche);
   timerRecherche = setTimeout(async () => {
     try {
       // Recherche via Nominatim (OpenStreetMap) — limitée à la Belgique
-      const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(texte)},Belgique&format=json&limit=6&countrycodes=be`;
+      const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(texte)},Belgique&format=json&limit=8&countrycodes=be`;
       const response = await fetch(url);
       const resultats = await response.json();
 
       if(resultats.length === 0){
-        liste.innerHTML = '<li style="color:#8a7355;padding:.7rem .8rem">Aucune adresse trouvée</li>';
+        liste.innerHTML = '<div class="no-results">❌ Aucune adresse trouvée — vérifiez l\'orthographe</div>';
       } else {
         liste.innerHTML = resultats.map(r => {
           // Formater l'adresse
-          const addr = (r.address?.road || r.address?.neighbourhood || r.name || '');
           const num = r.address?.house_number || '';
+          const addr = (r.address?.road || r.address?.neighbourhood || r.name || 'Adresse');
           const ville = r.address?.city || r.address?.town || r.address?.village || '';
-          const codepostal = r.address?.postcode || '';
-          const display = `${num ? num + ' ' : ''}${addr}${ville ? ', ' + ville : ''}${codepostal ? ' (' + codepostal + ')' : ''}`;
-          return `<li onclick="selectionnerAdresse('${display.replace(/'/g,'\\\'')}')" title="${display}"><strong>${num ? num + ' ' : ''}${addr}</strong><br><span style="font-size:.8rem;color:#6d5236">${ville}${codepostal ? ' ' + codepostal : ''}</span></li>`;
+          const cp = r.address?.postcode || '';
+          const display = `${num ? num + ' ' : ''}${addr}${ville ? ', ' + ville : ''}${cp ? ' (' + cp + ')' : ''}`.trim();
+          const sousInfo = `${ville}${cp ? ' ' + cp : ''}`;
+          return `<div onclick="selectionnerAdresse('${display.replace(/'/g,'\\\'')}')">
+            <span class="addr-icon">📍</span>
+            <div class="addr-info">
+              <strong>${num ? num + ' ' : ''}${addr}</strong>
+              <small>${sousInfo}</small>
+            </div>
+          </div>`;
         }).join('');
       }
-      liste.style.display = "block";
     } catch(e){
       console.warn('Erreur recherche adresses:', e);
-      liste.innerHTML = '<li style="color:#8a7355;padding:.7rem .8rem">Erreur de connexion</li>';
+      liste.innerHTML = '<div class="no-results">⚠️ Erreur de connexion — vérifiez votre internet</div>';
     }
-  }, 300);
+  }, 400);
 }
 
 function selectionnerAdresse(adresse){
   document.getElementById('f-adresse').value = adresse;
   document.getElementById('suggestions-adresse').style.display = "none";
   majLienCarte();
+}
+
+function afficherSuggestionsIfExists(){
+  const liste = document.getElementById('suggestions-adresse');
+  if(liste.innerHTML.trim().length > 0){
+    liste.style.display = "block";
+  }
 }
 
 function fermerSuggestions(){
