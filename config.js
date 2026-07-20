@@ -1,5 +1,5 @@
-/* Fichier généré par la page d'administration — 16/07/2026 13:32:23 */
-const CONFIG_VERSION = 1784201543741;
+/* Fichier généré par la page d'administration — 21/07/2026 00:32:04 */
+const CONFIG_VERSION = 1784586724329;
 const NUMERO_WHATSAPP = "32489765828";
 const IBAN = "BE00 0000 0000 0000";
 const ACOMPTE_POURCENT = 50;
@@ -22,6 +22,6 @@ const MENU = [
   { id:"accomp2", cat:"accomp", nom:"Banane vapeur", prix:5.00, photo:"photos/banane-vapeur.jpg",
     desc:"Plantains mûrs cuits à la vapeur, doux et moelleux, comme à la maison.", allergenes:"" },
 
-  { id:"accomp3", cat:"accomp", nom:"Banane plantain", prix:5.00, photo:"photos/banane-plantain.jpg",
+  { id:"accomp3", cat:"accomp", nom:"Banane plantain frie", prix:5.00, photo:"photos/banane-plantain.jpg",
     desc:"Plantains mûrs frits et dorés, caramélisés à souhait. Irrésistibles.", allergenes:"" }
 ];
