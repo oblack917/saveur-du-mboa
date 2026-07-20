@@ -40,11 +40,14 @@ varie d'une adresse à l'autre et selon la zone.
   géocodage indisponible), les frais passent en « à confirmer sur WhatsApp » et
   la commande n'est **pas bloquée**.
 
-## En attente d'infos client (ne pas inventer)
+## Infos client (fournies)
 
-- **Adresses exactes** des deux cuisines (Caroline / Luxembourg, Viviane /
-  Liège) pour renseigner les coordonnées lat/lon et l'adresse de retrait
-  affichée. Placeholders en attendant, comme l'IBAN.
+Adresses des deux cuisines, géocodées via Nominatim (2026-07-20) :
+
+- **Caroline / Luxembourg** : Martelwée 33, 6637 Fauvillers (Warnach) →
+  `lat 49.8626398, lon 5.7267954`.
+- **Viviane / Liège** : Chaussée Roosevelt 128, 4420 Saint-Nicolas (Montegnée) →
+  `lat 50.6456901, lon 5.5230284`.
 
 ## Note de confidentialité (choix assumé par l'utilisateur)
 
@@ -67,9 +70,9 @@ const FACTEUR_ROUTE = 1.3;   // vol d'oiseau -> distance route estimée
 
 const ZONES = [
   { id:"luxembourg", nom:"Province de Luxembourg", cuisine:"Caroline",
-    adresse:"<adresse à compléter>", lat:0, lon:0 },
+    adresse:"Martelwée 33, 6637 Fauvillers", lat:49.8626398, lon:5.7267954 },
   { id:"liege",      nom:"Province de Liège",      cuisine:"Viviane",
-    adresse:"<adresse à compléter>", lat:0, lon:0 }
+    adresse:"Chaussée Roosevelt 128, 4420 Saint-Nicolas", lat:50.6456901, lon:5.5230284 }
 ];
 ```
 
