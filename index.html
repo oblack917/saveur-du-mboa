@@ -64,6 +64,11 @@ header{position:sticky;top:0;z-index:50;background:var(--brun);color:var(--creme
 .logo{text-decoration:none;display:flex;align-items:baseline;gap:.4rem;line-height:1}
 .logo .s{font-family:var(--script);font-size:1.5rem;color:var(--creme)}
 .logo .m{font-family:var(--display);font-weight:800;font-size:1.25rem;color:var(--or);letter-spacing:1px}
+.logo .toque{width:2.1em;height:auto;align-self:center;transform:translateY(-2px)}
+.hero-titre{position:relative;display:inline-block}
+.hero-titre .titre-script,.hero-titre .titre-mboa{position:relative;z-index:1}
+.hero .toque{position:absolute;top:-3.4rem;right:-2.1rem;width:clamp(74px,12.5vw,118px);height:auto;filter:drop-shadow(0 6px 14px rgba(0,0,0,.35));pointer-events:none;z-index:0}
+@media(max-width:560px){.hero .toque{right:-1.25rem;top:-2rem;width:70px}}
 nav.principal{display:flex;gap:.3rem}
 nav.principal a{
   text-decoration:none;font-size:.93rem;font-weight:600;padding:.5rem .85rem;border-radius:999px;opacity:.9;
@@ -348,7 +353,7 @@ button:active, .btn-whatsapp:active, .btn-ajouter:active{transform:translateY(1p
 
 <header>
   <div class="header-inner">
-    <a class="logo" href="#/accueil"><span class="s">Saveurs du</span><span class="m">MBOA</span></a>
+    <a class="logo" href="#/accueil"><img class="toque" src="photos/toque.png" alt=""><span class="s">Saveurs du</span><span class="m">MBOA</span></a>
     <nav class="principal" id="nav">
       <a href="#/accueil" data-page="accueil">Accueil</a>
       <a href="#/menu" data-page="menu">Le Menu</a>
@@ -369,8 +374,11 @@ button:active, .btn-whatsapp:active, .btn-ajouter:active{transform:translateY(1p
 <!-- ============ PAGE ACCUEIL ============ -->
 <div class="page" id="page-accueil">
   <section class="hero wax-bg">
-    <span class="titre-script">Saveurs du</span>
-    <span class="titre-mboa">MBOA</span>
+    <div class="hero-titre">
+      <img class="toque" src="photos/toque.png" alt="">
+      <span class="titre-script">Saveurs du</span>
+      <span class="titre-mboa">MBOA</span>
+    </div>
     <p class="slogan">Le goût authentique, fait maison avec amour</p>
     <div class="compteur" id="compteur">⏳ <span>Commandes ouvertes</span></div>
     <p class="intro">Chaque semaine, Caroline et Viviane cuisinent pour vous 3 plats camerounais faits maison, dans le respect des recettes traditionnelles — livrés chez vous le week-end.</p>
