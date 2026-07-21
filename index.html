@@ -1002,7 +1002,8 @@ function rendrePanier(){
 
   const libLiv = document.getElementById('r-livraison-lib');
   if(libLiv) libLiv.textContent = (liv.etat === 'ok' && liv.km !== undefined)
-    ? `Livraison (~${liv.km} km)` : 'Livraison';
+    ? `Livraison (~${liv.km} km${liv.precision && liv.precision !== 'exact' ? ', approx.' : ''})`
+    : 'Livraison';
   document.getElementById('r-livraison').textContent = libelleLivraison(liv);
 
   document.getElementById('cart-count').textContent = count;
@@ -1164,7 +1165,8 @@ function livraisonPour(k){
   if(choix.mode === 'retrait') return {etat:'retrait', zone:choix.zone, frais:0};
   const km = estimerKmRoute(c.coords, choix.zone);
   if(km === null) return {etat:'inconnue', zone:choix.zone};
-  return {etat:'ok', zone:choix.zone, km, frais:fraisLivraison(km)};
+  return {etat:'ok', zone:choix.zone, km, frais:fraisLivraison(km),
+          precision:(c.coords.precision || 'exact')};
 }
 
 function libelleLivraison(liv){
@@ -1209,6 +1211,70 @@ function saisieAdresse(k){
   rechercherAdresses(k);
 }
 
+/* Découpe la saisie : le numéro de maison est la 1re cause d'échec (OpenStreetMap
+   ne connaît pas tous les numéros en Belgique), on doit pouvoir le retirer. */
+function extraireNumero(texte){
+  const t = (texte || '').trim();
+  const estCodePostal = v => /^\d{4}$/.test(v);   // 4 chiffres = code postal, pas un numéro
+  let m = t.match(/^(\d+[a-zA-Z]?)\s+(.+)$/);     // "12 Rue de Fer"
+  if(m && !estCodePostal(m[1])) return {numero:m[1], sansNumero:m[2].trim()};
+  m = t.match(/^(.*?[^\W\d_])\s+(\d+[a-zA-Z]?)\b(.*)$/);   // "Rue de Fer 12 Namur"
+  if(m && !estCodePostal(m[2])) return {numero:m[2], sansNumero:(m[1] + ' ' + m[3]).replace(/\s+/g,' ').trim()};
+  return {numero:'', sansNumero:t};
+}
+
+/* Dernier recours : code postal et/ou nom de commune, pour toujours pouvoir situer. */
+function partieCommune(texte){
+  const cp = ((texte || '').match(/\b\d{4}\b/) || [])[0] || '';
+  let reste = (texte || '').split(',').pop()
+    .replace(/\b\d{4}\b/g,'').replace(/\d+[a-zA-Z]?/g,'').trim();
+  const mots = reste.split(/\s+/).filter(Boolean);
+  const commune = mots.length ? mots[mots.length - 1] : '';
+  return [cp, commune].filter(Boolean).join(' ').trim();
+}
+
+function urlNominatim(texte){
+  return `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(texte)}&format=json&limit=8&addressdetails=1&countrycodes=be`;
+}
+
+async function interroger(texte){
+  if(!texte || texte.length < 3) return [];
+  const cle = texte.toLowerCase();
+  const cache = cacheGet(cle);
+  if(cache && Array.isArray(cache)) return cache;
+  const reponse = await fetch(urlNominatim(texte));
+  const data = await reponse.json();
+  const resultats = Array.isArray(data) ? data : [];
+  cacheSet(cle, resultats);
+  return resultats;
+}
+
+const pause = ms => new Promise(r => setTimeout(r, ms));
+
+/* Recherche en cascade : adresse complète -> sans le numéro -> commune seule.
+   Objectif : n'importe quelle adresse de Belgique doit finir par donner un point
+   de calcul, quitte à être approximatif (l'estimation est de toute façon
+   confirmée sur WhatsApp). `precision` dit au client ce qu'on a trouvé. */
+async function rechercheCascade(texte){
+  let resultats = await interroger(texte);
+  if(resultats.length) return {resultats, precision:'exact', numero:''};
+
+  const {numero, sansNumero} = extraireNumero(texte);
+  if(numero && sansNumero.length >= 3){
+    await pause(350);   // on reste poli avec Nominatim (1 requête/seconde max)
+    resultats = await interroger(sansNumero);
+    if(resultats.length) return {resultats, precision:'rue', numero};
+  }
+
+  const commune = partieCommune(texte);
+  if(commune.length >= 3 && commune.toLowerCase() !== texte.toLowerCase()){
+    await pause(350);
+    resultats = await interroger(commune);
+    if(resultats.length) return {resultats, precision:'commune', numero};
+  }
+  return {resultats:[], precision:'exact', numero:''};
+}
+
 async function rechercherAdresses(k){
   const c = ctx(k);
   const input = document.getElementById(c.input);
@@ -1232,26 +1298,18 @@ async function rechercherAdresses(k){
   clearTimeout(c.timer);
   c.timer = setTimeout(async () => {
     try {
-      // Vérifier cache
-      const cache = cacheGet(texte.toLowerCase());
-      let resultats = null;
-      if(cache && Array.isArray(cache)){
-        resultats = cache;
-      } else {
-        const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(texte)},Belgique&format=json&limit=8&addressdetails=1&countrycodes=be`;
-        const response = await fetch(url);
-        resultats = await response.json();
-        cacheSet(texte.toLowerCase(), resultats);
-      }
+      const {resultats, precision, numero} = await rechercheCascade(texte);
+      // La saisie a pu changer pendant l'appel : on n'écrase pas un résultat plus récent
+      if((input.value || '').trim() !== texte) return;
 
-      if(!Array.isArray(resultats) || resultats.length === 0){
-        liste.innerHTML = '<div class="no-results">❌ Aucune adresse trouvée — vérifiez l\'orthographe</div>';
+      if(resultats.length === 0){
+        liste.innerHTML = '<div class="no-results">❌ Adresse introuvable — essayez juste la rue et la commune (ex. « Rue de Fer, Namur »)</div>';
         c.suggestions = [];
         c.active = -1;
       } else {
         c.suggestions = resultats;
         c.active = -1;
-        renderSuggestions(k, texte, resultats);
+        renderSuggestions(k, texte, resultats, precision, numero);
       }
     } catch(e){
       console.warn('Erreur recherche adresses:', e);
@@ -1262,9 +1320,10 @@ async function rechercherAdresses(k){
   }, 350);
 }
 
-function renderSuggestions(k, query, items){
+function renderSuggestions(k, query, items, precision, numeroTape){
   const liste = elListe(k);
   const q = query.trim();
+  precision = precision || 'exact';
   const html = items.map((r, idx) => {
     // Compose precise lines: main = "rue + num" ; second = "CP + ville" (ensure street stays when API returns number first)
     const num = r.address?.house_number || '';
@@ -1293,14 +1352,32 @@ function renderSuggestions(k, query, items){
     const mainLine = highlightMatch(mainLineRaw, q);
     const secondLine = escapeHtml(secondLineRaw);
 
-    const valeurSelection = escapeHtml(`${mainLineRaw}${secondLineRaw ? ', ' + secondLineRaw : ''}`.replace(/'/g,"\\'"));
+    // Ce qu'on écrit dans le champ selon ce qu'on a réellement trouvé :
+    // - exact   : l'adresse trouvée
+    // - rue     : la rue + LE NUMÉRO TAPÉ par le client (sinon on perdrait son numéro)
+    // - commune : on garde sa saisie telle quelle, on ne remplace pas son adresse
+    let texteChamp;
+    if(precision === 'commune'){
+      texteChamp = q;
+    } else if(precision === 'rue' && numeroTape){
+      texteChamp = `${mainLineRaw} ${numeroTape}${secondLineRaw ? ', ' + secondLineRaw : ''}`;
+    } else {
+      texteChamp = `${mainLineRaw}${secondLineRaw ? ', ' + secondLineRaw : ''}`;
+    }
+    const valeurSelection = escapeHtml(texteChamp.replace(/'/g,"\\'"));
     const lat = Number(r.lat), lon = Number(r.lon);
+    const badge = precision === 'rue'
+      ? '<small style="color:var(--terracotta);font-weight:700">↳ numéro non répertorié — rue utilisée pour l\'estimation</small>'
+      : (precision === 'commune'
+        ? '<small style="color:var(--terracotta);font-weight:700">↳ estimation basée sur la commune</small>'
+        : '');
 
-    return `<div class="addr-item" role="option" id="addr-opt-${k}-${idx}" data-idx="${idx}" aria-selected="false" onclick="selectionnerAdresse('${k}','${valeurSelection}',${isFinite(lat)?lat:'null'},${isFinite(lon)?lon:'null'})">
+    return `<div class="addr-item" role="option" id="addr-opt-${k}-${idx}" data-idx="${idx}" aria-selected="false" onclick="selectionnerAdresse('${k}','${valeurSelection}',${isFinite(lat)?lat:'null'},${isFinite(lon)?lon:'null'},'${precision}')">
       <span class="addr-icon">📍</span>
       <div class="addr-info">
         <strong>${mainLine}</strong>
         ${secondLine ? `<small>${secondLine}</small>` : ''}
+        ${badge}
       </div>
     </div>`;
   }).join('');
@@ -1344,7 +1421,7 @@ function highlightMatch(text, query){
   }
 }
 
-function selectionnerAdresse(k, adresse, lat, lon){
+function selectionnerAdresse(k, adresse, lat, lon, precision){
   const c = ctx(k);
   const input = document.getElementById(c.input);
   if(input) input.value = adresse;
@@ -1354,7 +1431,7 @@ function selectionnerAdresse(k, adresse, lat, lon){
   c.active = -1;
   // Coordonnées captées ici : c'est ce qui rend le calcul des frais possible.
   c.coords = (typeof lat === 'number' && typeof lon === 'number' && isFinite(lat) && isFinite(lon))
-    ? {lat, lon} : null;
+    ? {lat, lon, precision: precision || 'exact'} : null;
   if(k === 'panier') majLienCarte();
   c.apres();
 }
@@ -1481,7 +1558,9 @@ function envoyerCommande(){
   if(retrait){
     blocLiv = `🥡 Retrait sur place — chez ${liv.zone.cuisine} (${liv.zone.nom})\n${liv.zone.adresse}`;
   } else if(liv.etat === 'ok'){
-    blocLiv = `📍 Zone : ${liv.zone.nom} (livraison)\n🚚 Livraison estimée : ${liv.frais === 0 ? 'Gratuit' : euro(liv.frais)} (~${liv.km} km, à confirmer)`;
+    const source = liv.precision === 'rue' ? ', numéro non répertorié'
+                 : (liv.precision === 'commune' ? ', estimée depuis la commune' : '');
+    blocLiv = `📍 Zone : ${liv.zone.nom} (livraison)\n🚚 Livraison estimée : ${liv.frais === 0 ? 'Gratuit' : euro(liv.frais)} (~${liv.km} km${source}, à confirmer)`;
   } else {
     blocLiv = `📍 Zone : ${liv.zone.nom} (livraison)\n🚚 Frais de livraison : à confirmer`;
   }
