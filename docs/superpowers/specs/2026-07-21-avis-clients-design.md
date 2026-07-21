@@ -59,11 +59,14 @@ client** et **sans serveur** (le site reste 100 % statique sur GitHub Pages).
 
 ```js
 const AVIS_FORM_KEY = "";           // clé du service d'envoi (vide = mode démo)
-const AVIS = [
-  { nom: "Marie L.", note: 5, texte: "Le ndolè était délicieux, comme au pays !", date: "2026-07" },
-  // ...
-];
+const AVIS = [];                    // DÉMARRAGE : liste vide (aucun avis d'exemple)
+// Structure d'un avis (ajouté via l'admin) :
+//   { nom: "Marie L.", note: 5, texte: "…", date: "2026-07" }
 ```
+
+**Démarrage : `AVIS` est vide.** La page « Avis » affiche alors « Soyez le premier à
+laisser un avis » et l'aperçu d'accueil ne s'affiche pas tant qu'il n'y a aucun avis.
+Service d'envoi retenu : **Web3Forms**. E-mail du client : **optionnel**.
 
 - `note` : entier 1–5. `date` : format « AAAA-MM » (affiché « juillet 2026 »).
 - La **note moyenne** est calculée à partir de `AVIS` (aucune donnée dupliquée).
