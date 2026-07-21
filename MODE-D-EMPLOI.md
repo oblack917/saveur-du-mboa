@@ -29,6 +29,52 @@ Chaque commande arrive sur WhatsApp avec un lien **"🗺️ Localisation"** :
 appuyez dessus → l'adresse du client s'ouvre dans Google Maps → lancez
 l'itinéraire pour la livraison.
 
+## 🚚 Les deux zones et les frais de livraison
+
+Le client choisit lui-même sa zone :
+
+- **Province de Luxembourg** → cuisine de **Caroline** (Martelwée 33, Fauvillers)
+- **Province de Liège** → cuisine de **Viviane** (Chaussée Roosevelt 128, Saint-Nicolas)
+
+Il peut aussi choisir **"Venir chercher"** : dans ce cas, pas de frais, et
+l'adresse de la cuisine s'affiche.
+
+Les frais sont **calculés automatiquement** d'après son adresse : gratuit
+jusqu'à 5 km de la cuisine de sa zone, puis 0,30 € par kilomètre. Ces deux
+valeurs se modifient dans "Réglages généraux" de la page admin.
+
+⚠️ **C'est une estimation, pas une facture.** La distance est calculée à vol
+d'oiseau puis majorée. Le message WhatsApp vous indique toujours d'où vient
+le chiffre :
+
+| Ce que vous lisez dans le message | Ce que ça veut dire |
+|---|---|
+| `Livraison estimée : 2,10 € (~12 km, à confirmer)` | adresse exacte trouvée, estimation fiable |
+| `… (~12 km, numéro non répertorié, à confirmer)` | la rue a été trouvée, pas le numéro |
+| `… (~12 km, estimée depuis la commune, à confirmer)` | seule la commune a été trouvée — **vérifiez** |
+| `Frais de livraison : à confirmer` | rien n'a été trouvé, **annoncez le prix vous-mêmes** |
+
+Confirmez toujours le montant au client dans votre réponse WhatsApp.
+
+## ⚠️ Une commande n'existe que si le message WhatsApp arrive
+
+Le site **n'enregistre rien** : il prépare le message et le client doit
+appuyer sur **envoyer** dans WhatsApp. L'écran de fin le lui dit clairement
+et lui propose un bouton pour rouvrir WhatsApp s'il a fermé trop vite.
+
+👉 Si un client vous dit avoir commandé sans que vous ayez rien reçu, ce
+n'est pas une panne : son message n'est pas parti. Demandez-lui de vous
+donner sa **référence (MB-XXXX)** et de renvoyer le message.
+
+## 💡 Deux choses à savoir si un client vous appelle
+
+- **"J'ai rechargé la page, mon panier est-il perdu ?"** → Non. Son panier,
+  sa zone et son adresse sont gardés **7 jours** sur son téléphone. Le
+  panier se vide seulement quand la commande a été envoyée.
+- **"Le menu ne s'affiche pas"** → C'est sa connexion. Le site réessaie tout
+  seul, puis affiche un bouton **Réessayer** et votre numéro WhatsApp. Il
+  peut commander directement par message en attendant.
+
 ---
 
 ## Pour Yann : installation (une seule fois) 🔧
@@ -57,7 +103,27 @@ l'itinéraire pour la livraison.
 projets), mais garde-le privé : quiconque l'a peut modifier le site.
 En cas de doute, supprime-le sur GitHub et crée-en un nouveau.
 
-### 3. À personnaliser avant le lancement
-- L'**IBAN** (via la page admin ou config.js)
-- Les liens **Instagram / TikTok** dans `index.html` (pied de page, cherche `href="#"`)
-- Remplacer les photos avec filigrane (porc, maquereau) par vos propres photos
+### 3. À FAIRE AVANT D'ACCEPTER LA PREMIÈRE VRAIE COMMANDE
+
+Le site fonctionne, mais il n'est **pas prêt à encaisser**. Dans l'ordre :
+
+1. 🔴 **L'IBAN est faux** (`BE00 0000 0000 0000`). Le message WhatsApp demande
+   au client de verser l'acompte sur ce compte : aucun virement ne peut
+   aboutir. À corriger via "Réglages généraux" de la page admin. **Bloquant.**
+2. 🔴 **Mentions légales incomplètes** : la page `#/legal` affiche encore
+   `[dénomination exacte à compléter]`, `[N° BCE à compléter]`,
+   `[adresse à compléter]` et `[e-mail de contact à compléter]`. En vente à
+   distance, l'identité du vendeur est obligatoire — et ces crochets visibles
+   font fuir les clients. **Bloquant.**
+3. 🔴 **Enregistrement AFSCA** (AFSCA/FAVV) obligatoire pour vendre de la
+   nourriture en Belgique. Démarche hors site — je ne suis pas juriste,
+   renseignez-vous auprès de l'AFSCA.
+4. 🟠 **Allergènes à valider par la cuisine.** Ils ont été pré-remplis par
+   défaut : 4 plats sur 6 sont marqués "aucun allergène", ce qui est une
+   affirmation engageante. À relire plat par plat dans la page admin.
+5. 🟠 **Photos protégées** : les photos du porc et du maquereau portent le
+   filigrane d'un tiers ("Cooking with Claudy"). À remplacer par vos propres
+   photos ou des photos libres de droit.
+6. 🟡 Les liens **Instagram / TikTok** sont encore vides (`href="#"` dans
+   `index.html`, pied de page).
+7. 🟡 Nom de domaine perso (`saveursdumboa.be`) — confort, pas urgent.
