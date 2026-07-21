@@ -1,7 +1,8 @@
 /* Fichier généré par la page d'administration — 21/07/2026 00:32:04 */
 const CONFIG_VERSION = 1784586724329;
 const NUMERO_WHATSAPP = "32489765828";
-const IBAN = "BE00 0000 0000 0000";
+const IBAN = "BE37 3632 7506 1728";
+const TITULAIRE = "Bouquet Nanhou";
 const ACOMPTE_POURCENT = 50;
 const FRAIS_KM = 0.3;
 const KM_GRATUITS = 5;

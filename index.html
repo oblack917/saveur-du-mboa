@@ -516,7 +516,7 @@ button:active, .btn-whatsapp:active, .btn-ajouter:active{transform:translateY(1p
       <p class="section-sous">Pour garantir votre commande et éviter le gaspillage, un acompte de <span class="pct-acompte">30</span> % est demandé à la confirmation.</p>
       <div class="carte-info" style="max-width:760px">
         <p>💳 <strong>Acompte de <span class="pct-acompte">30</span> %</strong> du montant total, par virement bancaire dès la confirmation de votre commande sur WhatsApp :</p>
-        <p class="iban"><span class="js-iban">BE00 0000 0000 0000</span> — Saveurs du Mboa</p>
+        <p class="iban"><span class="js-iban">BE00 0000 0000 0000</span> — <span class="js-titulaire">Saveurs du Mboa</span></p>
         <p style="font-size:.92rem;color:#6d5236">Communication : votre nom + date de livraison. La commande est définitivement réservée à la réception de l'acompte. En cas de désistement après confirmation, l'acompte reste acquis.</p>
         <p>💶 <strong>Le solde</strong> se règle à la livraison, en espèces ou par virement instantané.</p>
       </div>
@@ -893,6 +893,9 @@ function majTextesConfig(){
   document.querySelectorAll('.js-tel').forEach(a => { a.href = 'tel:+' + NUMERO_WHATSAPP; a.textContent = telNat(NUMERO_WHATSAPP); });
   document.querySelectorAll('.js-phone').forEach(el => el.textContent = telNat(NUMERO_WHATSAPP));
   document.querySelectorAll('.js-iban').forEach(el => el.textContent = IBAN);
+  if(typeof TITULAIRE !== 'undefined' && TITULAIRE){
+    document.querySelectorAll('.js-titulaire').forEach(el => el.textContent = TITULAIRE);
+  }
   document.querySelectorAll('.js-km-gratuits').forEach(el => el.textContent = KM_GRATUITS);
   document.querySelectorAll('.js-frais-km').forEach(el => el.textContent = FRAIS_KM.toFixed(2).replace('.', ','));
   document.querySelectorAll('.js-prix-plat').forEach(el => el.textContent = prixCat('plat'));
@@ -1624,7 +1627,7 @@ function envoyerCommande(){
   const blocAdresse = retrait ? '' : `\n📍 ${adresse}\n🗺️ Localisation : ${urlCarte(adresse)}`;
 
   const message =
-`🧺 *Nouvelle commande — Saveurs du Mboa*\nRéf. ${ref}\n\n${lignes}\n\n*Total plats : ${euro(total)}*\n${blocLiv}\nAcompte (${ACOMPTE_POURCENT} %) : *${euro(acompte)}* par virement au ${IBAN}\nSolde ${retrait ? 'au retrait' : 'à la livraison'} : ${euro(total - acompte + fraisLiv)}\n\n👤 ${nom}\n📞 ${tel}${blocAdresse}\n📅 ${retrait ? 'Retrait' : 'Livraison'} : ${jour} (à partir de 10h)${notes ? `\n📝 ${notes}` : ''}\n\n_Je confirme ma commande et verse l'acompte pour la réserver._`;
+`🧺 *Nouvelle commande — Saveurs du Mboa*\nRéf. ${ref}\n\n${lignes}\n\n*Total plats : ${euro(total)}*\n${blocLiv}\nAcompte (${ACOMPTE_POURCENT} %) : *${euro(acompte)}* par virement au ${IBAN}${typeof TITULAIRE !== 'undefined' && TITULAIRE ? ` (${TITULAIRE})` : ''}\nSolde ${retrait ? 'au retrait' : 'à la livraison'} : ${euro(total - acompte + fraisLiv)}\n\n👤 ${nom}\n📞 ${tel}${blocAdresse}\n📅 ${retrait ? 'Retrait' : 'Livraison'} : ${jour} (à partir de 10h)${notes ? `\n📝 ${notes}` : ''}\n\n_Je confirme ma commande et verse l'acompte pour la réserver._`;
 
   // On garde le lien : si le navigateur bloque l'ouverture (popup) ou si le
   // client ferme WhatsApp sans envoyer, il doit pouvoir le rouvrir.

@@ -107,9 +107,9 @@ En cas de doute, supprime-le sur GitHub et crée-en un nouveau.
 
 Le site fonctionne, mais il n'est **pas prêt à encaisser**. Dans l'ordre :
 
-1. 🔴 **L'IBAN est faux** (`BE00 0000 0000 0000`). Le message WhatsApp demande
-   au client de verser l'acompte sur ce compte : aucun virement ne peut
-   aboutir. À corriger via "Réglages généraux" de la page admin. **Bloquant.**
+1. ✅ **IBAN — fait** (21/07/2026). Compte `BE37 3632 7506 1728`, titulaire
+   *Bouquet Nanhou*. Les deux clés de contrôle ont été vérifiées. L'IBAN et le
+   nom du titulaire se modifient dans "Réglages généraux" de la page admin.
 2. 🔴 **Mentions légales incomplètes** : la page `#/legal` affiche encore
    `[dénomination exacte à compléter]`, `[N° BCE à compléter]`,
    `[adresse à compléter]` et `[e-mail de contact à compléter]`. En vente à

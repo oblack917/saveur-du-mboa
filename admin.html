@@ -90,6 +90,8 @@ textarea{resize:vertical;min-height:70px}
       <input type="text" id="g-whatsapp">
       <label>IBAN pour l'acompte</label>
       <input type="text" id="g-iban">
+      <label>Nom du titulaire du compte</label>
+      <input type="text" id="g-titulaire">
       <div class="grille-prix">
         <div><label>Acompte (%)</label><input type="number" id="g-acompte" min="0" max="100"></div>
         <div><label>Km gratuits</label><input type="number" id="g-km" min="0"></div>
@@ -176,7 +178,9 @@ async function chargerConfig(){
   const f = await apiGet("config.js");
   const texte = decodeURIComponent(escape(atob(f.content.replace(/\n/g,""))));
   const lire = new Function(texte + `
-    ; return { NUMERO_WHATSAPP, IBAN, ACOMPTE_POURCENT, FRAIS_KM, KM_GRATUITS, MENU,
+    ; return { NUMERO_WHATSAPP, IBAN,
+        TITULAIRE: (typeof TITULAIRE !== "undefined" ? TITULAIRE : ""),
+        ACOMPTE_POURCENT, FRAIS_KM, KM_GRATUITS, MENU,
         FACTEUR_ROUTE: (typeof FACTEUR_ROUTE !== "undefined" ? FACTEUR_ROUTE : null),
         ZONES: (typeof ZONES !== "undefined" ? ZONES : null) };`);
   etat = lire();
@@ -189,6 +193,7 @@ const PHOTO_VIDE = "data:image/svg+xml;base64," + btoa('<svg xmlns="http://www.w
 function afficher(){
   document.getElementById("g-whatsapp").value = etat.NUMERO_WHATSAPP;
   document.getElementById("g-iban").value = etat.IBAN;
+  document.getElementById("g-titulaire").value = etat.TITULAIRE || "";
   document.getElementById("g-acompte").value = etat.ACOMPTE_POURCENT;
   document.getElementById("g-km").value = etat.KM_GRATUITS;
   document.getElementById("g-frais").value = etat.FRAIS_KM;
@@ -306,6 +311,7 @@ function texteConfig(){
 const CONFIG_VERSION = ${Date.now()};
 const NUMERO_WHATSAPP = ${s(document.getElementById("g-whatsapp").value.trim())};
 const IBAN = ${s(document.getElementById("g-iban").value.trim())};
+const TITULAIRE = ${s(document.getElementById("g-titulaire").value.trim())};
 const ACOMPTE_POURCENT = ${parseFloat(document.getElementById("g-acompte").value) || 0};
 const FRAIS_KM = ${parseFloat(document.getElementById("g-frais").value) || 0};
 const KM_GRATUITS = ${parseFloat(document.getElementById("g-km").value) || 0};
