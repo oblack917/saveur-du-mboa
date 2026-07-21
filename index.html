@@ -562,7 +562,7 @@ button:active, .btn-whatsapp:active, .btn-ajouter:active{transform:translateY(1p
         <ul>
           <li><strong>Province de Liège</strong> — toutes communes, depuis la cuisine de Viviane</li>
           <li><strong>Province du Luxembourg</strong> — toutes communes, depuis la cuisine de Caroline</li>
-          <li>Livraison le <strong>samedi et dimanche</strong>, sur deux créneaux : <strong>10h–13h</strong> ou <strong>14h–18h</strong></li>
+          <li>Livraison le <strong>samedi et dimanche</strong>, créneaux : <strong class="js-creneaux">10h–13h ou 14h–18h</strong></li>
           <li><strong>Venir chercher</strong> possible dans les deux zones — <strong>0 €</strong></li>
           <li><strong>Gratuite jusqu'à <span class="js-km-gratuits">5</span> km</strong> de la cuisine de votre zone</li>
           <li>Au-delà : <strong><span class="js-frais-km">0,30</span> € par kilomètre</strong></li>
@@ -925,6 +925,26 @@ function majTextesConfig(){
   document.querySelectorAll('.js-frais-km').forEach(el => el.textContent = FRAIS_KM.toFixed(2).replace('.', ','));
   document.querySelectorAll('.js-prix-plat').forEach(el => el.textContent = prixCat('plat'));
   document.querySelectorAll('.js-prix-accomp').forEach(el => el.textContent = prixCat('accomp'));
+  remplirCreneaux();
+  const libelles = creneauxLivraison().map(libelleCreneau).join(' ou ');
+  document.querySelectorAll('.js-creneaux').forEach(el => { if(libelles) el.textContent = libelles; });
+}
+
+/* ===== Créneaux de livraison (réglés dans config.js) =====
+   Garde-fou : on n'affiche jamais un créneau invalide ou qui dépasse
+   la dernière heure de livraison (LIVRAISON_FIN_MAX). */
+function creneauxLivraison(){
+  const max = (typeof LIVRAISON_FIN_MAX === 'number' && LIVRAISON_FIN_MAX > 0) ? LIVRAISON_FIN_MAX : 18;
+  const brut = (typeof CRENEAUX_LIVRAISON !== 'undefined' && Array.isArray(CRENEAUX_LIVRAISON))
+    ? CRENEAUX_LIVRAISON : [{debut:10,fin:13},{debut:14,fin:18}];
+  return brut.filter(c => c && Number(c.debut) < Number(c.fin) && Number(c.fin) <= max);
+}
+function libelleCreneau(c){ return `${c.debut}h–${c.fin}h`; }
+function remplirCreneaux(){
+  const sel = document.getElementById('f-creneau');
+  if(!sel) return;
+  const opts = creneauxLivraison().map(c => `<option>${libelleCreneau(c)}</option>`).join('');
+  sel.innerHTML = `<option value="">— Choisir —</option>` + opts;
 }
 
 function actionHtml(p){

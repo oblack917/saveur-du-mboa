@@ -7,6 +7,15 @@ const ACOMPTE_POURCENT = 50;
 const FRAIS_KM = 0.3;
 const KM_GRATUITS = 5;
 
+/* Créneaux de livraison — réglés depuis la page d'administration.
+   LIVRAISON_FIN_MAX = dernière heure de livraison possible (plafond, en heures).
+   Aucun créneau ne peut se terminer après cette heure. */
+const LIVRAISON_FIN_MAX = 18;
+const CRENEAUX_LIVRAISON = [
+  { debut:10, fin:13 },
+  { debut:14, fin:18 }
+];
+
 /* Zones de livraison — réglées une fois ici (l'admin les préserve, ne les édite pas).
    lat/lon = coordonnées de la cuisine, servent au calcul automatique des frais. */
 const FACTEUR_ROUTE = 1.3;   // vol d'oiseau -> distance route estimée

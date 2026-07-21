@@ -98,6 +98,15 @@ textarea{resize:vertical;min-height:70px}
       </div>
       <label>Prix par km au-delà (€)</label>
       <input type="number" id="g-frais" step="0.05" min="0">
+
+      <div style="margin-top:1.2rem;padding-top:1rem;border-top:1.5px dashed #e4d3b6">
+        <label>Dernière heure de livraison (plafond)</label>
+        <input type="number" id="g-fin-max" min="1" max="23" step="1" style="max-width:8rem">
+        <p style="font-size:.85rem;color:#8a7355;margin:.3rem 0 .8rem">Aucun créneau ne pourra se terminer après cette heure.</p>
+        <label>Créneaux de livraison proposés au client</label>
+        <div id="zone-creneaux"></div>
+        <button class="btn" type="button" onclick="ajouterCreneau()" style="background:#eef7ee;color:#1c5b2b;margin-top:.6rem;font-size:.9rem;padding:.55rem 1.1rem">+ Ajouter un créneau</button>
+      </div>
     </div>
 
     <p class="pied-note">Connecté · <a href="#" onclick="deconnecter();return false">se déconnecter de cet appareil</a></p>
@@ -182,7 +191,9 @@ async function chargerConfig(){
         TITULAIRE: (typeof TITULAIRE !== "undefined" ? TITULAIRE : ""),
         ACOMPTE_POURCENT, FRAIS_KM, KM_GRATUITS, MENU,
         FACTEUR_ROUTE: (typeof FACTEUR_ROUTE !== "undefined" ? FACTEUR_ROUTE : null),
-        ZONES: (typeof ZONES !== "undefined" ? ZONES : null) };`);
+        ZONES: (typeof ZONES !== "undefined" ? ZONES : null),
+        LIVRAISON_FIN_MAX: (typeof LIVRAISON_FIN_MAX !== "undefined" ? LIVRAISON_FIN_MAX : null),
+        CRENEAUX_LIVRAISON: (typeof CRENEAUX_LIVRAISON !== "undefined" ? CRENEAUX_LIVRAISON : null) };`);
   etat = lire();
   etat._shaConfig = f.sha;
   afficher();
@@ -197,7 +208,45 @@ function afficher(){
   document.getElementById("g-acompte").value = etat.ACOMPTE_POURCENT;
   document.getElementById("g-km").value = etat.KM_GRATUITS;
   document.getElementById("g-frais").value = etat.FRAIS_KM;
+  document.getElementById("g-fin-max").value = (typeof etat.LIVRAISON_FIN_MAX === "number" ? etat.LIVRAISON_FIN_MAX : 18);
+  afficherCreneaux();
   afficherMenu();
+}
+
+/* ===== Créneaux de livraison ===== */
+function creneauxCourants(){
+  return (Array.isArray(etat.CRENEAUX_LIVRAISON) && etat.CRENEAUX_LIVRAISON.length)
+    ? etat.CRENEAUX_LIVRAISON : [{debut:10, fin:13}, {debut:14, fin:18}];
+}
+function afficherCreneaux(){
+  const zone = document.getElementById("zone-creneaux");
+  zone.innerHTML = creneauxCourants().map((c, i) => `
+    <div class="creneau-ligne" style="display:flex;align-items:center;gap:.4rem;margin:.45rem 0">
+      <input type="number" id="cr-debut-${i}" value="${c.debut}" min="0" max="23" step="1" style="width:4.8rem">
+      <span style="color:#8a7355">h&nbsp;→</span>
+      <input type="number" id="cr-fin-${i}" value="${c.fin}" min="1" max="23" step="1" style="width:4.8rem">
+      <span style="color:#8a7355">h</span>
+      <button class="btn" type="button" onclick="supprimerCreneau(${i})" title="Supprimer ce créneau" style="margin-left:auto;background:#fdecea;color:#8f2013;padding:.4rem .7rem;font-size:.85rem">✕</button>
+    </div>`).join("");
+}
+function lireCreneaux(){
+  const arr = [];
+  document.querySelectorAll("#zone-creneaux .creneau-ligne").forEach((_, i) => {
+    const d = parseInt(document.getElementById("cr-debut-" + i).value, 10);
+    const f = parseInt(document.getElementById("cr-fin-" + i).value, 10);
+    if(!isNaN(d) && !isNaN(f)) arr.push({ debut:d, fin:f });
+  });
+  return arr;
+}
+function ajouterCreneau(){
+  etat.CRENEAUX_LIVRAISON = lireCreneaux();
+  etat.CRENEAUX_LIVRAISON.push({ debut:14, fin:18 });
+  afficherCreneaux();
+}
+function supprimerCreneau(i){
+  etat.CRENEAUX_LIVRAISON = lireCreneaux();
+  etat.CRENEAUX_LIVRAISON.splice(i, 1);
+  afficherCreneaux();
 }
 
 function afficherMenu(){
@@ -235,6 +284,8 @@ function afficherMenu(){
 
 /* Récupère les valeurs tapées dans le formulaire avant tout ré-affichage */
 function lireFormulaire(){
+  etat.LIVRAISON_FIN_MAX = parseInt(document.getElementById("g-fin-max").value, 10) || 18;
+  etat.CRENEAUX_LIVRAISON = lireCreneaux();
   etat.MENU.forEach(p => {
     const nom = document.getElementById("nom-" + p.id);
     if(!nom) return;
@@ -307,6 +358,10 @@ function texteConfig(){
   const lignesZones = zones.map(z =>
     `  { id:${s(z.id)}, nom:${s(z.nom)}, cuisine:${s(z.cuisine)},\n    adresse:${s(z.adresse)}, lat:${Number(z.lat)}, lon:${Number(z.lon)} }`
   ).join(",\n");
+  const finMax = (typeof etat.LIVRAISON_FIN_MAX === "number" && etat.LIVRAISON_FIN_MAX > 0) ? etat.LIVRAISON_FIN_MAX : 18;
+  const creneaux = (Array.isArray(etat.CRENEAUX_LIVRAISON) && etat.CRENEAUX_LIVRAISON.length)
+    ? etat.CRENEAUX_LIVRAISON : [{debut:10, fin:13}, {debut:14, fin:18}];
+  const lignesCreneaux = creneaux.map(c => `  { debut:${Number(c.debut)}, fin:${Number(c.fin)} }`).join(",\n");
   return `/* Fichier généré par la page d'administration — ${new Date().toLocaleString("fr-BE")} */
 const CONFIG_VERSION = ${Date.now()};
 const NUMERO_WHATSAPP = ${s(document.getElementById("g-whatsapp").value.trim())};
@@ -315,6 +370,13 @@ const TITULAIRE = ${s(document.getElementById("g-titulaire").value.trim())};
 const ACOMPTE_POURCENT = ${parseFloat(document.getElementById("g-acompte").value) || 0};
 const FRAIS_KM = ${parseFloat(document.getElementById("g-frais").value) || 0};
 const KM_GRATUITS = ${parseFloat(document.getElementById("g-km").value) || 0};
+
+/* Créneaux de livraison — réglés depuis la page d'administration.
+   Aucun créneau ne peut se terminer après LIVRAISON_FIN_MAX (la dernière heure de livraison). */
+const LIVRAISON_FIN_MAX = ${finMax};
+const CRENEAUX_LIVRAISON = [
+${lignesCreneaux}
+];
 
 /* Zones de livraison — réglées une fois dans le code (préservées à chaque publication). */
 const FACTEUR_ROUTE = ${facteur};
@@ -336,6 +398,28 @@ async function publier(){
   err.style.display = "none";
   btn.disabled = true;
   lireFormulaire();
+
+  // Vérifications avant envoi — créneaux de livraison
+  const finMax = etat.LIVRAISON_FIN_MAX || 18;
+  const creneaux = etat.CRENEAUX_LIVRAISON || [];
+  if(creneaux.length === 0){
+    err.className = "erreur";
+    err.textContent = "❌ Ajoutez au moins un créneau de livraison avant de publier.";
+    err.style.display = "block"; btn.disabled = false;
+    document.getElementById("zone-creneaux").scrollIntoView({behavior:"smooth", block:"center"});
+    return;
+  }
+  const creneauInvalide = creneaux.find(c => !(c.debut < c.fin));
+  const creneauTropTard = creneaux.find(c => c.fin > finMax);
+  if(creneauInvalide || creneauTropTard){
+    err.className = "erreur";
+    err.textContent = creneauInvalide
+      ? "❌ Un créneau est incohérent : l'heure de fin doit être après l'heure de début."
+      : "❌ Un créneau (" + creneauTropTard.debut + "h–" + creneauTropTard.fin + "h) dépasse la dernière heure de livraison (" + finMax + "h). Corrigez-le avant de publier.";
+    err.style.display = "block"; btn.disabled = false;
+    document.getElementById("zone-creneaux").scrollIntoView({behavior:"smooth", block:"center"});
+    return;
+  }
 
   // Vérifications avant envoi
   const sansPhoto = etat.MENU.find(p => p._nouveau && !photosModifiees[p.id]);
