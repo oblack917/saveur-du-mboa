@@ -176,7 +176,9 @@ async function chargerConfig(){
   const f = await apiGet("config.js");
   const texte = decodeURIComponent(escape(atob(f.content.replace(/\n/g,""))));
   const lire = new Function(texte + `
-    ; return { NUMERO_WHATSAPP, IBAN, ACOMPTE_POURCENT, FRAIS_KM, KM_GRATUITS, MENU };`);
+    ; return { NUMERO_WHATSAPP, IBAN, ACOMPTE_POURCENT, FRAIS_KM, KM_GRATUITS, MENU,
+        FACTEUR_ROUTE: (typeof FACTEUR_ROUTE !== "undefined" ? FACTEUR_ROUTE : null),
+        ZONES: (typeof ZONES !== "undefined" ? ZONES : null) };`);
   etat = lire();
   etat._shaConfig = f.sha;
   afficher();
@@ -288,6 +290,18 @@ function texteConfig(){
   const lignes = etat.MENU.map(p =>
     `  { id:${s(p.id)}, cat:${s(p.cat)}, nom:${s(p.nom.trim())}, prix:${p.prix.toFixed(2)}, photo:${s(p.photo)},\n    desc:${s(p.desc.trim())}, allergenes:${s((p.allergenes || '').trim())} }`
   ).join(",\n\n");
+  // Les zones de livraison ne s'éditent pas ici : on les recopie telles quelles
+  // pour qu'une publication du menu ne les efface jamais.
+  const facteur = (typeof etat.FACTEUR_ROUTE === "number" && etat.FACTEUR_ROUTE > 0) ? etat.FACTEUR_ROUTE : 1.3;
+  const zones = Array.isArray(etat.ZONES) && etat.ZONES.length ? etat.ZONES : [
+    { id:"luxembourg", nom:"Province de Luxembourg", cuisine:"Caroline",
+      adresse:"Martelwée 33, 6637 Fauvillers", lat:49.8626398, lon:5.7267954 },
+    { id:"liege", nom:"Province de Liège", cuisine:"Viviane",
+      adresse:"Chaussée Roosevelt 128, 4420 Saint-Nicolas", lat:50.6456901, lon:5.5230284 }
+  ];
+  const lignesZones = zones.map(z =>
+    `  { id:${s(z.id)}, nom:${s(z.nom)}, cuisine:${s(z.cuisine)},\n    adresse:${s(z.adresse)}, lat:${Number(z.lat)}, lon:${Number(z.lon)} }`
+  ).join(",\n");
   return `/* Fichier généré par la page d'administration — ${new Date().toLocaleString("fr-BE")} */
 const CONFIG_VERSION = ${Date.now()};
 const NUMERO_WHATSAPP = ${s(document.getElementById("g-whatsapp").value.trim())};
@@ -295,6 +309,13 @@ const IBAN = ${s(document.getElementById("g-iban").value.trim())};
 const ACOMPTE_POURCENT = ${parseFloat(document.getElementById("g-acompte").value) || 0};
 const FRAIS_KM = ${parseFloat(document.getElementById("g-frais").value) || 0};
 const KM_GRATUITS = ${parseFloat(document.getElementById("g-km").value) || 0};
+
+/* Zones de livraison — réglées une fois dans le code (préservées à chaque publication). */
+const FACTEUR_ROUTE = ${facteur};
+
+const ZONES = [
+${lignesZones}
+];
 
 const MENU = [
 ${lignes}

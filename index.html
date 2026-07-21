@@ -276,39 +276,39 @@ footer p{font-size:.95rem}
 .form input,.form select,.form textarea{width:100%;padding:.65rem .8rem;border:1.5px solid #d9c5a6;border-radius:10px;font-family:var(--body);font-size:.95rem;background:#fff}
 .form input:focus{outline:none;border-color:var(--or);box-shadow:0 0 0 3px rgba(227,163,46,.15)}
 /* Autocomplete adresses - Dropdown stylisé */
-#suggestions-adresse{animation:slideDown .25s ease-out}
+.auto-liste{animation:slideDown .25s ease-out}
 @keyframes slideDown{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
-#suggestions-adresse > .addr-item, #suggestions-adresse > div{padding:.95rem 1rem;border-bottom:1px solid #e4d3b6;cursor:pointer;transition:all .12s;display:flex;align-items:flex-start;gap:.7rem}
-#suggestions-adresse > .addr-item:hover, #suggestions-adresse > div:hover{background:rgba(227,163,46,.08);border-left:4px solid var(--or);padding-left:calc(1rem - 4px)}
-#suggestions-adresse > .addr-item:last-child, #suggestions-adresse > div:last-child{border-bottom:none}
-#suggestions-adresse .addr-icon{color:var(--terracotta);font-size:1.2rem;flex-shrink:0;margin-top:.05rem}
-#suggestions-adresse .addr-info strong{display:block;color:var(--encre);font-weight:700;font-size:.98rem;line-height:1.25}
-#suggestions-adresse .addr-info small{display:block;color:#8a7355;font-size:.82rem;margin-top:.18rem}
-#suggestions-adresse .loading{padding:1.2rem;text-align:center;color:#8a7355;font-size:.92rem}
-#suggestions-adresse .no-results{padding:1.2rem;text-align:center;color:#8a7355;font-size:.92rem}
+.auto-liste > .addr-item, .auto-liste > div{padding:.95rem 1rem;border-bottom:1px solid #e4d3b6;cursor:pointer;transition:all .12s;display:flex;align-items:flex-start;gap:.7rem}
+.auto-liste > .addr-item:hover, .auto-liste > div:hover{background:rgba(227,163,46,.08);border-left:4px solid var(--or);padding-left:calc(1rem - 4px)}
+.auto-liste > .addr-item:last-child, .auto-liste > div:last-child{border-bottom:none}
+.auto-liste .addr-icon{color:var(--terracotta);font-size:1.2rem;flex-shrink:0;margin-top:.05rem}
+.auto-liste .addr-info strong{display:block;color:var(--encre);font-weight:700;font-size:.98rem;line-height:1.25}
+.auto-liste .addr-info small{display:block;color:#8a7355;font-size:.82rem;margin-top:.18rem}
+.auto-liste .loading{padding:1.2rem;text-align:center;color:#8a7355;font-size:.92rem}
+.auto-liste .no-results{padding:1.2rem;text-align:center;color:#8a7355;font-size:.92rem}
 
 /* Active / keyboard focused state */
-#suggestions-adresse .addr-item.active{background:rgba(227,163,46,.12);border-left:4px solid var(--or);padding-left:calc(1rem - 4px)}
-#suggestions-adresse .addr-item[aria-selected="true"]{outline:2px solid rgba(227,163,46,.12)}
+.auto-liste .addr-item.active{background:rgba(227,163,46,.12);border-left:4px solid var(--or);padding-left:calc(1rem - 4px)}
+.auto-liste .addr-item[aria-selected="true"]{outline:2px solid rgba(227,163,46,.12)}
 
 /* Highlight matched text */
-#suggestions-adresse mark{background:var(--or);color:#fff;padding:0 .15rem;border-radius:2px}
+.auto-liste mark{background:var(--or);color:#fff;padding:0 .15rem;border-radius:2px}
 
 /* Scrollbar & mobile touch improvements */
-#suggestions-adresse{max-height:300px;overflow-y:auto;-webkit-overflow-scrolling:touch;box-sizing:border-box}
-#suggestions-adresse::-webkit-scrollbar{width:10px}
-#suggestions-adresse::-webkit-scrollbar-track{background:transparent}
-#suggestions-adresse::-webkit-scrollbar-thumb{background:rgba(0,0,0,.12);border-radius:8px}
+.auto-liste{max-height:300px;overflow-y:auto;-webkit-overflow-scrolling:touch;box-sizing:border-box}
+.auto-liste::-webkit-scrollbar{width:10px}
+.auto-liste::-webkit-scrollbar-track{background:transparent}
+.auto-liste::-webkit-scrollbar-thumb{background:rgba(0,0,0,.12);border-radius:8px}
 
 /* Larger tap targets on small screens */
 @media(max-width:520px){
-  #suggestions-adresse > .addr-item, #suggestions-adresse > div{padding:1rem 1rem;font-size:1rem}
-  #suggestions-adresse .addr-info strong{font-size:1rem}
+  .auto-liste > .addr-item, .auto-liste > div{padding:1rem 1rem;font-size:1rem}
+  .auto-liste .addr-info strong{font-size:1rem}
 }
 
 /* Respect reduced motion */
 @media(prefers-reduced-motion:reduce){
-  #suggestions-adresse{animation:none}
+  .auto-liste{animation:none}
 }
 
 /* Mini cart floating button (mobile) */
@@ -322,7 +322,7 @@ button:active, .btn-whatsapp:active, .btn-ajouter:active{transform:translateY(1p
 
 /* Respect reduced motion */
 @media(prefers-reduced-motion:reduce){
-  #suggestions-adresse{animation:none}
+  .auto-liste{animation:none}
   .mini-cart-flottant{transition:none}
 }
 
@@ -541,10 +541,11 @@ button:active, .btn-whatsapp:active, .btn-ajouter:active{transform:translateY(1p
       <div class="zone-carte">
         <h3>📍 Zones desservies &amp; conditions</h3>
         <ul>
-          <li><strong>Province de Liège</strong> — toutes communes</li>
-          <li><strong>Province du Luxembourg</strong> — toutes communes</li>
+          <li><strong>Province de Liège</strong> — toutes communes, depuis la cuisine de Viviane</li>
+          <li><strong>Province du Luxembourg</strong> — toutes communes, depuis la cuisine de Caroline</li>
           <li>Livraison le <strong>samedi et dimanche à partir de 10h</strong></li>
-          <li><strong>Gratuite jusqu'à <span class="js-km-gratuits">5</span> km</strong> de notre cuisine</li>
+          <li><strong>Venir chercher</strong> possible dans les deux zones — <strong>0 €</strong></li>
+          <li><strong>Gratuite jusqu'à <span class="js-km-gratuits">5</span> km</strong> de la cuisine de votre zone</li>
           <li>Au-delà : <strong><span class="js-frais-km">0,30</span> € par kilomètre</strong></li>
           <li>Créneau confirmé la veille par WhatsApp</li>
           <li>Plats livrés en contenants hermétiques, prêts à réchauffer</li>
@@ -552,16 +553,24 @@ button:active, .btn-whatsapp:active, .btn-ajouter:active{transform:translateY(1p
       </div>
       <div class="calculette">
         <h3>🧮 Estimez vos frais de livraison</h3>
-        <p class="mini">Déplacez le curseur selon votre distance approximative de notre cuisine.</p>
-        <div style="display:flex;justify-content:space-between;align-items:baseline">
-          <span>Distance</span><span class="km"><span id="km-val">5</span> km</span>
+        <p class="mini">Choisissez votre zone et tapez votre adresse : l'estimation se calcule toute seule.</p>
+        <label for="liv-zone" style="display:block;font-weight:700;margin:.6rem 0 .25rem">Zone</label>
+        <select id="liv-zone" onchange="changerZone('livraison')" style="width:100%;padding:.7rem;border:2px solid #e4d3b6;border-radius:10px;font:inherit;background:#fff">
+          <option value="">— Choisir —</option>
+        </select>
+        <div id="liv-bloc-adresse">
+          <label for="liv-adresse" style="display:block;font-weight:700;margin:.7rem 0 .25rem">Votre adresse</label>
+          <div style="position:relative;z-index:20">
+            <input id="liv-adresse" type="text" placeholder="Rue, numéro, commune" autocomplete="off" oninput="saisieAdresse('livraison')" onblur="fermerSuggestions('livraison')" onfocus="afficherSuggestionsIfExists('livraison')" style="width:100%;padding:.7rem;border:2px solid #e4d3b6;border-radius:10px;font:inherit;box-sizing:border-box">
+            <div id="liv-suggestions" class="auto-liste" style="display:none;position:absolute;top:100%;left:0;right:0;background:#fff;border:2px solid var(--or);border-top:none;border-radius:0 0 12px 12px;margin:0;padding:0;z-index:10;max-height:280px;overflow-y:auto;box-shadow:0 12px 32px rgba(64,32,14,.2);list-style:none"></div>
+          </div>
         </div>
-        <input type="range" id="km-slider" min="0" max="60" value="5" step="1" oninput="calculerFrais()" aria-label="Distance en kilomètres">
-        <div class="resultat">
+        <p id="liv-info-retrait" class="mini" style="display:none;margin:.6rem 0 0"></p>
+        <div class="resultat" style="margin-top:.9rem">
           <span>Frais de livraison estimés</span>
-          <span class="val" id="frais-val">Gratuit</span>
+          <span class="val" id="frais-val">—</span>
         </div>
-        <p class="mini" style="margin-top:.8rem;margin-bottom:0">Le montant exact est confirmé avec votre commande sur WhatsApp.</p>
+        <p class="mini" style="margin-top:.8rem;margin-bottom:0">Estimation à vol d'oiseau depuis la cuisine de votre zone — le montant exact est confirmé avec votre commande sur WhatsApp.</p>
       </div>
     </div>
   </section>
@@ -765,23 +774,31 @@ button:active, .btn-whatsapp:active, .btn-ajouter:active{transform:translateY(1p
   <div class="drawer-corps">
     <div id="lignes"></div>
     <div class="recap" id="recap" style="display:none">
-      <div class="r"><span>Sous-total</span><span id="r-total">0,00 €</span></div>
+      <div class="r"><span>Plats</span><span id="r-total">0,00 €</span></div>
+      <div class="r"><span id="r-livraison-lib">Livraison</span><span id="r-livraison">—</span></div>
+      <div class="r total"><span>Total</span><span id="r-grand">0,00 €</span></div>
       <div class="r acompte"><span>Acompte à verser (<span class="pct-acompte">30</span> %)</span><span id="r-acompte">0,00 €</span></div>
       <div class="r"><span>Solde à la livraison</span><span id="r-solde">0,00 €</span></div>
-      <div class="r total"><span>Total</span><span id="r-grand">0,00 €</span></div>
-      <p class="mini">Livraison gratuite jusqu'à <span class="js-km-gratuits">5</span> km, <span class="js-frais-km">0,30</span> €/km au-delà — les frais éventuels sont confirmés sur WhatsApp.</p>
+      <p class="mini">Livraison gratuite jusqu'à <span class="js-km-gratuits">5</span> km depuis la cuisine de votre zone, <span class="js-frais-km">0,30</span> €/km au-delà — estimation confirmée sur WhatsApp. L'acompte porte sur les plats ; la livraison se règle à la réception.</p>
     </div>
     <div class="form" id="form-cmd" style="display:none">
       <label for="f-nom">Nom complet *</label>
       <input id="f-nom" type="text" placeholder="Votre nom" autocomplete="name">
       <label for="f-tel">Téléphone *</label>
       <input id="f-tel" type="tel" placeholder="04XX XX XX XX" autocomplete="tel">
-      <label for="f-adresse">Adresse de livraison *</label>
-      <div style="position:relative;z-index:20">
-        <input id="f-adresse" type="text" placeholder="Rue, numéro, commune" autocomplete="off" oninput="majLienCarte();rechercherAdresses()" onblur="fermerSuggestions()" onfocus="afficherSuggestionsIfExists()">
-        <div id="suggestions-adresse" style="display:none;position:absolute;top:100%;left:0;right:0;background:#fff;border:2px solid var(--or);border-top:none;border-radius:0 0 12px 12px;margin:0;padding:0;z-index:10;max-height:280px;overflow-y:auto;box-shadow:0 12px 32px rgba(64,32,14,.2);list-style:none"></div>
+      <label for="f-zone">Zone de livraison *</label>
+      <select id="f-zone" onchange="changerZone('panier')">
+        <option value="">— Choisir —</option>
+      </select>
+      <div id="bloc-adresse">
+        <label for="f-adresse">Adresse de livraison *</label>
+        <div style="position:relative;z-index:20">
+          <input id="f-adresse" type="text" placeholder="Rue, numéro, commune" autocomplete="off" oninput="majLienCarte();saisieAdresse('panier')" onblur="fermerSuggestions('panier')" onfocus="afficherSuggestionsIfExists('panier')">
+          <div id="suggestions-adresse" class="auto-liste" style="display:none;position:absolute;top:100%;left:0;right:0;background:#fff;border:2px solid var(--or);border-top:none;border-radius:0 0 12px 12px;margin:0;padding:0;z-index:10;max-height:280px;overflow-y:auto;box-shadow:0 12px 32px rgba(64,32,14,.2);list-style:none"></div>
+        </div>
+        <a id="lien-carte" href="#" target="_blank" rel="noopener" style="display:none;font-size:.85rem;color:var(--terracotta);font-weight:700;margin-top:.3rem">🗺️ Vérifier cette adresse sur la carte</a>
       </div>
-      <a id="lien-carte" href="#" target="_blank" rel="noopener" style="display:none;font-size:.85rem;color:var(--terracotta);font-weight:700;margin-top:.3rem">🗺️ Vérifier cette adresse sur la carte</a>
+      <p id="info-retrait" class="mini" style="display:none;margin:.2rem 0 .6rem"></p>
       <label for="f-jour">Jour de livraison *</label>
       <select id="f-jour">
         <option value="">— Choisir —</option>
@@ -978,12 +995,21 @@ function rendrePanier(){
     }).join('');
   }
 
+  // Livraison : ajoutée au total, mais JAMAIS à l'acompte (acompte = plats seuls).
+  const liv = livraisonPour('panier');
+  const fraisLiv = liv.etat === 'ok' ? liv.frais : 0;
   const acompte = total * ACOMPTE_POURCENT / 100;
+
+  const libLiv = document.getElementById('r-livraison-lib');
+  if(libLiv) libLiv.textContent = (liv.etat === 'ok' && liv.km !== undefined)
+    ? `Livraison (~${liv.km} km)` : 'Livraison';
+  document.getElementById('r-livraison').textContent = libelleLivraison(liv);
+
   document.getElementById('cart-count').textContent = count;
   document.getElementById('r-total').textContent  = euro(total);
   document.getElementById('r-acompte').textContent = euro(acompte);
-  document.getElementById('r-solde').textContent  = euro(total - acompte);
-  document.getElementById('r-grand').textContent  = euro(total);
+  document.getElementById('r-solde').textContent  = euro(total - acompte + fraisLiv);
+  document.getElementById('r-grand').textContent  = euro(total + fraisLiv);
   document.getElementById('recap').style.display   = ids.length ? 'block' : 'none';
   document.getElementById('form-cmd').style.display = ids.length ? 'block' : 'none';
   document.getElementById('btn-envoyer').disabled = ids.length === 0;
@@ -1050,13 +1076,114 @@ function majLienCarte(){
   }
 }
 
+/* ============ ZONES DE LIVRAISON + DISTANCE ============ */
+function zonesDispo(){ return (typeof ZONES !== 'undefined' && Array.isArray(ZONES)) ? ZONES : []; }
+function facteurRoute(){ return (typeof FACTEUR_ROUTE === 'number' && FACTEUR_ROUTE > 0) ? FACTEUR_ROUTE : 1.3; }
+
+/* Distance à vol d'oiseau (haversine), en km. Pure, sans effet de bord. */
+function distanceKm(lat1, lon1, lat2, lon2){
+  const R = 6371, rad = d => d * Math.PI / 180;
+  const dLat = rad(lat2 - lat1), dLon = rad(lon2 - lon1);
+  const a = Math.sin(dLat/2)**2 + Math.cos(rad(lat1)) * Math.cos(rad(lat2)) * Math.sin(dLon/2)**2;
+  return 2 * R * Math.asin(Math.min(1, Math.sqrt(a)));
+}
+
+/* Distance route estimée (vol d'oiseau × facteur). null si adresse ou zone inconnue. */
+function estimerKmRoute(coords, zone){
+  if(!coords || typeof coords.lat !== 'number' || typeof coords.lon !== 'number') return null;
+  if(!zone || !zone.lat || !zone.lon) return null;   // coordonnées de zone absentes ou 0/0 -> repli
+  return Math.round(distanceKm(coords.lat, coords.lon, zone.lat, zone.lon) * facteurRoute());
+}
+
+function fraisLivraison(km){
+  if(km === null || km === undefined) return null;
+  return km <= KM_GRATUITS ? 0 : (km - KM_GRATUITS) * FRAIS_KM;
+}
+
 /* ============ AUTOCOMPLETE ADRESSES (Nominatim/OpenStreetMap) ============ */
-let timerRecherche = null;
-let activeIndex = -1;
-let currentSuggestions = [];
+/* Deux formulaires partagent le même moteur : le panier et la page Livraison.
+   Chaque contexte garde son adresse, ses coordonnées et sa zone. */
+const AUTO = {
+  panier: {
+    input:'f-adresse', liste:'suggestions-adresse', zoneSel:'f-zone',
+    bloc:'bloc-adresse', info:'info-retrait',
+    coords:null, timer:null, suggestions:[], active:-1,
+    apres:() => rendrePanier()
+  },
+  livraison: {
+    input:'liv-adresse', liste:'liv-suggestions', zoneSel:'liv-zone',
+    bloc:'liv-bloc-adresse', info:'liv-info-retrait',
+    coords:null, timer:null, suggestions:[], active:-1,
+    apres:() => majEstimationLivraison()
+  }
+};
+function ctx(k){ return AUTO[k] || AUTO.panier; }
+function elListe(k){ return document.getElementById(ctx(k).liste); }
 const CACHE_KEY = 'nominatim_cache_v1';
 
-// Simple cache wrapper using sessionStorage
+/* --- Sélecteur de zone --- */
+function remplirZones(){
+  Object.keys(AUTO).forEach(k => {
+    const sel = document.getElementById(ctx(k).zoneSel);
+    if(!sel) return;
+    const opts = ['<option value="">— Choisir —</option>'];
+    zonesDispo().forEach(z => opts.push(
+      `<option value="liv:${escapeHtml(z.id)}">Livraison — ${escapeHtml(z.nom)} (cuisine de ${escapeHtml(z.cuisine)})</option>`));
+    zonesDispo().forEach(z => opts.push(
+      `<option value="retrait:${escapeHtml(z.id)}">Venir chercher — ${escapeHtml(z.nom)} (chez ${escapeHtml(z.cuisine)})</option>`));
+    sel.innerHTML = opts.join('');
+  });
+}
+
+function choixZone(k){
+  const sel = document.getElementById(ctx(k).zoneSel);
+  const val = sel ? sel.value : '';
+  if(!val) return null;
+  const [mode, id] = val.split(':');
+  const zone = zonesDispo().find(z => z.id === id);
+  return zone ? {mode, zone} : null;
+}
+
+function changerZone(k){
+  const c = ctx(k), choix = choixZone(k);
+  const retrait = !!choix && choix.mode === 'retrait';
+  const bloc = document.getElementById(c.bloc);
+  const info = document.getElementById(c.info);
+  if(bloc) bloc.style.display = retrait ? 'none' : '';
+  if(info){
+    info.style.display = retrait ? 'block' : 'none';
+    if(retrait) info.innerHTML = `🥡 À récupérer chez <strong>${escapeHtml(choix.zone.cuisine)}</strong> — ${escapeHtml(choix.zone.adresse)}`;
+  }
+  c.apres();
+}
+
+/* --- État de la livraison pour un contexte --- */
+function livraisonPour(k){
+  const c = ctx(k), choix = choixZone(k);
+  if(!choix) return {etat:'aucune'};
+  if(choix.mode === 'retrait') return {etat:'retrait', zone:choix.zone, frais:0};
+  const km = estimerKmRoute(c.coords, choix.zone);
+  if(km === null) return {etat:'inconnue', zone:choix.zone};
+  return {etat:'ok', zone:choix.zone, km, frais:fraisLivraison(km)};
+}
+
+function libelleLivraison(liv){
+  if(liv.etat === 'retrait')  return 'Retrait sur place';
+  if(liv.etat === 'aucune')   return '—';
+  if(liv.etat === 'inconnue') return 'À confirmer';
+  return liv.frais === 0 ? 'Gratuit 🎉' : euro(liv.frais);
+}
+
+function majEstimationLivraison(){
+  const el = document.getElementById('frais-val');
+  if(!el) return;
+  const liv = livraisonPour('livraison');
+  el.textContent = (liv.etat === 'ok' && liv.frais > 0)
+    ? `${euro(liv.frais)} (~${liv.km} km)`
+    : libelleLivraison(liv);
+}
+
+/* --- Cache des recherches (sessionStorage) --- */
 function cacheGet(q){
   try{
     const store = JSON.parse(sessionStorage.getItem(CACHE_KEY) || '{}');
@@ -1074,17 +1201,26 @@ function cacheSet(q, data){
   }catch(e){}
 }
 
-async function rechercherAdresses(){
-  const input = document.getElementById('f-adresse');
-  const liste = document.getElementById('suggestions-adresse');
-  const raw = input.value || '';
-  const texte = raw.trim();
+/* Toute frappe libre invalide les coordonnées choisies : on repasse en « à confirmer ». */
+function saisieAdresse(k){
+  const c = ctx(k);
+  c.coords = null;
+  c.apres();
+  rechercherAdresses(k);
+}
+
+async function rechercherAdresses(k){
+  const c = ctx(k);
+  const input = document.getElementById(c.input);
+  const liste = elListe(k);
+  if(!input || !liste) return;
+  const texte = (input.value || '').trim();
 
   // Fermer si moins de 3 caractères
   if(texte.length < 3){
     liste.style.display = "none";
-    currentSuggestions = [];
-    activeIndex = -1;
+    c.suggestions = [];
+    c.active = -1;
     return;
   }
 
@@ -1093,8 +1229,8 @@ async function rechercherAdresses(){
   liste.style.display = "block";
 
   // Délai avant recherche (évite trop d'appels API)
-  clearTimeout(timerRecherche);
-  timerRecherche = setTimeout(async () => {
+  clearTimeout(c.timer);
+  c.timer = setTimeout(async () => {
     try {
       // Vérifier cache
       const cache = cacheGet(texte.toLowerCase());
@@ -1110,24 +1246,24 @@ async function rechercherAdresses(){
 
       if(!Array.isArray(resultats) || resultats.length === 0){
         liste.innerHTML = '<div class="no-results">❌ Aucune adresse trouvée — vérifiez l\'orthographe</div>';
-        currentSuggestions = [];
-        activeIndex = -1;
+        c.suggestions = [];
+        c.active = -1;
       } else {
-        currentSuggestions = resultats;
-        activeIndex = -1;
-        renderSuggestions(texte, resultats);
+        c.suggestions = resultats;
+        c.active = -1;
+        renderSuggestions(k, texte, resultats);
       }
     } catch(e){
       console.warn('Erreur recherche adresses:', e);
       liste.innerHTML = '<div class="no-results">⚠️ Erreur de connexion — vérifiez votre internet</div>';
-      currentSuggestions = [];
-      activeIndex = -1;
+      c.suggestions = [];
+      c.active = -1;
     }
   }, 350);
 }
 
-function renderSuggestions(query, items){
-  const liste = document.getElementById('suggestions-adresse');
+function renderSuggestions(k, query, items){
+  const liste = elListe(k);
   const q = query.trim();
   const html = items.map((r, idx) => {
     // Compose precise lines: main = "rue + num" ; second = "CP + ville" (ensure street stays when API returns number first)
@@ -1136,7 +1272,6 @@ function renderSuggestions(query, items){
     const ville = r.address?.city || r.address?.town || r.address?.village || r.address?.municipality || '';
     const cp = r.address?.postcode || '';
 
-    // If API returns display_name starting with number (e.g. "2, Place du Marché ...") and road is empty,
     // rebuild as "Place du Marché 2" so the street name remains visible when user adds number.
     let mainLineRaw = '';
     if(road){
@@ -1159,8 +1294,9 @@ function renderSuggestions(query, items){
     const secondLine = escapeHtml(secondLineRaw);
 
     const valeurSelection = escapeHtml(`${mainLineRaw}${secondLineRaw ? ', ' + secondLineRaw : ''}`.replace(/'/g,"\\'"));
+    const lat = Number(r.lat), lon = Number(r.lon);
 
-    return `<div class="addr-item" role="option" id="addr-opt-${idx}" data-idx="${idx}" aria-selected="false" onclick="selectionnerAdresse('${valeurSelection}')">
+    return `<div class="addr-item" role="option" id="addr-opt-${k}-${idx}" data-idx="${idx}" aria-selected="false" onclick="selectionnerAdresse('${k}','${valeurSelection}',${isFinite(lat)?lat:'null'},${isFinite(lon)?lon:'null'})">
       <span class="addr-icon">📍</span>
       <div class="addr-info">
         <strong>${mainLine}</strong>
@@ -1173,17 +1309,15 @@ function renderSuggestions(query, items){
   liste.style.display = 'block';
   liste.setAttribute('role','listbox');
   // attach mouse events for hover/active state
-  const nodes = liste.querySelectorAll('.addr-item');
-  nodes.forEach(n => {
-    n.addEventListener('mouseover', (e)=>{
-      setActiveIndex(Number(n.getAttribute('data-idx')));
-    });
-    n.addEventListener('mouseleave', ()=>{ /* keep current */ });
+  liste.querySelectorAll('.addr-item').forEach(n => {
+    n.addEventListener('mouseover', ()=> setActiveIndex(k, Number(n.getAttribute('data-idx'))));
   });
 }
 
-function setActiveIndex(i){
-  const liste = document.getElementById('suggestions-adresse');
+function setActiveIndex(k, i){
+  const c = ctx(k);
+  const liste = elListe(k);
+  if(!liste) return;
   const nodes = liste.querySelectorAll('.addr-item');
   if(nodes.length === 0) return;
   if(i < 0) i = -1;
@@ -1196,7 +1330,7 @@ function setActiveIndex(i){
     n.setAttribute('aria-selected','true');
     n.scrollIntoView({block: 'nearest'});
   }
-  activeIndex = i;
+  c.active = i;
 }
 
 function highlightMatch(text, query){
@@ -1210,50 +1344,58 @@ function highlightMatch(text, query){
   }
 }
 
-function selectionnerAdresse(adresse){
-  document.getElementById('f-adresse').value = adresse;
-  const liste = document.getElementById('suggestions-adresse');
-  liste.style.display = "none";
-  currentSuggestions = [];
-  activeIndex = -1;
-  majLienCarte();
+function selectionnerAdresse(k, adresse, lat, lon){
+  const c = ctx(k);
+  const input = document.getElementById(c.input);
+  if(input) input.value = adresse;
+  const liste = elListe(k);
+  if(liste) liste.style.display = "none";
+  c.suggestions = [];
+  c.active = -1;
+  // Coordonnées captées ici : c'est ce qui rend le calcul des frais possible.
+  c.coords = (typeof lat === 'number' && typeof lon === 'number' && isFinite(lat) && isFinite(lon))
+    ? {lat, lon} : null;
+  if(k === 'panier') majLienCarte();
+  c.apres();
 }
 
-function afficherSuggestionsIfExists(){
-  const liste = document.getElementById('suggestions-adresse');
+function afficherSuggestionsIfExists(k){
+  const liste = elListe(k);
   if(liste && liste.innerHTML.trim().length > 0){
     liste.style.display = "block";
   }
 }
 
-function fermerSuggestions(){
+function fermerSuggestions(k){
   // Ferme après un délai pour permettre le clic
   setTimeout(() => {
-    const liste = document.getElementById('suggestions-adresse');
+    const c = ctx(k);
+    const liste = elListe(k);
     if(liste) liste.style.display = "none";
-    currentSuggestions = [];
-    activeIndex = -1;
+    c.suggestions = [];
+    c.active = -1;
   }, 150);
 }
 
-// Keyboard handling: attach to input via onkeydown="handleAutocompleteKey(event)"
-function handleAutocompleteKey(e){
-  const liste = document.getElementById('suggestions-adresse');
+// Keyboard handling
+function handleAutocompleteKey(k, e){
+  const c = ctx(k);
+  const liste = elListe(k);
   if(!liste || liste.style.display === 'none') return;
   const nodes = liste.querySelectorAll('.addr-item');
   if(e.key === 'ArrowDown'){
     e.preventDefault();
-    setActiveIndex(activeIndex + 1);
+    setActiveIndex(k, c.active + 1);
   } else if(e.key === 'ArrowUp'){
     e.preventDefault();
-    setActiveIndex(activeIndex - 1);
+    setActiveIndex(k, c.active - 1);
   } else if(e.key === 'Enter'){
-    if(activeIndex >= 0 && nodes[activeIndex]){
+    if(c.active >= 0 && nodes[c.active]){
       e.preventDefault();
-      nodes[activeIndex].click();
+      nodes[c.active].click();
     }
   } else if(e.key === 'Escape'){
-    fermerSuggestions();
+    fermerSuggestions(k);
   }
 }
 
@@ -1265,16 +1407,14 @@ function escapeHtml(str){
   });
 }
 
-// Attach input listeners if DOM ready
+// Clavier : les autres écouteurs sont posés en attributs (oninput/onfocus/onblur)
 document.addEventListener('DOMContentLoaded', ()=>{
-  const input = document.getElementById('f-adresse');
-  if(input){
+  Object.keys(AUTO).forEach(k => {
+    const input = document.getElementById(ctx(k).input);
+    if(!input) return;
     input.setAttribute('autocomplete','off');
-    input.addEventListener('input', rechercherAdresses);
-    input.addEventListener('keydown', handleAutocompleteKey);
-    input.addEventListener('focus', afficherSuggestionsIfExists);
-    input.addEventListener('blur', fermerSuggestions);
-  }
+    input.addEventListener('keydown', e => handleAutocompleteKey(k, e));
+  });
 });
 
 function envoyerCommande(){
@@ -1307,11 +1447,16 @@ function envoyerCommande(){
     if(!firstInvalid) firstInvalid = el;
   }
 
+  const zoneEl = document.getElementById('f-zone');
+  const liv = livraisonPour('panier');
+  const retrait = liv.etat === 'retrait';
+
   // Simple validations
   if(nom.length < 2) showFieldError(nomEl, 'Merci d\'indiquer votre nom complet');
   const telDigits = tel.replace(/[^0-9+]/g,'');
   if(telDigits.length < 8) showFieldError(telEl, 'Numéro incorrect — entrez au moins 8 chiffres');
-  if(adresse.length < 6) showFieldError(adresseEl, 'Adresse trop courte');
+  if(liv.etat === 'aucune') showFieldError(zoneEl, 'Choisissez une zone de livraison');
+  if(!retrait && adresse.length < 6) showFieldError(adresseEl, 'Adresse trop courte');
   if(!jour) showFieldError(jourEl, 'Choisissez un jour de livraison');
 
   if(firstInvalid){
@@ -1328,13 +1473,25 @@ function envoyerCommande(){
     return `• ${p.nom} × ${q} — ${euro((p.prix||0) * q)}`;
   }).join('\n');
   const acompte = total * (ACOMPTE_POURCENT || 0) / 100;
+  const fraisLiv = liv.etat === 'ok' ? liv.frais : 0;
   const ref = genererRef();
 
+  // Bloc zone/livraison du message : retrait, estimation chiffrée, ou repli « à confirmer ».
+  let blocLiv;
+  if(retrait){
+    blocLiv = `🥡 Retrait sur place — chez ${liv.zone.cuisine} (${liv.zone.nom})\n${liv.zone.adresse}`;
+  } else if(liv.etat === 'ok'){
+    blocLiv = `📍 Zone : ${liv.zone.nom} (livraison)\n🚚 Livraison estimée : ${liv.frais === 0 ? 'Gratuit' : euro(liv.frais)} (~${liv.km} km, à confirmer)`;
+  } else {
+    blocLiv = `📍 Zone : ${liv.zone.nom} (livraison)\n🚚 Frais de livraison : à confirmer`;
+  }
+  const blocAdresse = retrait ? '' : `\n📍 ${adresse}\n🗺️ Localisation : ${urlCarte(adresse)}`;
+
   const message =
-`🧺 *Nouvelle commande — Saveurs du Mboa*\nRéf. ${ref}\n\n${lignes}\n\n*Total : ${euro(total)}*\nAcompte (${ACOMPTE_POURCENT} %) : *${euro(acompte)}* par virement au ${IBAN}\nSolde à la livraison : ${euro(total - acompte)}\n\n👤 ${nom}\n📞 ${tel}\n📍 ${adresse}\n🗺️ Localisation : ${urlCarte(adresse)}\n📅 Livraison : ${jour} (à partir de 10h)${notes ? `\n📝 ${notes}` : ''}\n\n_Je confirme ma commande et verse l'acompte pour la réserver._`;
+`🧺 *Nouvelle commande — Saveurs du Mboa*\nRéf. ${ref}\n\n${lignes}\n\n*Total plats : ${euro(total)}*\n${blocLiv}\nAcompte (${ACOMPTE_POURCENT} %) : *${euro(acompte)}* par virement au ${IBAN}\nSolde ${retrait ? 'au retrait' : 'à la livraison'} : ${euro(total - acompte + fraisLiv)}\n\n👤 ${nom}\n📞 ${tel}${blocAdresse}\n📅 ${retrait ? 'Retrait' : 'Livraison'} : ${jour} (à partir de 10h)${notes ? `\n📝 ${notes}` : ''}\n\n_Je confirme ma commande et verse l'acompte pour la réserver._`;
 
   window.open(`https://wa.me/${NUMERO_WHATSAPP}?text=${encodeURIComponent(message)}`, '_blank');
-  afficherConfirmation(ref, total, acompte);
+  afficherConfirmation(ref, total, acompte, liv);
 }
 
 /* ============ CONFIRMATION + SUIVI DE COMMANDE ============ */
@@ -1345,8 +1502,10 @@ function genererRef(){
   return 'MB-' + s;
 }
 
-function afficherConfirmation(ref, total, acompte){
+function afficherConfirmation(ref, total, acompte, liv){
   document.getElementById('conf-ref').textContent = ref;
+  liv = liv || {etat:'aucune'};
+  const fraisLiv = liv.etat === 'ok' ? liv.frais : 0;
 
   const lignesHtml = Object.keys(panier).map(id => {
     const p = MENU.find(m => m.id === id) || {nom:'?', prix:0};
@@ -1355,8 +1514,10 @@ function afficherConfirmation(ref, total, acompte){
   }).join('');
   document.getElementById('conf-recap').innerHTML =
     lignesHtml +
-    `<div class="r total"><span>Total</span><span>${euro(total)}</span></div>` +
-    `<div class="r acompte"><span>Acompte (${ACOMPTE_POURCENT} %)</span><span>${euro(acompte)}</span></div>`;
+    `<div class="r"><span>${liv.etat === 'ok' && liv.km !== undefined ? `Livraison (~${liv.km} km)` : 'Livraison'}</span><span>${libelleLivraison(liv)}</span></div>` +
+    `<div class="r total"><span>Total</span><span>${euro(total + fraisLiv)}</span></div>` +
+    `<div class="r acompte"><span>Acompte (${ACOMPTE_POURCENT} %)</span><span>${euro(acompte)}</span></div>` +
+    `<div class="r"><span>Solde ${liv.etat === 'retrait' ? 'au retrait' : 'à la livraison'}</span><span>${euro(total - acompte + fraisLiv)}</span></div>`;
 
   ['lignes','recap','form-cmd'].forEach(id => document.getElementById(id).style.display = 'none');
   document.getElementById('btn-envoyer').style.display = 'none';
@@ -1370,6 +1531,11 @@ function afficherConfirmation(ref, total, acompte){
 
 function nouvelleCommande(){
   Object.keys(panier).forEach(k => delete panier[k]);
+  // Repartir d'une commande vierge : zone et adresse géocodée remises à zéro.
+  AUTO.panier.coords = null;
+  const zoneEl = document.getElementById('f-zone');
+  if(zoneEl) zoneEl.value = '';
+  changerZone('panier');
   document.getElementById('confirmation').style.display = 'none';
   document.getElementById('btn-nouvelle').style.display = 'none';
   document.getElementById('btn-envoyer').style.display = '';
@@ -1434,14 +1600,6 @@ function majCompteur(){
   el.innerHTML = `⏳ <span>Fermeture des commandes dans</span> <span class="temps">${j > 0 ? j + " j " : ""}${h} h ${String(m).padStart(2,"0")} min</span>`;
 }
 
-/* ============ CALCULATEUR LIVRAISON ============ */
-function calculerFrais(){
-  const km = parseInt(document.getElementById('km-slider').value, 10);
-  document.getElementById('km-val').textContent = km;
-  const frais = km <= KM_GRATUITS ? 0 : (km - KM_GRATUITS) * FRAIS_KM;
-  document.getElementById('frais-val').textContent = frais === 0 ? "Gratuit 🎉" : euro(frais);
-}
-
 /* Injecte le pourcentage d'acompte (config) dans tous les libellés .pct-acompte */
 function majPourcentAcompte(){
   document.querySelectorAll('.pct-acompte').forEach(el => el.textContent = ACOMPTE_POURCENT);
@@ -1450,13 +1608,14 @@ function majPourcentAcompte(){
 /* ============ INIT ============ */
 remplirMarquee();
 rendreMenu();
+remplirZones();
 majPourcentAcompte();
 majTextesConfig();
 majTout();
+changerZone('livraison');
 router();
 majCompteur();
 setInterval(majCompteur, 30000);
-calculerFrais();
 </script>
 
 <!-- (Consentement cookies retiré : le site ne dépose aucun cookie de pistage — voir #/legal) -->
