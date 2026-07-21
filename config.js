@@ -16,6 +16,12 @@ const CRENEAUX_LIVRAISON = [
   { debut:14, fin:18 }
 ];
 
+/* Avis clients — gérés depuis la page d'administration.
+   AVIS_FORM_KEY = clé Web3Forms du formulaire d'avis (vide = formulaire en mode démo).
+   AVIS = avis validés affichés sur le site : { nom, note (1-5), texte, date "AAAA-MM" }. */
+const AVIS_FORM_KEY = "";
+const AVIS = [];
+
 /* Zones de livraison — réglées une fois ici (l'admin les préserve, ne les édite pas).
    lat/lon = coordonnées de la cuisine, servent au calcul automatique des frais. */
 const FACTEUR_ROUTE = 1.3;   // vol d'oiseau -> distance route estimée
