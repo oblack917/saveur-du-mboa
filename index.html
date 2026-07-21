@@ -810,21 +810,22 @@ button:active, .btn-whatsapp:active, .btn-ajouter:active{transform:translateY(1p
 
     <div id="confirmation" style="display:none">
       <div class="conf-ok">
-        <div class="conf-check">✅</div>
-        <h3>Commande bien enregistrée !</h3>
+        <div class="conf-check">📲</div>
+        <h3>Dernière étape : envoyez le message</h3>
         <p class="conf-ref">Référence : <strong id="conf-ref">—</strong></p>
-        <p class="conf-sub">Votre commande a été transmise sur WhatsApp. Nous vous confirmons le créneau au plus vite.</p>
+        <p class="conf-sub"><strong>Votre commande ne nous parvient que si le message est bien envoyé dans WhatsApp.</strong> Vérifiez qu'il est parti — sans ça, nous ne le recevons pas et rien ne sera préparé.</p>
+        <a id="conf-relancer" class="btn-whatsapp" href="#" target="_blank" rel="noopener" style="display:block;text-align:center;margin-top:.6rem;text-decoration:none">🔁 Rouvrir WhatsApp avec ma commande</a>
       </div>
       <div class="suivi">
         <h4>Suivi de votre commande</h4>
         <ol class="timeline">
-          <li class="done"><span class="dot"></span><strong>Reçue</strong><em>À l'instant</em></li>
-          <li><span class="dot"></span><strong>Confirmée par WhatsApp</strong><em>Nous vous répondons vite</em></li>
+          <li class="done"><span class="dot"></span><strong>Message préparé</strong><em>À vous de l'envoyer sur WhatsApp</em></li>
+          <li><span class="dot"></span><strong>Reçue et confirmée par nos soins</strong><em>Dès que le message nous arrive</em></li>
           <li><span class="dot"></span><strong>En préparation</strong><em>Plats frais, le week-end</em></li>
           <li><span class="dot"></span><strong>En route vers vous</strong><em>À partir de 10h</em></li>
           <li><span class="dot"></span><strong>Livrée</strong><em>Bon appétit !</em></li>
         </ol>
-        <p class="suivi-note">ℹ️ L'avancée de votre commande et l'heure de passage du livreur vous sont communiquées directement sur WhatsApp.</p>
+        <p class="suivi-note">ℹ️ Si vous n'avez pas de réponse de notre part dans la journée, c'est que le message n'est pas arrivé : renvoyez-le avec le bouton ci-dessus. L'avancée de votre commande et l'heure de passage vous sont communiquées sur WhatsApp.</p>
       </div>
       <div class="recap" id="conf-recap" style="display:block;margin-top:1rem"></div>
     </div>
@@ -941,6 +942,7 @@ function carteTeaser(p){
 }
 
 function rendreMenu(){
+  if(typeof MENU === 'undefined' || !Array.isArray(MENU)) return;
   document.getElementById('liste-plats').innerHTML  = MENU.filter(p => p.cat === "plat").map(carte).join('');
   document.getElementById('liste-accomp').innerHTML = MENU.filter(p => p.cat === "accomp").map(carte).join('');
   document.getElementById('teaser-plats').innerHTML = MENU.filter(p => p.cat === "plat").map(carteTeaser).join('');
@@ -964,6 +966,61 @@ function changer(id, delta){
 function supprimer(id){ delete panier[id]; majTout(); }
 
 function majTout(){ rendreActions(); rendrePanier(); }
+
+/* ============ PANIER QUI SURVIT AU RECHARGEMENT ============ */
+/* Un appel entrant ou un retour arrière ne doit pas effacer une commande en
+   cours : on garde le panier, la zone et l'adresse choisis pendant 7 jours. */
+const CLE_PANIER = 'sdm_panier_v1';
+const DUREE_PANIER = 7 * 24 * 3600 * 1000;
+
+function sauverPanier(){
+  try{
+    // Panier vide : on n'a rien à garder, et surtout on ne laisse pas traîner
+    // l'adresse d'une commande déjà envoyée.
+    if(Object.keys(panier).length === 0){ oublierPanier(); return; }
+    const zoneEl = document.getElementById('f-zone');
+    const adrEl  = document.getElementById('f-adresse');
+    localStorage.setItem(CLE_PANIER, JSON.stringify({
+      ts: Date.now(),
+      panier: panier,
+      zone: zoneEl ? zoneEl.value : '',
+      adresse: adrEl ? adrEl.value : '',
+      coords: ctx('panier').coords
+    }));
+  }catch(e){ /* navigation privée, quota plein : on continue sans sauvegarde */ }
+}
+
+function oublierPanier(){
+  try{ localStorage.removeItem(CLE_PANIER); }catch(e){}
+}
+
+function restaurerPanier(){
+  try{
+    const brut = localStorage.getItem(CLE_PANIER);
+    if(!brut) return;
+    const d = JSON.parse(brut);
+    if(!d || !d.ts || (Date.now() - d.ts) > DUREE_PANIER){ oublierPanier(); return; }
+
+    // On ne restaure que des plats encore au menu (il change chaque semaine),
+    // et les prix sont toujours relus dans MENU : jamais de tarif périmé.
+    Object.keys(d.panier || {}).forEach(id => {
+      const q = parseInt(d.panier[id], 10);
+      if(MENU.find(m => m.id === id) && q > 0) panier[id] = q;
+    });
+
+    const zoneEl = document.getElementById('f-zone');
+    if(zoneEl && d.zone){
+      zoneEl.value = d.zone;
+      if(zoneEl.value !== d.zone) zoneEl.value = '';   // zone disparue de config.js
+    }
+    const adrEl = document.getElementById('f-adresse');
+    if(adrEl && d.adresse) adrEl.value = d.adresse;
+    if(d.coords && typeof d.coords.lat === 'number' && typeof d.coords.lon === 'number'){
+      ctx('panier').coords = d.coords;
+    }
+    majLienCarte();
+  }catch(e){ oublierPanier(); }
+}
 
 function rendrePanier(){
   const lignes = document.getElementById('lignes');
@@ -1013,6 +1070,7 @@ function rendrePanier(){
   document.getElementById('recap').style.display   = ids.length ? 'block' : 'none';
   document.getElementById('form-cmd').style.display = ids.length ? 'block' : 'none';
   document.getElementById('btn-envoyer').disabled = ids.length === 0;
+  sauverPanier();
 }
 
 function ouvrirPanier(){
@@ -1568,8 +1626,11 @@ function envoyerCommande(){
   const message =
 `🧺 *Nouvelle commande — Saveurs du Mboa*\nRéf. ${ref}\n\n${lignes}\n\n*Total plats : ${euro(total)}*\n${blocLiv}\nAcompte (${ACOMPTE_POURCENT} %) : *${euro(acompte)}* par virement au ${IBAN}\nSolde ${retrait ? 'au retrait' : 'à la livraison'} : ${euro(total - acompte + fraisLiv)}\n\n👤 ${nom}\n📞 ${tel}${blocAdresse}\n📅 ${retrait ? 'Retrait' : 'Livraison'} : ${jour} (à partir de 10h)${notes ? `\n📝 ${notes}` : ''}\n\n_Je confirme ma commande et verse l'acompte pour la réserver._`;
 
-  window.open(`https://wa.me/${NUMERO_WHATSAPP}?text=${encodeURIComponent(message)}`, '_blank');
-  afficherConfirmation(ref, total, acompte, liv);
+  // On garde le lien : si le navigateur bloque l'ouverture (popup) ou si le
+  // client ferme WhatsApp sans envoyer, il doit pouvoir le rouvrir.
+  const lienWhatsApp = `https://wa.me/${NUMERO_WHATSAPP}?text=${encodeURIComponent(message)}`;
+  window.open(lienWhatsApp, '_blank');
+  afficherConfirmation(ref, total, acompte, liv, lienWhatsApp);
 }
 
 /* ============ CONFIRMATION + SUIVI DE COMMANDE ============ */
@@ -1580,8 +1641,10 @@ function genererRef(){
   return 'MB-' + s;
 }
 
-function afficherConfirmation(ref, total, acompte, liv){
+function afficherConfirmation(ref, total, acompte, liv, lienWhatsApp){
   document.getElementById('conf-ref').textContent = ref;
+  const relancer = document.getElementById('conf-relancer');
+  if(relancer && lienWhatsApp) relancer.href = lienWhatsApp;
   liv = liv || {etat:'aucune'};
   const fraisLiv = liv.etat === 'ok' ? liv.frais : 0;
 
@@ -1609,6 +1672,7 @@ function afficherConfirmation(ref, total, acompte, liv){
 
 function nouvelleCommande(){
   Object.keys(panier).forEach(k => delete panier[k]);
+  oublierPanier();
   // Repartir d'une commande vierge : zone et adresse géocodée remises à zéro.
   AUTO.panier.coords = null;
   const zoneEl = document.getElementById('f-zone');
@@ -1684,16 +1748,62 @@ function majPourcentAcompte(){
 }
 
 /* ============ INIT ============ */
-remplirMarquee();
-rendreMenu();
-remplirZones();
-majPourcentAcompte();
-majTextesConfig();
-majTout();
-changerZone('livraison');
-router();
-majCompteur();
-setInterval(majCompteur, 30000);
+/* config.js porte le menu et les prix. Il est rechargé à chaque visite (anti-cache),
+   donc chaque visite dépend d'un aller-retour réseau : on réessaie plutôt que de
+   laisser un menu vide, et on le dit clairement si ça échoue vraiment. */
+function configChargee(){
+  return typeof MENU !== 'undefined' && Array.isArray(MENU) && MENU.length > 0;
+}
+
+function afficherPanneMenu(){
+  const message = `<div style="background:#fdeccb;border:2px solid var(--or);border-radius:var(--radius);padding:1.2rem;text-align:center;color:var(--brun)">
+      <p style="font-weight:700;margin:0 0 .5rem">⚠️ Le menu n'a pas pu se charger</p>
+      <p style="margin:0 0 .8rem">Votre connexion a peut-être coupé pendant le chargement.</p>
+      <button class="btn btn-primaire" onclick="location.reload()">Réessayer</button>
+      <p style="margin:.8rem 0 0;font-size:.9rem">Vous pouvez aussi commander directement sur WhatsApp au <strong class="js-phone">0489 76 58 28</strong>.</p>
+    </div>`;
+  ['liste-plats','teaser-plats'].forEach(id => {
+    const el = document.getElementById(id);
+    if(el) el.innerHTML = message;
+  });
+  const accomp = document.getElementById('liste-accomp');
+  if(accomp) accomp.innerHTML = '';
+}
+
+function demarrer(){
+  if(configChargee()){
+    remplirMarquee();
+    rendreMenu();
+    remplirZones();
+    majPourcentAcompte();
+    majTextesConfig();
+    restaurerPanier();
+    majTout();
+    changerZone('panier');
+    changerZone('livraison');
+  } else {
+    afficherPanneMenu();
+  }
+  // Le reste du site (pages, mentions légales, compte à rebours) doit vivre
+  // même sans menu : on ne laisse jamais une page morte.
+  router();
+  majCompteur();
+  setInterval(majCompteur, 30000);
+}
+
+function chargerConfigPuisDemarrer(essai){
+  if(configChargee() || essai > 3){
+    demarrer();
+    return;
+  }
+  const script = document.createElement('script');
+  script.src = 'config.js?v=' + Date.now() + '&essai=' + essai;
+  script.onload  = () => chargerConfigPuisDemarrer(essai + 1);
+  script.onerror = () => setTimeout(() => chargerConfigPuisDemarrer(essai + 1), 500 * essai);
+  document.body.appendChild(script);
+}
+
+chargerConfigPuisDemarrer(1);
 </script>
 
 <!-- (Consentement cookies retiré : le site ne dépose aucun cookie de pistage — voir #/legal) -->
