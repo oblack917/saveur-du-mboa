@@ -562,11 +562,11 @@ button:active, .btn-whatsapp:active, .btn-ajouter:active{transform:translateY(1p
         <ul>
           <li><strong>Province de Liège</strong> — toutes communes, depuis la cuisine de Viviane</li>
           <li><strong>Province du Luxembourg</strong> — toutes communes, depuis la cuisine de Caroline</li>
-          <li>Livraison le <strong>samedi et dimanche à partir de 10h</strong></li>
+          <li>Livraison le <strong>samedi et dimanche</strong>, sur deux créneaux : <strong>10h–13h</strong> ou <strong>14h–18h</strong></li>
           <li><strong>Venir chercher</strong> possible dans les deux zones — <strong>0 €</strong></li>
           <li><strong>Gratuite jusqu'à <span class="js-km-gratuits">5</span> km</strong> de la cuisine de votre zone</li>
           <li>Au-delà : <strong><span class="js-frais-km">0,30</span> € par kilomètre</strong></li>
-          <li>Créneau confirmé la veille par WhatsApp</li>
+          <li>Vous choisissez votre créneau à la commande — confirmé la veille par WhatsApp</li>
         </ul>
       </div>
       <div class="calculette">
@@ -822,6 +822,12 @@ button:active, .btn-whatsapp:active, .btn-ajouter:active{transform:translateY(1p
         <option value="">— Choisir —</option>
         <option>Samedi</option>
         <option>Dimanche</option>
+      </select>
+      <label for="f-creneau">Créneau horaire *</label>
+      <select id="f-creneau">
+        <option value="">— Choisir —</option>
+        <option>10h–13h</option>
+        <option>14h–18h</option>
       </select>
       <label for="f-notes">Remarques (allergies, étage, etc.)</label>
       <textarea id="f-notes" placeholder="Facultatif"></textarea>
@@ -1581,12 +1587,14 @@ function envoyerCommande(){
   const telEl = document.getElementById('f-tel');
   const adresseEl = document.getElementById('f-adresse');
   const jourEl = document.getElementById('f-jour');
+  const creneauEl = document.getElementById('f-creneau');
   const notesEl = document.getElementById('f-notes');
 
   const nom = nomEl.value.trim();
   const tel = telEl.value.trim();
   const adresse = adresseEl.value.trim();
   const jour = jourEl.value;
+  const creneau = creneauEl.value;
   const notes = notesEl.value.trim();
 
   let firstInvalid = null;
@@ -1614,6 +1622,7 @@ function envoyerCommande(){
   if(liv.etat === 'aucune') showFieldError(zoneEl, 'Choisissez une zone de livraison');
   if(!retrait && adresse.length < 6) showFieldError(adresseEl, 'Adresse trop courte');
   if(!jour) showFieldError(jourEl, 'Choisissez un jour de livraison');
+  if(!creneau) showFieldError(creneauEl, 'Choisissez un créneau horaire');
 
   if(firstInvalid){
     firstInvalid.focus();
@@ -1646,13 +1655,13 @@ function envoyerCommande(){
   const blocAdresse = retrait ? '' : `\n📍 ${adresse}\n🗺️ Localisation : ${urlCarte(adresse)}`;
 
   const message =
-`🧺 *Nouvelle commande — Saveurs du Mboa*\nRéf. ${ref}\n\n${lignes}\n\n*Total plats : ${euro(total)}*\n${blocLiv}\nAcompte (${ACOMPTE_POURCENT} %) : *${euro(acompte)}* par virement au ${IBAN}${typeof TITULAIRE !== 'undefined' && TITULAIRE ? ` (${TITULAIRE})` : ''}\nSolde ${retrait ? 'au retrait' : 'à la livraison'} : ${euro(total - acompte + fraisLiv)}\n\n👤 ${nom}\n📞 ${tel}${blocAdresse}\n📅 ${retrait ? 'Retrait' : 'Livraison'} : ${jour} (à partir de 10h)${notes ? `\n📝 ${notes}` : ''}\n\n_Je confirme ma commande et verse l'acompte pour la réserver._`;
+`🧺 *Nouvelle commande — Saveurs du Mboa*\nRéf. ${ref}\n\n${lignes}\n\n*Total plats : ${euro(total)}*\n${blocLiv}\nAcompte (${ACOMPTE_POURCENT} %) : *${euro(acompte)}* par virement au ${IBAN}${typeof TITULAIRE !== 'undefined' && TITULAIRE ? ` (${TITULAIRE})` : ''}\nSolde ${retrait ? 'au retrait' : 'à la livraison'} : ${euro(total - acompte + fraisLiv)}\n\n👤 ${nom}\n📞 ${tel}${blocAdresse}\n📅 ${retrait ? 'Retrait' : 'Livraison'} : ${jour}, ${creneau}${notes ? `\n📝 ${notes}` : ''}\n\n_Je confirme ma commande et verse l'acompte pour la réserver._`;
 
   // On garde le lien : si le navigateur bloque l'ouverture (popup) ou si le
   // client ferme WhatsApp sans envoyer, il doit pouvoir le rouvrir.
   const lienWhatsApp = `https://wa.me/${NUMERO_WHATSAPP}?text=${encodeURIComponent(message)}`;
   window.open(lienWhatsApp, '_blank');
-  afficherConfirmation(ref, total, acompte, liv, lienWhatsApp);
+  afficherConfirmation(ref, total, acompte, liv, lienWhatsApp, jour, creneau);
 }
 
 /* ============ CONFIRMATION + SUIVI DE COMMANDE ============ */
@@ -1663,7 +1672,7 @@ function genererRef(){
   return 'MB-' + s;
 }
 
-function afficherConfirmation(ref, total, acompte, liv, lienWhatsApp){
+function afficherConfirmation(ref, total, acompte, liv, lienWhatsApp, jour, creneau){
   document.getElementById('conf-ref').textContent = ref;
   const relancer = document.getElementById('conf-relancer');
   if(relancer && lienWhatsApp) relancer.href = lienWhatsApp;
@@ -1677,6 +1686,7 @@ function afficherConfirmation(ref, total, acompte, liv, lienWhatsApp){
   }).join('');
   document.getElementById('conf-recap').innerHTML =
     lignesHtml +
+    (jour && creneau ? `<div class="r"><span>📅 ${liv.etat === 'retrait' ? 'Retrait' : 'Livraison'}</span><span>${jour}, ${creneau}</span></div>` : '') +
     `<div class="r"><span>${liv.etat === 'ok' && liv.km !== undefined ? `Livraison (~${liv.km} km)` : 'Livraison'}</span><span>${libelleLivraison(liv)}</span></div>` +
     `<div class="r total"><span>Total</span><span>${euro(total + fraisLiv)}</span></div>` +
     `<div class="r acompte"><span>Acompte (${ACOMPTE_POURCENT} %)</span><span>${euro(acompte)}</span></div>` +
