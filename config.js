@@ -6,6 +6,17 @@ const ACOMPTE_POURCENT = 50;
 const FRAIS_KM = 0.3;
 const KM_GRATUITS = 5;
 
+/* Zones de livraison — réglées une fois ici (l'admin les préserve, ne les édite pas).
+   lat/lon = coordonnées de la cuisine, servent au calcul automatique des frais. */
+const FACTEUR_ROUTE = 1.3;   // vol d'oiseau -> distance route estimée
+
+const ZONES = [
+  { id:"luxembourg", nom:"Province de Luxembourg", cuisine:"Caroline",
+    adresse:"Martelwée 33, 6637 Fauvillers", lat:49.8626398, lon:5.7267954 },
+  { id:"liege",      nom:"Province de Liège",      cuisine:"Viviane",
+    adresse:"Chaussée Roosevelt 128, 4420 Saint-Nicolas", lat:50.6456901, lon:5.5230284 }
+];
+
 const MENU = [
   { id:"plat1", cat:"plat", nom:"Ndole Royal", prix:15.00, photo:"photos/ndole.jpg",
     desc:"Le plat national : feuilles de ndolè mijotées aux arachides, crevettes et viande. Un classique généreux et parfumé.", allergenes:"Arachides, Crustacés" },
