@@ -1099,10 +1099,12 @@ function rendrePanier(){
     }).join('');
   }
 
-  // Livraison : ajoutée au total, mais JAMAIS à l'acompte (acompte = plats seuls).
+  // Acompte = pourcentage du total, livraison comprise (si elle est déjà connue).
+  // Si la livraison est « à confirmer » (adresse imprécise), elle n'est pas encore
+  // chiffrée : fraisLiv vaut 0 ici, et le montant réel s'ajoutera au solde.
   const liv = livraisonPour('panier');
   const fraisLiv = liv.etat === 'ok' ? liv.frais : 0;
-  const acompte = total * ACOMPTE_POURCENT / 100;
+  const acompte = (total + fraisLiv) * ACOMPTE_POURCENT / 100;
 
   const libLiv = document.getElementById('r-livraison-lib');
   if(libLiv) libLiv.textContent = (liv.etat === 'ok' && liv.km !== undefined)
@@ -1657,8 +1659,8 @@ function envoyerCommande(){
     total += (p.prix || 0) * q;
     return `• ${p.nom} × ${q} — ${euro((p.prix||0) * q)}`;
   }).join('\n');
-  const acompte = total * (ACOMPTE_POURCENT || 0) / 100;
   const fraisLiv = liv.etat === 'ok' ? liv.frais : 0;
+  const acompte = (total + fraisLiv) * (ACOMPTE_POURCENT || 0) / 100;
   const ref = genererRef();
 
   // Bloc zone/livraison du message : retrait, estimation chiffrée, ou repli « à confirmer ».
