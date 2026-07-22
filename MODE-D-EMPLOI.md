@@ -66,6 +66,25 @@ et lui propose un bouton pour rouvrir WhatsApp s'il a fermé trop vite.
 n'est pas une panne : son message n'est pas parti. Demandez-lui de vous
 donner sa **référence (MB-XXXX)** et de renvoyer le message.
 
+## ✅ Répondez à chaque commande reçue (très important)
+
+Le site promet au client : *« Dès réception, nous vous répondons sur
+WhatsApp pour confirmer votre commande. »* C'est **votre réponse qui
+rassure le client** — sans elle, il ne sait pas si sa commande existe.
+
+Dès qu'une commande arrive, renvoyez ce message (copiez-collez et adaptez) :
+
+> Bonjour 😊 Votre commande **MB-XXXX** est bien reçue ✅
+> Elle sera confirmée dès réception de l'acompte de XX € sur le compte
+> BEXX XXXX XXXX XXXX. À très vite !
+> — Saveurs du Mboa
+
+Et quand l'acompte est arrivé :
+
+> C'est noté, acompte bien reçu 🙏 Votre commande **MB-XXXX** est
+> confirmée pour [samedi/dimanche] dans le créneau [10h–13h].
+> Bon appétit d'avance ! — Saveurs du Mboa
+
 ## 💡 Deux choses à savoir si un client vous appelle
 
 - **"J'ai rechargé la page, mon panier est-il perdu ?"** → Non. Son panier,

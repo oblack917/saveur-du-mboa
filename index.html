@@ -802,7 +802,7 @@ button:active, .btn-whatsapp:active, .btn-ajouter:active{transform:translateY(1p
 .allergenes strong{color:var(--brun)}
 .avertissement-allergenes{font-size:.86rem;color:#6d5236;line-height:1.5;background:#fdf3e0;border:1px solid #efd9ac;border-radius:var(--radius);padding:.9rem 1.1rem;margin-top:1.6rem}
 .avertissement-allergenes strong{color:var(--brun)}
-/* ===== Confirmation de commande + suivi ===== */
+/* ===== Confirmation de commande ===== */
 #confirmation{padding:.2rem 0}
 .conf-ok{text-align:center;padding:.4rem 0 .6rem}
 .conf-check{font-size:2.6rem;line-height:1}
@@ -811,17 +811,6 @@ button:active, .btn-whatsapp:active, .btn-ajouter:active{transform:translateY(1p
 .conf-ref strong{color:var(--terracotta);letter-spacing:1px}
 .conf-sub{color:#5a4632;font-size:.92rem;max-width:36ch;margin:.4rem auto 0;line-height:1.45}
 .suivi{background:var(--creme);border-radius:var(--radius);padding:1rem 1.1rem;margin-top:1rem}
-.suivi h4{color:var(--brun);margin-bottom:.8rem}
-.timeline{list-style:none;margin:0;padding:0}
-.timeline li{position:relative;padding:0 0 1.05rem 1.7rem}
-.timeline li:last-child{padding-bottom:0}
-.timeline li::before{content:"";position:absolute;left:6px;top:1.1rem;bottom:0;width:2px;background:#e4d3b6}
-.timeline li:last-child::before{display:none}
-.timeline .dot{position:absolute;left:0;top:2px;width:14px;height:14px;border-radius:50%;background:#fff;border:2px solid #cdb68e}
-.timeline li.done .dot{background:var(--or);border-color:var(--or)}
-.timeline li strong{display:block;font-size:.95rem;color:#a4906f}
-.timeline li.done strong{color:var(--brun)}
-.timeline li em{font-style:normal;color:#8a7053;font-size:.82rem}
 .suivi-note{font-size:.85rem;color:#6d5236;margin-top:.9rem;line-height:1.45}
 </style>
 <aside id="drawer" aria-label="Panier">
@@ -876,21 +865,14 @@ button:active, .btn-whatsapp:active, .btn-ajouter:active{transform:translateY(1p
     <div id="confirmation" style="display:none">
       <div class="conf-ok">
         <div class="conf-check">📲</div>
-        <h3>Dernière étape : envoyez le message</h3>
+        <h3>Votre commande est prête à partir !</h3>
         <p class="conf-ref">Référence : <strong id="conf-ref">—</strong></p>
-        <p class="conf-sub"><strong>Votre commande ne nous parvient que si le message est bien envoyé dans WhatsApp.</strong> Vérifiez qu'il est parti — sans ça, nous ne le recevons pas et rien ne sera préparé.</p>
+        <p class="conf-sub"><strong>Envoyez le message WhatsApp qui vient de s'ouvrir</strong> — c'est lui qui nous transmet votre commande.</p>
         <a id="conf-relancer" class="btn-whatsapp" href="#" target="_blank" rel="noopener" style="display:block;text-align:center;margin-top:.6rem;text-decoration:none">🔁 Rouvrir WhatsApp avec ma commande</a>
       </div>
       <div class="suivi">
-        <h4>Suivi de votre commande</h4>
-        <ol class="timeline">
-          <li class="done"><span class="dot"></span><strong>Message préparé</strong><em>À vous de l'envoyer sur WhatsApp</em></li>
-          <li><span class="dot"></span><strong>Reçue et confirmée par nos soins</strong><em>Dès que le message nous arrive</em></li>
-          <li><span class="dot"></span><strong>En préparation</strong><em>Plats frais, le week-end</em></li>
-          <li><span class="dot"></span><strong>En route vers vous</strong><em>À partir de 10h</em></li>
-          <li><span class="dot"></span><strong>Livrée</strong><em>Bon appétit !</em></li>
-        </ol>
-        <p class="suivi-note">ℹ️ Si vous n'avez pas de réponse de notre part dans la journée, c'est que le message n'est pas arrivé : renvoyez-le avec le bouton ci-dessus. L'avancée de votre commande et l'heure de passage vous sont communiquées sur WhatsApp.</p>
+        <p class="suivi-note" style="margin-top:0">✅ <strong>Dès réception, nous vous répondons sur WhatsApp pour confirmer votre commande</strong> (référence à l'appui). C'est ce message qui vaut confirmation.</p>
+        <p class="suivi-note">ℹ️ Pas de réponse de notre part dans la journée ? Votre message n'est pas arrivé : renvoyez-le avec le bouton ci-dessus.</p>
       </div>
       <div class="recap" id="conf-recap" style="display:block;margin-top:1rem"></div>
     </div>
