@@ -956,6 +956,7 @@ function majTextesConfig(){
   const libelles = creneauxLivraison().map(libelleCreneau).join(' ou ');
   document.querySelectorAll('.js-creneaux').forEach(el => { if(libelles) el.textContent = libelles; });
   rendreAvis();
+  rendreFormAvis();
 }
 
 /* ===== Créneaux de livraison (réglés dans config.js) =====
@@ -1019,6 +1020,91 @@ function rendreAvis(){
   moy.innerHTML = `<div class="avis-note-globale">${etoilesHtml(Math.round(moyenneAvis()))}</div>
     <div class="avis-note-chiffre">${moyenneAvis().toString().replace('.', ',')} / 5 · ${v.length} avis</div>`;
   liste.innerHTML = v.map(carteAvisHtml).join('');
+}
+
+/* ---- Formulaire « Laisser un avis » (envoi Web3Forms, modéré avant publication) ---- */
+let _noteAvisChoisie = 0;
+function setNoteAvis(n){
+  _noteAvisChoisie = n;
+  document.querySelectorAll('#avis-etoiles-choix .etoile-choix').forEach((el, i) => {
+    el.textContent = i < n ? '★' : '☆';
+  });
+  const err = document.getElementById('avis-note-err');
+  if(err) err.style.display = 'none';
+}
+function rendreFormAvis(){
+  const bloc = document.getElementById('avis-form-bloc');
+  if(!bloc) return;
+  const actif = typeof AVIS_FORM_KEY !== 'undefined' && AVIS_FORM_KEY;
+  bloc.innerHTML = `
+    <h2 class="section-titre" style="text-align:center">Laisser un avis</h2>
+    ${actif ? '' : `<p style="text-align:center;color:#8a7355;font-size:.88rem">Le formulaire sera bientôt actif. En attendant, écrivez-nous sur <a id="avis-demo-wa" href="#">WhatsApp</a>.</p>`}
+    <form id="avis-form" class="form" ${actif ? '' : 'style="opacity:.55;pointer-events:none"'}>
+      <label for="av-nom">Votre prénom / nom *</label>
+      <input id="av-nom" type="text" maxlength="60" placeholder="Ex. Marie L.">
+      <label>Votre note *</label>
+      <div id="avis-etoiles-choix" style="font-size:1.8rem;color:var(--or);cursor:pointer;letter-spacing:3px">
+        ${[1,2,3,4,5].map(n => `<span class="etoile-choix" onclick="setNoteAvis(${n})">☆</span>`).join('')}
+      </div>
+      <span id="avis-note-err" style="display:none;color:var(--terracotta);font-size:.88rem"></span>
+      <label for="av-texte">Votre commentaire *</label>
+      <textarea id="av-texte" maxlength="600" placeholder="Racontez votre expérience…"></textarea>
+      <label for="av-email">Votre e-mail (facultatif)</label>
+      <input id="av-email" type="email" placeholder="Pour vous répondre si besoin">
+      <input type="checkbox" name="botcheck" id="av-botcheck" style="display:none" tabindex="-1" autocomplete="off">
+      <button type="submit" class="btn btn-primaire" style="width:100%;margin-top:.9rem" ${actif ? '' : 'disabled'}>Envoyer mon avis</button>
+      <p style="color:#8a7355;font-size:.8rem;margin-top:.6rem">En envoyant votre avis, vous acceptez qu'il soit transmis pour modération et publié sur le site.</p>
+      <p id="avis-form-msg" style="display:none;margin-top:.8rem;text-align:center;font-weight:700"></p>
+    </form>`;
+  // Le lien WhatsApp est injecté après la boucle .js-wa : on le câble ici directement.
+  const demoWa = document.getElementById('avis-demo-wa');
+  if(demoWa) demoWa.href = 'https://wa.me/' + NUMERO_WHATSAPP;
+  const f = document.getElementById('avis-form');
+  if(f && actif) f.addEventListener('submit', envoyerAvis);
+}
+
+async function envoyerAvis(ev){
+  ev.preventDefault();
+  const nom = document.getElementById('av-nom').value.trim();
+  const texte = document.getElementById('av-texte').value.trim();
+  const email = document.getElementById('av-email').value.trim();
+  const botcheck = document.getElementById('av-botcheck').checked;
+  const msg = document.getElementById('avis-form-msg');
+  const noteErr = document.getElementById('avis-note-err');
+  if(nom.length < 2){ document.getElementById('av-nom').focus(); return; }
+  if(!_noteAvisChoisie){ noteErr.textContent = 'Choisissez une note.'; noteErr.style.display = 'block'; return; }
+  if(texte.length < 3){ document.getElementById('av-texte').focus(); return; }
+  if(botcheck) return; // honeypot : bot détecté, on ignore silencieusement
+
+  const bouton = ev.target.querySelector('button[type=submit]');
+  bouton.disabled = true; bouton.textContent = 'Envoi…';
+  try{
+    const r = await fetch('https://api.web3forms.com/submit', {
+      method:'POST',
+      headers:{'Content-Type':'application/json', 'Accept':'application/json'},
+      body: JSON.stringify({
+        access_key: AVIS_FORM_KEY,
+        subject: 'Nouvel avis — Saveurs du Mboa',
+        from_name: nom,
+        note: _noteAvisChoisie + '/5',
+        message: texte,
+        email_client: email || '(non fourni)'
+      })
+    });
+    const data = await r.json();
+    if(data.success){
+      ev.target.reset(); _noteAvisChoisie = 0; setNoteAvis(0);
+      msg.style.color = '#1c5b2b';
+      msg.textContent = '🙏 Merci ! Votre avis sera publié après validation.';
+      msg.style.display = 'block';
+    } else { throw new Error('échec'); }
+  } catch(e){
+    msg.style.color = 'var(--terracotta)';
+    msg.textContent = "Désolé, l'envoi a échoué. Réessayez ou écrivez-nous sur WhatsApp.";
+    msg.style.display = 'block';
+  } finally {
+    bouton.disabled = false; bouton.textContent = 'Envoyer mon avis';
+  }
 }
 
 function actionHtml(p){
