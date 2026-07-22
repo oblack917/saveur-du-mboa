@@ -75,6 +75,28 @@ donner sa **référence (MB-XXXX)** et de renvoyer le message.
   seul, puis affiche un bouton **Réessayer** et votre numéro WhatsApp. Il
   peut commander directement par message en attendant.
 
+## ⭐ Les avis clients
+
+Quand un client laisse un avis sur le site, il **n'apparaît pas tout seul** :
+vous le recevez d'abord **par e-mail** (objet « Nouvel avis — Saveurs du
+Mboa »). C'est vous qui décidez de le publier ou non.
+
+Pour publier un avis reçu :
+
+1. Ouvrez l'e-mail, **sélectionnez tout son contenu et copiez-le**
+2. Ouvrez la page d'administration → Réglages généraux → **📋 Coller
+   l'avis reçu**
+3. Collez, appuyez sur **Remplir les champs** → le nom, la note et le
+   commentaire se remplissent tout seuls (relisez-les !)
+4. Appuyez sur **Publier les changements** en bas — l'avis apparaît sur le
+   site 1 à 2 minutes plus tard
+
+Pour retirer un avis : le bouton **✕** à côté de l'avis, puis Publier.
+
+*(Pour Yann : le formulaire d'avis reste grisé tant que la clé gratuite
+web3forms.com n'est pas collée dans « Clé du formulaire d'avis » de l'admin.
+L'e-mail donné à Web3Forms = celui qui recevra les avis.)*
+
 ---
 
 ## Pour Yann : installation (une seule fois) 🔧

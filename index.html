@@ -1112,9 +1112,12 @@ async function envoyerAvis(ev){
         access_key: AVIS_FORM_KEY,
         subject: 'Nouvel avis — Saveurs du Mboa',
         from_name: nom,
+        // Ces noms de champs font des lignes « nom: … » dans l'e-mail reçu :
+        // c'est ce que lit le bouton « Coller l'avis reçu » de l'admin.
+        nom: nom,
         note: _noteAvisChoisie + '/5',
-        message: texte,
-        email_client: email || '(non fourni)'
+        avis: texte,
+        email_du_client: email || '(non fourni)'
       })
     });
     const data = await r.json();
