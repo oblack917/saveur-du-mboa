@@ -115,6 +115,13 @@ textarea{resize:vertical;min-height:70px}
         <label>Avis publiés sur le site</label>
         <div id="zone-avis"></div>
         <button class="btn" type="button" onclick="ajouterAvis()" style="background:#eef7ee;color:#1c5b2b;margin-top:.6rem;font-size:.9rem;padding:.55rem 1.1rem">+ Ajouter un avis</button>
+        <button class="btn" type="button" onclick="basculerCollerAvis()" style="background:#fff3dd;color:#8a5b12;margin:.6rem 0 0 .4rem;font-size:.9rem;padding:.55rem 1.1rem">📋 Coller l'avis reçu</button>
+        <div id="bloc-coller-avis" style="display:none;margin-top:.8rem;padding:.8rem;background:#fffaf0;border:1.5px dashed #e4d3b6;border-radius:10px">
+          <label>Collez ici tout le texte de l'e-mail « Nouvel avis »</label>
+          <textarea id="texte-coller-avis" placeholder="Ouvrez l'e-mail, sélectionnez tout son contenu, copiez, puis collez ici." style="min-height:7rem"></textarea>
+          <button class="btn" type="button" onclick="collerAvis()" style="background:#eef7ee;color:#1c5b2b;margin-top:.5rem;font-size:.9rem;padding:.55rem 1.1rem">Remplir les champs</button>
+          <p id="err-coller-avis" style="display:none;color:#8f2013;font-size:.85rem;margin-top:.4rem"></p>
+        </div>
       </div>
     </div>
 
@@ -302,6 +309,60 @@ function supprimerAvis(i){
   etat.AVIS = lireAvis();
   etat.AVIS.splice(i, 1);
   afficherAvis();
+}
+function basculerCollerAvis(){
+  const b = document.getElementById("bloc-coller-avis");
+  b.style.display = b.style.display === "none" ? "block" : "none";
+}
+/* Lit le texte d'un e-mail « Nouvel avis » (Web3Forms) collé par la gérante
+   et en extrait { nom, note, texte, email }. Renvoie null si illisible. */
+function analyserAvisColle(brut){
+  if(!brut || !String(brut).trim()) return null;
+  const res = { nom:"", note:0, texte:"", email:"" };
+  let champ = null; // seul le commentaire peut continuer sur plusieurs lignes
+  for(const ligne of String(brut).replace(/\r/g,"").split("\n")){
+    const m = /^\s*(nom|note|avis|commentaire|message|e-?mail(?:[ _]du[ _]client)?)\s*:\s*(.*)$/i.exec(ligne);
+    if(m){
+      const cle = m[1].toLowerCase().replace(/[ _-]/g,"");
+      const val = m[2].trim();
+      champ = null;
+      if(cle === "nom") res.nom = val;
+      else if(cle === "note"){
+        const n = /([1-5])\s*\/\s*5/.exec(val) || /^([1-5])$/.exec(val);
+        res.note = n ? parseInt(n[1], 10) : 0;
+      }
+      else if(cle === "avis" || cle === "commentaire" || cle === "message"){ res.texte = val; champ = "texte"; }
+      else res.email = /\S+@\S+/.test(val) ? val : "";
+    } else if(champ === "texte"){
+      // séparateur ou pied de page Web3Forms = fin du commentaire
+      if(/^\s*(-{2,}|_{2,}|={2,}|Sent via|Unsubscribe)/i.test(ligne)){ champ = null; continue; }
+      res.texte += (res.texte ? "\n" : "") + ligne;
+    }
+  }
+  res.nom = res.nom.trim();
+  res.texte = res.texte.trim();
+  if(!res.nom || !res.texte) return null;
+  if(!res.note) res.note = 5; // note illisible : 5 par défaut, la gérante vérifie
+  return res;
+}
+function collerAvis(){
+  const zone = document.getElementById("texte-coller-avis");
+  const err = document.getElementById("err-coller-avis");
+  const a = analyserAvisColle(zone.value);
+  if(!a){
+    err.textContent = "Impossible de lire cet avis — collez tout le contenu de l'e-mail, ou ajoutez l'avis à la main avec « + Ajouter un avis ».";
+    err.style.display = "block";
+    return;
+  }
+  err.style.display = "none";
+  etat.AVIS = lireAvis();
+  const d = new Date();
+  const mois = String(d.getMonth()+1).padStart(2,'0');
+  etat.AVIS.unshift({ nom:a.nom, note:a.note, texte:a.texte, date:`${d.getFullYear()}-${mois}` });
+  afficherAvis();
+  zone.value = "";
+  document.getElementById("bloc-coller-avis").style.display = "none";
+  document.getElementById("zone-avis").scrollIntoView({behavior:"smooth", block:"center"});
 }
 
 function afficherMenu(){
