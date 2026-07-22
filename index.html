@@ -361,6 +361,7 @@ button:active, .btn-whatsapp:active, .btn-ajouter:active{transform:translateY(1p
       <a href="#/comment" data-page="comment">Comment ça marche</a>
       <a href="#/livraison" data-page="livraison">Livraison</a>
       <a href="#/faq" data-page="faq">FAQ</a>
+      <a href="#/avis" data-page="avis">Avis</a>
     </nav>
     <div class="header-actions">
       <button class="btn-panier" onclick="ouvrirPanier()">🧺 <span id="cart-count">0</span></button>
@@ -497,6 +498,22 @@ button:active, .btn-whatsapp:active, .btn-ajouter:active{transform:translateY(1p
     <h2>Goûtez notre <span>cuisine</span></h2>
     <p>Le menu change chaque semaine — découvrez celui de ce week-end.</p>
     <a class="btn btn-primaire" href="#/menu">Voir le menu de la semaine</a>
+  </section>
+</div>
+
+<!-- ============ PAGE AVIS ============ -->
+<div class="page" id="page-avis">
+  <section class="page-hero wax-bg">
+    <span class="fil-ariane">Avis</span>
+    <h1>Avis de nos <span class="fil">clients</span></h1>
+    <p>Ce que pensent celles et ceux qui ont goûté notre cuisine.</p>
+  </section>
+  <section>
+    <div class="container">
+      <div id="avis-moyenne" style="text-align:center;margin-bottom:1.5rem"></div>
+      <div id="avis-liste"></div>
+      <div id="avis-form-bloc" style="max-width:560px;margin:2.5rem auto 0"></div>
+    </div>
   </section>
 </div>
 
@@ -868,7 +885,7 @@ button:active, .btn-whatsapp:active, .btn-ajouter:active{transform:translateY(1p
 <script>document.write('<script src="config.js?v=' + Date.now() + '"><\/script>');</script>
 <script>
 /* ============ ROUTEUR DE PAGES ============ */
-const PAGES = ["accueil","menu","histoire","comment","livraison","faq","legal"];
+const PAGES = ["accueil","menu","histoire","comment","livraison","faq","avis","legal"];
 function router(){
   let cible = (location.hash || "#/accueil").replace("#/","");
   if(!PAGES.includes(cible)) cible = "accueil";
