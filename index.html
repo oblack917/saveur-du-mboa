@@ -432,6 +432,13 @@ button:active, .btn-whatsapp:active, .btn-ajouter:active{transform:translateY(1p
     </div>
   </section>
 
+  <section id="apercu-avis" class="container" style="display:none;text-align:center">
+    <h2 class="section-titre">Ils ont <span class="accent">goûté</span></h2>
+    <div id="apercu-avis-moyenne" style="margin-bottom:1rem"></div>
+    <div id="apercu-avis-liste"></div>
+    <a class="btn btn-terre" href="#/avis" style="margin-top:.5rem">Voir tous les avis</a>
+  </section>
+
   <section class="cta-final wax-bg">
     <h2>Prêt à goûter au <span>pays</span> ?</h2>
     <p>Commandez avant vendredi 12h — livraison samedi ou dimanche dès 10h.</p>
@@ -957,6 +964,7 @@ function majTextesConfig(){
   document.querySelectorAll('.js-creneaux').forEach(el => { if(libelles) el.textContent = libelles; });
   rendreAvis();
   rendreFormAvis();
+  rendreApercuAvis();
 }
 
 /* ===== Créneaux de livraison (réglés dans config.js) =====
@@ -1020,6 +1028,18 @@ function rendreAvis(){
   moy.innerHTML = `<div class="avis-note-globale">${etoilesHtml(Math.round(moyenneAvis()))}</div>
     <div class="avis-note-chiffre">${moyenneAvis().toString().replace('.', ',')} / 5 · ${v.length} avis</div>`;
   liste.innerHTML = v.map(carteAvisHtml).join('');
+}
+
+function rendreApercuAvis(){
+  const sec = document.getElementById('apercu-avis');
+  if(!sec) return;
+  const v = avisValides();
+  if(!v.length){ sec.style.display = 'none'; return; }
+  sec.style.display = 'block';
+  document.getElementById('apercu-avis-moyenne').innerHTML =
+    `<span class="avis-note-globale">${etoilesHtml(Math.round(moyenneAvis()))}</span>
+     <div class="avis-note-chiffre">${moyenneAvis().toString().replace('.', ',')} / 5 · ${v.length} avis</div>`;
+  document.getElementById('apercu-avis-liste').innerHTML = v.slice(0, 3).map(carteAvisHtml).join('');
 }
 
 /* ---- Formulaire « Laisser un avis » (envoi Web3Forms, modéré avant publication) ---- */
