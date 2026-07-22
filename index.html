@@ -339,6 +339,16 @@ button:active, .btn-whatsapp:active, .btn-ajouter:active{transform:translateY(1p
 .btn-whatsapp:disabled{background:#bcc9be;cursor:not-allowed}
 .note-cmd{font-size:.8rem;color:#6d5236;text-align:center;margin-top:.5rem}
 
+/* ---- Avis clients ---- */
+.avis-carte{background:var(--creme);border:1.5px solid #e4d3b6;border-radius:var(--radius);padding:1.1rem 1.3rem;margin:0 auto 1rem;max-width:640px}
+.avis-tete{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;margin-bottom:.4rem}
+.avis-etoiles{color:var(--or);letter-spacing:1px}
+.avis-nom{font-weight:700;color:var(--encre)}
+.avis-date{color:#8a7355;font-size:.9rem}
+.avis-texte{margin:0;color:var(--brun);font-style:italic}
+.avis-note-globale{font-size:1.8rem;color:var(--or);letter-spacing:2px}
+.avis-note-chiffre{font-weight:700;color:var(--encre);margin-top:.2rem}
+
 @media(prefers-reduced-motion:reduce){
   *{transition:none!important;scroll-behavior:auto;animation:none!important}
 }
@@ -945,6 +955,7 @@ function majTextesConfig(){
   remplirCreneaux();
   const libelles = creneauxLivraison().map(libelleCreneau).join(' ou ');
   document.querySelectorAll('.js-creneaux').forEach(el => { if(libelles) el.textContent = libelles; });
+  rendreAvis();
 }
 
 /* ===== Créneaux de livraison (réglés dans config.js) =====
@@ -980,6 +991,34 @@ function moyenneAvis(){
 function etoilesHtml(note){
   const n = Math.max(0, Math.min(5, Math.round(note)));
   return '★'.repeat(n) + '☆'.repeat(5 - n);
+}
+function moisFr(date){
+  const mois = ["janvier","février","mars","avril","mai","juin","juillet","août","septembre","octobre","novembre","décembre"];
+  const m = /^(\d{4})-(\d{2})$/.exec(date || "");
+  if(!m) return "";
+  return mois[parseInt(m[2],10)-1] + " " + m[1];
+}
+function carteAvisHtml(a){
+  return `<div class="avis-carte">
+    <div class="avis-tete"><span class="avis-etoiles">${etoilesHtml(a.note)}</span>
+      <span class="avis-nom">${escapeHtml(a.nom)}</span>
+      ${moisFr(a.date) ? `<span class="avis-date">· ${moisFr(a.date)}</span>` : ''}</div>
+    <p class="avis-texte">« ${escapeHtml(a.texte)} »</p>
+  </div>`;
+}
+function rendreAvis(){
+  const liste = document.getElementById('avis-liste');
+  const moy = document.getElementById('avis-moyenne');
+  if(!liste || !moy) return;
+  const v = avisValides();
+  if(!v.length){
+    moy.innerHTML = '';
+    liste.innerHTML = `<p style="text-align:center;color:#8a7355">Soyez le premier à laisser un avis 💛</p>`;
+    return;
+  }
+  moy.innerHTML = `<div class="avis-note-globale">${etoilesHtml(Math.round(moyenneAvis()))}</div>
+    <div class="avis-note-chiffre">${moyenneAvis().toString().replace('.', ',')} / 5 · ${v.length} avis</div>`;
+  liste.innerHTML = v.map(carteAvisHtml).join('');
 }
 
 function actionHtml(p){
