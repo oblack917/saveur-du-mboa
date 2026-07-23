@@ -243,7 +243,8 @@ async function chargerConfig(){
         FERMETURE_HEURE: (typeof FERMETURE_HEURE !== "undefined" ? FERMETURE_HEURE : null),
         CRENEAUX_LIVRAISON: (typeof CRENEAUX_LIVRAISON !== "undefined" ? CRENEAUX_LIVRAISON : null),
         AVIS_FORM_KEY: (typeof AVIS_FORM_KEY !== "undefined" ? AVIS_FORM_KEY : ""),
-        AVIS: (typeof AVIS !== "undefined" ? AVIS : []) };`);
+        AVIS: (typeof AVIS !== "undefined" ? AVIS : []),
+        VIDEOS: (typeof VIDEOS !== "undefined" ? VIDEOS : []) };`);
   etat = lire();
   etat._shaConfig = f.sha;
   afficher();
@@ -585,6 +586,10 @@ function texteConfig(){
   const lignesAvis = avisArr.map(a =>
     `  { nom:${s(a.nom)}, note:${Number(a.note)||5}, texte:${s(a.texte)}, date:${s(a.date||"")} }`
   ).join(",\n");
+  const videosArr = (Array.isArray(etat.VIDEOS) ? etat.VIDEOS : []).filter(v => v && v.fichier);
+  const lignesVideos = videosArr.map(v =>
+    `  { fichier:${s(v.fichier)}, titre:${s((v.titre || "").trim())} }`
+  ).join(",\n");
   return `/* Fichier généré par la page d'administration — ${new Date().toLocaleString("fr-BE")} */
 const CONFIG_VERSION = ${Date.now()};
 const NUMERO_WHATSAPP = ${s(document.getElementById("g-whatsapp").value.trim())};
@@ -616,6 +621,12 @@ ${lignesCreneaux}
 const AVIS_FORM_KEY = ${s(avisKey)};
 const AVIS = [
 ${lignesAvis}
+];
+
+/* Vidéos « En cuisine » — gérées depuis la page d'administration.
+   { fichier:"videos/xxx.mp4", titre:"légende affichée sous la vidéo" } */
+const VIDEOS = [
+${lignesVideos}
 ];
 
 /* Zones de livraison — réglées une fois dans le code (préservées à chaque publication). */

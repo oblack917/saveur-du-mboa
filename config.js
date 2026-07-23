@@ -32,6 +32,10 @@ const AVIS = [
 
 ];
 
+/* Vidéos « En cuisine » — gérées depuis la page d'administration.
+   { fichier:"videos/xxx.mp4", titre:"légende affichée sous la vidéo" } */
+const VIDEOS = [];
+
 /* Zones de livraison — réglées une fois dans le code (préservées à chaque publication). */
 const FACTEUR_ROUTE = 1.3;
 
