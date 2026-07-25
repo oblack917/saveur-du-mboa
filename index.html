@@ -19,6 +19,46 @@
 <meta name="twitter:description" content="3 plats camerounais faits maison chaque semaine, livrés le week-end (Liège & Luxembourg).">
 <meta name="twitter:image" content="https://saveursdumboa.com/photos/ndole.jpg">
 <link rel="canonical" href="https://saveursdumboa.com/">
+<meta name="robots" content="index, follow">
+<meta name="keywords" content="cuisine camerounaise, plats africains, traiteur camerounais, livraison repas Liège, livraison repas Luxembourg belge, ndolé, eru, poulet DG, plats faits maison, Saveurs du Mboa">
+
+<!-- Données structurées : dit à Google que nous sommes un traiteur qui LIVRE,
+     ce qu'on cuisine et où. C'est ce qui permet un affichage enrichi. -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "FoodEstablishment",
+      "@id": "https://saveursdumboa.com/#business",
+      "name": "Saveurs du Mboa",
+      "description": "Cuisine camerounaise faite maison par Caroline et Viviane. Chaque semaine, 3 plats et leurs accompagnements, commandés en semaine et livrés le week-end en provinces de Liège et du Luxembourg.",
+      "url": "https://saveursdumboa.com/",
+      "image": "https://saveursdumboa.com/photos/ndole.jpg",
+      "telephone": "+32489765828",
+      "servesCuisine": ["Camerounaise", "Africaine"],
+      "priceRange": "12-15 €",
+      "currenciesAccepted": "EUR",
+      "paymentAccepted": "Virement bancaire",
+      "sameAs": ["https://www.instagram.com/saveurs_du_mboa"],
+      "areaServed": [
+        { "@type": "AdministrativeArea", "name": "Province de Liège", "address": { "@type": "PostalAddress", "addressRegion": "Liège", "addressCountry": "BE" } },
+        { "@type": "AdministrativeArea", "name": "Province de Luxembourg", "address": { "@type": "PostalAddress", "addressRegion": "Luxembourg", "addressCountry": "BE" } }
+      ],
+      "hasDeliveryMethod": ["https://schema.org/OnSitePickup", "https://schema.org/ParcelService"],
+      "knowsLanguage": ["fr-BE"]
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://saveursdumboa.com/#site",
+      "url": "https://saveursdumboa.com/",
+      "name": "Saveurs du Mboa",
+      "inLanguage": "fr-BE",
+      "publisher": { "@id": "https://saveursdumboa.com/#business" }
+    }
+  ]
+}
+</script>
 
 <!-- Favicon local (emoji SVG, aucune ressource externe) -->
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='88'%3E%F0%9F%8D%B2%3C/text%3E%3C/svg%3E">
