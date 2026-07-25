@@ -1,0 +1,39 @@
+<!doctype html><meta charset="utf-8"><body><pre id="R">…</pre>
+<script>
+const out=[]; const log=(ok,m)=>out.push((ok?'✅ ':'❌ ')+m);
+const f=document.createElement('iframe'); f.src='admin.html';
+f.style.cssText='width:420px;height:900px'; document.body.appendChild(f);
+f.onload=()=>setTimeout(()=>{
+ const w=f.contentWindow, d=f.contentDocument;
+ try{
+  // les let/const de la page ne sont pas sur window : on passe par eval
+  w.eval(`etat = { MENU:[
+     {id:'p1',cat:'plat',nom:'Poulet DG',desc:'d',prix:15,photo:'photos/x.jpg',allergenes:''},
+     {id:'p2',cat:'plat',nom:'Eru',desc:'d',prix:12,photo:'photos/y.jpg',allergenes:'Poisson'}
+   ], AVIS:[], CRENEAUX_LIVRAISON:[{debut:10,fin:13}], LIVRAISON_FIN_MAX:18, AVIS_FORM_KEY:'' };
+   afficherMenu();`);
+
+  const box = d.getElementById('aucun-p1');
+  const av  = d.getElementById('avert-p1');
+  log(!!box, 'case « aucun allergène » présente sur un plat non renseigné');
+  log(!!av && av.style.display==='block', 'avertissement VISIBLE tant que rien n\'est renseigné');
+
+  box.checked = true; w.eval("basculerAucunAllerg('p1')");
+  log(d.getElementById('allerg-p1').disabled===true, 'le champ texte se désactive quand la case est cochée');
+  log(av.style.display==='none', 'avertissement masqué une fois la case cochée');
+
+  w.eval('lireFormulaire()');
+  log(w.eval("etat.MENU[0].allergenes")==='aucun', 'lireFormulaire enregistre « aucun »');
+  log(w.eval("etat.MENU[1].allergenes")==='Poisson', 'l\'autre plat garde bien sa liste');
+
+  const txt = w.eval('texteConfig()');
+  log(/allergenes:"aucun"/.test(txt), 'le config.js généré contient allergenes:"aucun"');
+  log(/allergenes:"Poisson"/.test(txt), 'le config.js généré garde la liste de l\'autre plat');
+
+  box.checked=false; w.eval("basculerAucunAllerg('p1'); lireFormulaire();");
+  log(w.eval("etat.MENU[0].allergenes")==='', 'décocher redonne « non renseigné » (chaîne vide), PAS une fausse garantie');
+  log(av.style.display==='block', 'et l\'avertissement réapparaît');
+ }catch(e){ log(false,'ERREUR : '+e.message); }
+ document.getElementById('R').textContent=out.join('\n');
+},1000);
+</script></body>

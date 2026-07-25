@@ -453,7 +453,7 @@ button:active, .btn-whatsapp:active, .btn-ajouter:active{transform:translateY(1p
     <div class="container centre">
       <span class="badge">Cette semaine</span>
       <h2 class="section-titre">Le menu du <span class="accent">week-end</span></h2>
-      <p class="section-sous" style="margin-left:auto;margin-right:auto">Trois plats emblématiques à <span class="js-prix-plat">15 €</span>, et leurs accompagnements à <span class="js-prix-accomp">5 €</span>.</p>
+      <p class="section-sous" style="margin-left:auto;margin-right:auto">Trois plats emblématiques <span class="js-prix-plat">dès 15 €</span>, et leurs accompagnements <span class="js-prix-accomp">dès 5 €</span>.</p>
       <div class="plats" id="teaser-plats" style="text-align:left"></div>
       <a class="btn btn-terre" href="#/menu" style="margin-top:2.2rem">Voir tout le menu &amp; commander</a>
     </div>
@@ -506,7 +506,7 @@ button:active, .btn-whatsapp:active, .btn-ajouter:active{transform:translateY(1p
         <p class="section-sous">Complétez votre plat comme au pays.</p>
         <div class="plats" id="liste-accomp"></div>
       </div>
-      <p class="avertissement-allergenes">⚠️ <strong>Allergènes :</strong> les informations sont fournies à titre indicatif et confirmées par la cuisine. Nos plats sont préparés dans une cuisine qui manipule arachides, poisson, crustacés et autres allergènes — des traces sont possibles. <strong>En cas d'allergie, signalez-le impérativement dans les remarques de votre commande.</strong></p>
+      <p class="avertissement-allergenes">⚠️ <strong>Allergènes :</strong> les informations affichées sont fournies à titre indicatif par la cuisine. Lorsqu'un plat porte la mention « allergènes non renseignés », l'information n'a pas encore été vérifiée : demandez-la-nous avant de commander. Nos plats sont préparés dans une cuisine qui manipule arachides, poisson, crustacés et autres allergènes — des traces sont possibles. <strong>En cas d'allergie, signalez-le impérativement dans les remarques de votre commande.</strong></p>
     </div>
   </section>
   <section class="cta-final wax-bg">
@@ -732,9 +732,10 @@ button:active, .btn-whatsapp:active, .btn-ajouter:active{transform:translateY(1p
           passent via WhatsApp jusqu'au <strong>vendredi 12h</strong> pour une
           livraison le week-end suivant. Nos plats sont cuisinés sur commande, en
           quantité limitée, avec des produits frais.</p>
-        <p style="margin:.4rem 0"><strong>Prix.</strong> Plats à <span class="js-prix-plat">15 €</span> et
-          accompagnements à <span class="js-prix-accomp">5 €</span>. Les prix sont indiqués en euros, TVA comprise le
-          cas échéant.</p>
+        <p style="margin:.4rem 0"><strong>Prix.</strong> Plats <span class="js-plage-plat">de 12 à 15 €</span>,
+          accompagnements <span class="js-plage-accomp">de 3 à 5 €</span>. Les prix sont indiqués en euros et
+          correspondent au montant final à payer par article, hors frais de livraison éventuels. La fourchette
+          ci-dessus reflète automatiquement le menu publié : elle ne peut pas se désynchroniser des prix réels.</p>
         <p style="margin:.4rem 0"><strong>Acompte &amp; paiement.</strong> Un acompte
           de <span class="pct-acompte">50</span> % est demandé par virement pour confirmer et réserver la commande.
           Le solde se règle à la livraison, en espèces ou par virement.
@@ -842,6 +843,10 @@ button:active, .btn-whatsapp:active, .btn-ajouter:active{transform:translateY(1p
 /* ===== Allergènes ===== */
 .allergenes{font-size:.82rem;color:#7a6144;background:var(--creme);border-radius:8px;padding:.35rem .6rem;margin:.2rem 0 .6rem;line-height:1.4}
 .allergenes strong{color:var(--brun)}
+/* Allergènes non renseignés : doit se voir, surtout pas passer pour une garantie */
+.allergenes.allerg-inconnu{background:#fdf0e6;border:1px solid #f0c9a8;color:#8a4b1c}
+.allergenes.allerg-inconnu strong{color:#8a4b1c}
+.allergenes.allerg-aucun{background:#eef6ec;border:1px solid #cfe4c8;color:#3f6b34}
 .avertissement-allergenes{font-size:.86rem;color:#6d5236;line-height:1.5;background:#fdf3e0;border:1px solid #efd9ac;border-radius:var(--radius);padding:.9rem 1.1rem;margin-top:1.6rem}
 .avertissement-allergenes strong{color:var(--brun)}
 /* ===== Confirmation de commande ===== */
@@ -976,6 +981,18 @@ function prixCat(cat){
   const mn = Math.min(...arr), mx = Math.max(...arr);
   return mn === mx ? euroCourt(mn) : 'dès ' + euroCourt(mn);
 }
+/* Fourchette complète — pour les conditions de vente, où « dès X € » serait
+   incomplet : le client doit connaître le prix le plus élevé qu'il peut payer. */
+function prixPlage(cat){
+  const arr = MENU.filter(p => p.cat === cat).map(p => p.prix);
+  if(!arr.length) return '';
+  const mn = Math.min(...arr), mx = Math.max(...arr);
+  // On renvoie la préposition avec le prix : « à 3 € » ou « de 12 à 15 € »,
+  // pour que la phrase reste correcte dans les deux cas.
+  if(mn === mx) return 'à ' + euroCourt(mn);
+  const bas = Number.isInteger(mn) ? String(mn) : euro(mn).replace(' €', '');
+  return 'de ' + bas + ' à ' + euroCourt(mx);
+}
 function majTextesConfig(){
   const wa = 'https://wa.me/' + NUMERO_WHATSAPP;
   document.querySelectorAll('.js-wa').forEach(a => a.href = wa);
@@ -989,6 +1006,8 @@ function majTextesConfig(){
   document.querySelectorAll('.js-frais-km').forEach(el => el.textContent = FRAIS_KM.toFixed(2).replace('.', ','));
   document.querySelectorAll('.js-prix-plat').forEach(el => el.textContent = prixCat('plat'));
   document.querySelectorAll('.js-prix-accomp').forEach(el => el.textContent = prixCat('accomp'));
+  document.querySelectorAll('.js-plage-plat').forEach(el => el.textContent = prixPlage('plat'));
+  document.querySelectorAll('.js-plage-accomp').forEach(el => el.textContent = prixPlage('accomp'));
   remplirCreneaux();
   const libelles = creneauxLivraison().map(libelleCreneau).join(' ou ');
   document.querySelectorAll('.js-creneaux').forEach(el => { if(libelles) el.textContent = libelles; });
@@ -1172,17 +1191,30 @@ function actionHtml(p){
   </div>`;
 }
 
+/* Allergènes — TROIS états, jamais deux.
+   Un champ vide ne veut PAS dire « aucun allergène » : il veut dire
+   « pas encore renseigné ». Confondre les deux revient à rassurer un client
+   allergique sur la foi d'une information que personne n'a saisie.
+   Pour déclarer explicitement l'absence d'allergène, la cuisine coche la case
+   prévue dans l'admin, qui écrit la valeur « aucun ». */
+function infoAllergenes(p){
+  const v = (p.allergenes || '').trim();
+  if(!v)                       return { cls:'allerg-inconnu', ic:'❓',
+    txt:`<strong>Allergènes non renseignés</strong> — demandez-nous avant de commander` };
+  if(v.toLowerCase() === 'aucun') return { cls:'allerg-aucun', ic:'🥜',
+    txt:`Aucun allergène majeur — confirmé par la cuisine` };
+  return { cls:'', ic:'🥜', txt:`<strong>Allergènes :</strong> ${v}` };
+}
+
 function carte(p){
-  const allerg = (p.allergenes && p.allergenes.trim())
-    ? `<strong>Allergènes :</strong> ${p.allergenes.trim()}`
-    : `Aucun allergène majeur connu`;
+  const a = infoAllergenes(p);
   return `
     <article class="plat">
       <div class="plat-photo"><img src="${photoUrl(p.photo)}" alt="${p.nom}" loading="lazy"></div>
       <div class="plat-corps">
         <h3>${p.nom}</h3>
         <p class="desc">${p.desc}</p>
-        <p class="allergenes">🥜 ${allerg}</p>
+        <p class="allergenes ${a.cls}">${a.ic} ${a.txt}</p>
         <div class="plat-pied"><span class="prix">${euro(p.prix)}</span></div>
         <div id="action-${p.id}"></div>
       </div>

@@ -24,6 +24,29 @@ compressées — envoyez-les telles quelles.
 Vous pouvez aussi modifier dans "Réglages généraux" : le numéro WhatsApp,
 l'IBAN de l'acompte, le pourcentage d'acompte et les conditions de livraison.
 
+## 🥜 Les allergènes — à remplir pour CHAQUE plat (important)
+
+Une allergie alimentaire peut envoyer quelqu'un à l'hôpital. Le site ne dira
+donc **jamais** qu'un plat est sans danger si personne ne l'a vérifié.
+
+Pour chaque plat, vous avez **deux façons** de renseigner les allergènes :
+
+1. **Écrire la liste** dans le champ — ex. `Arachides, Poisson, Gluten`
+2. **Cocher la case** « Ce plat ne contient aucun allergène (je l'ai vérifié) »
+
+**Si vous ne faites ni l'un ni l'autre**, le site affiche au client, en orange :
+*« Allergènes non renseignés — demandez-nous avant de commander »*. Ce n'est pas
+une erreur, c'est voulu : mieux vaut dire « je ne sais pas » que de laisser croire
+à tort qu'un plat est sans risque.
+
+⚠️ **Ne cochez la case que si vous avez vraiment vérifié la recette**, ingrédient
+par ingrédient — y compris les bouillons cubes, sauces et huiles, qui contiennent
+souvent du gluten, du soja ou du céleri sans qu'on y pense.
+
+Les 14 allergènes à déclarer en Europe : céréales contenant du gluten, crustacés,
+œufs, poissons, arachides, soja, lait, fruits à coque, céleri, moutarde, graines
+de sésame, anhydride sulfureux/sulfites, lupin, mollusques.
+
 ## 🗺️ Les commandes et la localisation
 Chaque commande arrive sur WhatsApp avec un lien **"🗺️ Localisation"** :
 appuyez dessus → l'adresse du client s'ouvre dans Google Maps → lancez

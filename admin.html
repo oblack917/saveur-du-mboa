@@ -387,8 +387,22 @@ function afficherMenu(){
           <textarea id="desc-${p.id}" placeholder="Décrivez le plat en une ou deux phrases">${p.desc}</textarea>
           <label>Prix (€)</label>
           <input type="number" id="prix-${p.id}" step="0.50" min="0" value="${p.prix}">
-          <label>Allergènes <span style="font-weight:400;color:#8a7355">(séparés par des virgules — ex : Arachides, Poisson. Laissez vide si aucun.)</span></label>
-          <input type="text" id="allerg-${p.id}" value="${(p.allergenes || '').replace(/"/g,'&quot;')}" placeholder="Ex : Arachides, Crustacés">
+          <label>Allergènes <span style="font-weight:400;color:#8a7355">(séparés par des virgules — ex : Arachides, Poisson)</span></label>
+          <input type="text" id="allerg-${p.id}" value="${aucunAllerg(p) ? '' : (p.allergenes || '').replace(/"/g,'&quot;')}"
+                 placeholder="Ex : Arachides, Crustacés" ${aucunAllerg(p) ? 'disabled' : ''}
+                 oninput="majAvertAllerg('${p.id}')">
+          <label style="display:flex;align-items:center;gap:.5rem;font-weight:400;margin-top:.5rem;cursor:pointer">
+            <input type="checkbox" id="aucun-${p.id}" ${aucunAllerg(p) ? 'checked' : ''}
+                   onchange="basculerAucunAllerg('${p.id}')" style="width:1.15rem;height:1.15rem;flex:none">
+            <span>Ce plat ne contient <strong>aucun allergène</strong> (je l'ai vérifié)</span>
+          </label>
+          <p id="avert-${p.id}" style="display:${p.allergenes && p.allergenes.trim() ? 'none' : 'block'};
+             font-size:.82rem;background:#fdf0e6;border:1px solid #f0c9a8;color:#8a4b1c;
+             border-radius:8px;padding:.5rem .7rem;margin:.5rem 0 0">
+            ⚠️ Tant que ce champ est vide et que la case n'est pas cochée, le site affichera
+            « <strong>allergènes non renseignés</strong> » aux clients. C'est voulu : on ne
+            promet jamais à un client allergique une information que personne n'a vérifiée.
+          </p>
           <button class="btn" style="background:#fdecea;color:#8f2013;margin-top:.8rem;font-size:.85rem;padding:.5rem 1rem" onclick="supprimerItem('${p.id}')">🗑 Supprimer ${p.nom ? '« ' + p.nom.replace(/"/g,'&quot;') + ' »' : 'ce plat'}</button>
         </div>`).join("")}
       <button class="btn btn-brun" style="margin-top:1rem;width:100%" onclick="ajouterItem('${cat}')">➕ ${libelleAjout}</button>
@@ -410,9 +424,38 @@ function lireFormulaire(){
     p.nom  = nom.value;
     p.desc = document.getElementById("desc-" + p.id).value;
     p.prix = parseFloat(document.getElementById("prix-" + p.id).value) || 0;
-    const al = document.getElementById("allerg-" + p.id);
-    p.allergenes = al ? al.value.trim() : (p.allergenes || "");
+    const al  = document.getElementById("allerg-" + p.id);
+    const box = document.getElementById("aucun-" + p.id);
+    if(box && box.checked)      p.allergenes = "aucun";   // absence VÉRIFIÉE
+    else if(al)                 p.allergenes = al.value.trim();
+    else                        p.allergenes = p.allergenes || "";
   });
+}
+
+/* ===== Allergènes : trois états, jamais deux =====
+   ""       -> pas encore renseigné  (le site le dit clairement au client)
+   "aucun"  -> absence VÉRIFIÉE par la cuisine
+   "texte"  -> liste des allergènes
+   Confondre le 1er et le 2e reviendrait à rassurer un client allergique sur la
+   foi d'un champ que personne n'a rempli. */
+function aucunAllerg(p){
+  return (p.allergenes || '').trim().toLowerCase() === 'aucun';
+}
+function basculerAucunAllerg(id){
+  const box = document.getElementById("aucun-" + id);
+  const al  = document.getElementById("allerg-" + id);
+  if(!box || !al) return;
+  al.disabled = box.checked;
+  if(box.checked) al.value = '';
+  majAvertAllerg(id);
+}
+function majAvertAllerg(id){
+  const box = document.getElementById("aucun-" + id);
+  const al  = document.getElementById("allerg-" + id);
+  const av  = document.getElementById("avert-" + id);
+  if(!av) return;
+  const renseigne = (box && box.checked) || (al && al.value.trim());
+  av.style.display = renseigne ? 'none' : 'block';
 }
 
 function ajouterItem(cat){
