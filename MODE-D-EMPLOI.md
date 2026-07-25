@@ -5,7 +5,7 @@
 **Vous n'avez besoin d'aucune connaissance en informatique.** Tout se fait
 depuis une page du site, sur votre téléphone :
 
-1. Ouvrez la page : **https://oblack917.github.io/saveur-du-mboa/admin.html**
+1. Ouvrez la page : **https://saveursdumboa.com/admin.html**
    💡 Ajoutez-la à l'écran d'accueil de votre téléphone pour la retrouver facilement
 2. La première fois : entrez le **code d'accès** que Yann vous a remis,
    cochez "Se souvenir de moi" → vous ne le retaperez plus jamais
@@ -125,7 +125,9 @@ L'e-mail donné à Web3Forms = celui qui recevra les avis.)*
 2. Add file → Upload files → envoyer : `index.html`, `admin.html`, `config.js`,
    `MODE-D-EMPLOI.md` et le dossier `photos/` complet → Commit
 3. Settings → Pages → Branch : `main` + `/ (root)` → Save
-4. Site en ligne sur `https://oblack917.github.io/saveur-du-mboa/`
+4. Site en ligne sur `https://saveursdumboa.com/`
+   (domaine perso branché sur GitHub Pages via le fichier `CNAME` à la racine
+   du dépôt ; l'ancienne adresse `oblack917.github.io/saveur-du-mboa/` y redirige)
 
 ### 2. Créer le "code d'accès" (jeton GitHub à accès limité)
 1. GitHub → photo de profil → **Settings** → tout en bas **Developer settings**
