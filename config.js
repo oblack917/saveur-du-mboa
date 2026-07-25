@@ -1,5 +1,5 @@
-/* Fichier généré par la page d'administration — 25/07/2026 12:06:07 */
-const CONFIG_VERSION = 1784973967631;
+/* Fichier généré par la page d'administration — 25/07/2026 12:40:24 */
+const CONFIG_VERSION = 1784976024280;
 const NUMERO_WHATSAPP = "32489765828";
 const IBAN = "BE37 3632 7506 1728";
 const TITULAIRE = "Bouquet Nanhou";
@@ -34,7 +34,7 @@ const ZONES = [
 ];
 
 const MENU = [
-  { id:"plat1", cat:"plat", nom:"Eru", prix:15.00, photo:"photos/ndole.jpg",
+  { id:"plat1", cat:"plat", nom:"Eru", prix:12.00, photo:"photos/ndole.jpg",
     desc:"Un incontournable de la cuisine camerounaise, préparé avec des feuilles d’eru, des épinards, de la viande de bœuf, du poisson fumé et la peau de bœuf ,  mijotés dans une huile de palme savoureuse. Servi avec votre choix de placali ou de tapioca pour une expérience authentique.", allergenes:"Poisson , Crustacés" },
 
   { id:"plat2", cat:"plat", nom:"Beignet haricots (BH)", prix:15.00, photo:"photos/porc.jpg",
@@ -47,5 +47,11 @@ const MENU = [
     desc:"Plantains mûrs frits et dorés, caramélisés à souhait. Irrésistibles.", allergenes:"" },
 
   { id:"p1784973822456", cat:"accomp", nom:"Beignet farine", prix:5.00, photo:"photos/p1784973822456.jpg",
-    desc:"Beignets moelleux et dorés, préparés à base de farine pour une pause gourmande", allergenes:"Gluten" }
+    desc:"Beignets moelleux et dorés, préparés à base de farine pour une pause gourmande", allergenes:"Gluten" },
+
+  { id:"p1784975651202", cat:"accomp", nom:"Tapioca", prix:3.00, photo:"photos/p1784975651202.jpg",
+    desc:"Une pâte légère et douce à base de manioc, idéale pour accompagner le Eru et en révéler toutes les saveurs.", allergenes:"" },
+
+  { id:"p1784975941281", cat:"accomp", nom:"Placali", prix:3.00, photo:"photos/p1784975941281.jpg",
+    desc:"Une pâte à base de manioc fermenté, proche du watafufu, parfaite pour accompagner le Eru et savourer pleinement sa sauce.", allergenes:"" }
 ];
