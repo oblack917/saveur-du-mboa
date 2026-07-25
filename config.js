@@ -1,5 +1,5 @@
-/* Fichier généré par la page d'administration — 25/07/2026 12:40:24 */
-const CONFIG_VERSION = 1784976024280;
+/* Fichier généré par la page d'administration — 25/07/2026 14:03:12 */
+const CONFIG_VERSION = 1784980992808;
 const NUMERO_WHATSAPP = "32489765828";
 const IBAN = "BE37 3632 7506 1728";
 const TITULAIRE = "Bouquet Nanhou";
@@ -41,7 +41,7 @@ const MENU = [
     desc:"Le célèbre petit-déjeuner camerounais composé de beignets moelleux et dorés, accompagnés de haricots mijotés dans une sauce savoureuse aux épices. Un plat généreux, réconfortant et riche en saveurs, idéal à tout moment de la journée.", allergenes:"Gluten" },
 
   { id:"plat3", cat:"plat", nom:"Poulet DG", prix:15.00, photo:"photos/maquereau.jpg",
-    desc:"Un plat emblématique du Cameroun, préparé avec du poulet mijoté, des bananes plantains frites, des légumes colorés et des épices savamment dosées. Une recette généreuse et savoureuse qui célèbre toute la richesse de la cuisine camerounaise.", allergenes:"Poisson" },
+    desc:"Un plat emblématique du Cameroun, préparé avec du poulet mijoté, des bananes plantains frites, des légumes colorés et des épices savamment dosées. Une recette généreuse et savoureuse qui célèbre toute la richesse de la cuisine camerounaise.", allergenes:"" },
 
   { id:"accomp3", cat:"accomp", nom:"Banane plantain frie", prix:5.00, photo:"photos/banane-plantain.jpg",
     desc:"Plantains mûrs frits et dorés, caramélisés à souhait. Irrésistibles.", allergenes:"" },
