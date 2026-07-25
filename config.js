@@ -1,5 +1,5 @@
-/* Fichier généré par la page d'administration — 21/07/2026 00:32:04 */
-const CONFIG_VERSION = 1784586724329;
+/* Fichier généré par la page d'administration — 25/07/2026 12:06:07 */
+const CONFIG_VERSION = 1784973967631;
 const NUMERO_WHATSAPP = "32489765828";
 const IBAN = "BE37 3632 7506 1728";
 const TITULAIRE = "Bouquet Nanhou";
@@ -8,8 +8,7 @@ const FRAIS_KM = 0.3;
 const KM_GRATUITS = 5;
 
 /* Créneaux de livraison — réglés depuis la page d'administration.
-   LIVRAISON_FIN_MAX = dernière heure de livraison possible (plafond, en heures).
-   Aucun créneau ne peut se terminer après cette heure. */
+   Aucun créneau ne peut se terminer après LIVRAISON_FIN_MAX (la dernière heure de livraison). */
 const LIVRAISON_FIN_MAX = 18;
 const CRENEAUX_LIVRAISON = [
   { debut:10, fin:13 },
@@ -20,35 +19,33 @@ const CRENEAUX_LIVRAISON = [
    AVIS_FORM_KEY = clé Web3Forms du formulaire d'avis (vide = formulaire en mode démo).
    AVIS = avis validés affichés sur le site : { nom, note (1-5), texte, date "AAAA-MM" }. */
 const AVIS_FORM_KEY = "";
-const AVIS = [];
+const AVIS = [
 
-/* Zones de livraison — réglées une fois ici (l'admin les préserve, ne les édite pas).
-   lat/lon = coordonnées de la cuisine, servent au calcul automatique des frais. */
-const FACTEUR_ROUTE = 1.3;   // vol d'oiseau -> distance route estimée
+];
+
+/* Zones de livraison — réglées une fois dans le code (préservées à chaque publication). */
+const FACTEUR_ROUTE = 1.3;
 
 const ZONES = [
   { id:"luxembourg", nom:"Province de Luxembourg", cuisine:"Caroline",
     adresse:"Martelwée 33, 6637 Fauvillers", lat:49.8626398, lon:5.7267954 },
-  { id:"liege",      nom:"Province de Liège",      cuisine:"Viviane",
+  { id:"liege", nom:"Province de Liège", cuisine:"Viviane",
     adresse:"Chaussée Roosevelt 128, 4420 Saint-Nicolas", lat:50.6456901, lon:5.5230284 }
 ];
 
 const MENU = [
-  { id:"plat1", cat:"plat", nom:"Ndole Royal", prix:15.00, photo:"photos/ndole.jpg",
-    desc:"Le plat national : feuilles de ndolè mijotées aux arachides, crevettes et viande. Un classique généreux et parfumé.", allergenes:"Arachides, Crustacés" },
+  { id:"plat1", cat:"plat", nom:"Eru", prix:15.00, photo:"photos/ndole.jpg",
+    desc:"Un incontournable de la cuisine camerounaise, préparé avec des feuilles d’eru, des épinards, de la viande de bœuf, du poisson fumé et la peau de bœuf ,  mijotés dans une huile de palme savoureuse. Servi avec votre choix de placali ou de tapioca pour une expérience authentique.", allergenes:"Poisson , Crustacés" },
 
-  { id:"plat2", cat:"plat", nom:"Porc Braisé", prix:15.00, photo:"photos/porc.jpg",
-    desc:"Morceaux de porc marinés aux épices maison puis braisés, fondants et savoureux, servis avec oignons rouges.", allergenes:"" },
+  { id:"plat2", cat:"plat", nom:"Beignet haricots (BH)", prix:15.00, photo:"photos/porc.jpg",
+    desc:"Le célèbre petit-déjeuner camerounais composé de beignets moelleux et dorés, accompagnés de haricots mijotés dans une sauce savoureuse aux épices. Un plat généreux, réconfortant et riche en saveurs, idéal à tout moment de la journée.", allergenes:"Gluten" },
 
-  { id:"plat3", cat:"plat", nom:"Poisson braisé", prix:15.00, photo:"photos/maquereau.jpg",
-    desc:"Vous avez le choix entre maquereau , bar , tilapia entier mariné aux épices vertes et braisé comme au pays, relevé juste ce qu'il faut.", allergenes:"Poisson" },
-
-  { id:"accomp1", cat:"accomp", nom:"Bâtons de manioc", prix:5.00, photo:"photos/manioc.jpg",
-    desc:"Bâtons de manioc traditionnels (bobolo), l'accompagnement parfait du poisson braisé.", allergenes:"" },
-
-  { id:"accomp2", cat:"accomp", nom:"Banane vapeur", prix:5.00, photo:"photos/banane-vapeur.jpg",
-    desc:"Plantains mûrs cuits à la vapeur, doux et moelleux, comme à la maison.", allergenes:"" },
+  { id:"plat3", cat:"plat", nom:"Poulet DG", prix:15.00, photo:"photos/maquereau.jpg",
+    desc:"Un plat emblématique du Cameroun, préparé avec du poulet mijoté, des bananes plantains frites, des légumes colorés et des épices savamment dosées. Une recette généreuse et savoureuse qui célèbre toute la richesse de la cuisine camerounaise.", allergenes:"Poisson" },
 
   { id:"accomp3", cat:"accomp", nom:"Banane plantain frie", prix:5.00, photo:"photos/banane-plantain.jpg",
-    desc:"Plantains mûrs frits et dorés, caramélisés à souhait. Irrésistibles.", allergenes:"" }
+    desc:"Plantains mûrs frits et dorés, caramélisés à souhait. Irrésistibles.", allergenes:"" },
+
+  { id:"p1784973822456", cat:"accomp", nom:"Beignet farine", prix:5.00, photo:"photos/p1784973822456.jpg",
+    desc:"Beignets moelleux et dorés, préparés à base de farine pour une pause gourmande", allergenes:"Gluten" }
 ];
