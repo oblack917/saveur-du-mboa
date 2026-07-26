@@ -1,0 +1,53 @@
+<!doctype html><meta charset="utf-8"><body><pre id="R">…</pre>
+<script>
+const out=[]; const log=(ok,m)=>out.push((ok?'✅ ':'❌ ')+m);
+const f=document.createElement('iframe'); f.src='admin.html';
+f.style.cssText='width:420px;height:1100px'; document.body.appendChild(f);
+
+fetch('config.js').then(r=>r.text()).then(txtConfig=>{
+ f.onload=()=>setTimeout(()=>{
+  const w=f.contentWindow, d=f.contentDocument;
+  try{
+   // 1) On rejoue EXACTEMENT l'extraction que fait chargerConfig()
+   const lire = new w.Function(txtConfig + `; return {
+       NUMERO_WHATSAPP, IBAN, ACOMPTE_POURCENT, FRAIS_KM, KM_GRATUITS, MENU,
+       TITULAIRE: (typeof TITULAIRE!=="undefined"?TITULAIRE:""),
+       EMAIL_CONTACT: (typeof EMAIL_CONTACT!=="undefined"?EMAIL_CONTACT:""),
+       ZONES:(typeof ZONES!=="undefined"?ZONES:null),
+       FACTEUR_ROUTE:(typeof FACTEUR_ROUTE!=="undefined"?FACTEUR_ROUTE:null),
+       LIVRAISON_FIN_MAX:(typeof LIVRAISON_FIN_MAX!=="undefined"?LIVRAISON_FIN_MAX:18),
+       CRENEAUX_LIVRAISON:(typeof CRENEAUX_LIVRAISON!=="undefined"?CRENEAUX_LIVRAISON:[]),
+       AVIS_FORM_KEY:(typeof AVIS_FORM_KEY!=="undefined"?AVIS_FORM_KEY:""),
+       AVIS:(typeof AVIS!=="undefined"?AVIS:[]) };`);
+   const cfg = lire();
+   log(cfg.EMAIL_CONTACT==='saveursdumboa237@gmail.com', 'chargerConfig() lit bien EMAIL_CONTACT depuis config.js');
+
+   // 2) On injecte cet état dans l'admin et on affiche
+   w.eval('etat = ' + JSON.stringify(cfg) + '; etat._shaConfig="x"; afficher();');
+   const champ = d.getElementById('g-email');
+   log(!!champ, 'champ « e-mail de contact » présent dans le formulaire');
+   log(champ.value==='saveursdumboa237@gmail.com', 'champ pré-rempli avec la valeur du fichier');
+
+   // 3) LE test qui compte : publier sans y toucher ne doit pas l'effacer
+   const txt = w.eval('texteConfig()');
+   log(/const EMAIL_CONTACT = "saveursdumboa237@gmail\.com";/.test(txt),
+       'PUBLICATION SANS Y TOUCHER : l\'adresse survit (pas écrasée)');
+   log(/const IBAN = "BE37 3632 7506 1728";/.test(txt), 'et l\'IBAN survit aussi (non-régression)');
+   log(txt.split('const EMAIL_CONTACT').length===2, 'la constante n\'est écrite qu\'une seule fois');
+
+   // 4) Modification
+   champ.value='  nouvelle@exemple.be  ';
+   log(/const EMAIL_CONTACT = "nouvelle@exemple\.be";/.test(w.eval('texteConfig()')),
+       'une modification est enregistrée et nettoyée des espaces');
+
+   // 5) Champ vidé : le fichier doit rester valide
+   champ.value='';
+   const t3 = w.eval('texteConfig()');
+   log(/const EMAIL_CONTACT = "";/.test(t3), 'champ vidé -> config.js toujours valide');
+   try{ new Function(t3); log(true, 'le config.js généré est du JavaScript valide'); }
+   catch(e){ log(false, 'config.js généré INVALIDE : '+e.message); }
+  }catch(e){ log(false,'ERREUR : '+e.message); }
+  document.getElementById('R').textContent=out.join('\n');
+ },1000);
+});
+</script></body>

@@ -36,6 +36,7 @@
       "url": "https://saveursdumboa.com/",
       "image": "https://saveursdumboa.com/photos/ndole.jpg",
       "telephone": "+32489765828",
+      "email": "saveursdumboa237@gmail.com",
       "servesCuisine": ["Camerounaise", "Africaine"],
       "priceRange": "12-15 €",
       "currenciesAccepted": "EUR",
@@ -721,7 +722,7 @@ button:active, .btn-whatsapp:active, .btn-ajouter:active{transform:translateY(1p
           <strong>Adresse :</strong>
           <mark style="background:#fdeccb">[adresse à compléter]</mark>.<br>
           <strong>Contact :</strong>
-          <mark style="background:#fdeccb">[e-mail de contact à compléter]</mark> —
+          <a class="js-email" href="mailto:saveursdumboa237@gmail.com">saveursdumboa237@gmail.com</a> —
           WhatsApp <span class="js-phone">0489 76 58 28</span>.<br>
           <strong>Hébergement :</strong> GitHub Pages, fourni par GitHub, Inc.
           (88 Colin P. Kelly Jr. Street, San Francisco, CA 94107, États-Unis).
@@ -784,7 +785,7 @@ button:active, .btn-whatsapp:active, .btn-ajouter:active{transform:translateY(1p
         <p style="margin:.4rem 0 1.4rem"><strong>Vos droits.</strong> Vous pouvez
           demander l'accès, la rectification ou l'effacement de vos données en nous
           écrivant à
-          <mark style="background:#fdeccb">[e-mail de contact à compléter]</mark>.</p>
+          <a class="js-email" href="mailto:saveursdumboa237@gmail.com">saveursdumboa237@gmail.com</a>.</p>
 
         <h2 style="color:var(--brun)">Cookies</h2>
         <p style="margin:.6rem 0 0">
@@ -817,6 +818,7 @@ button:active, .btn-whatsapp:active, .btn-ajouter:active{transform:translateY(1p
       <h4>Contact</h4>
       <p>📞 <a class="js-tel" href="tel:+32489765828">0489 76 58 28</a></p>
       <p>💬 <a class="js-wa" href="https://wa.me/32489765828">WhatsApp</a></p>
+      <p style="word-break:break-all">✉️ <a class="js-email" href="mailto:saveursdumboa237@gmail.com">saveursdumboa237@gmail.com</a></p>
       <p>📸 <a href="https://www.instagram.com/saveurs_du_mboa" target="_blank" rel="noopener">Instagram</a> · 🎵 <a href="#">TikTok</a></p>
     </div>
     <div>
@@ -1001,6 +1003,11 @@ function majTextesConfig(){
   document.querySelectorAll('.js-iban').forEach(el => el.textContent = IBAN);
   if(typeof TITULAIRE !== 'undefined' && TITULAIRE){
     document.querySelectorAll('.js-titulaire').forEach(el => el.textContent = TITULAIRE);
+  }
+  if(typeof EMAIL_CONTACT !== 'undefined' && EMAIL_CONTACT){
+    document.querySelectorAll('.js-email').forEach(a => {
+      a.href = 'mailto:' + EMAIL_CONTACT; a.textContent = EMAIL_CONTACT;
+    });
   }
   document.querySelectorAll('.js-km-gratuits').forEach(el => el.textContent = KM_GRATUITS);
   document.querySelectorAll('.js-frais-km').forEach(el => el.textContent = FRAIS_KM.toFixed(2).replace('.', ','));

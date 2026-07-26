@@ -3,6 +3,7 @@ const CONFIG_VERSION = 1784980992808;
 const NUMERO_WHATSAPP = "32489765828";
 const IBAN = "BE37 3632 7506 1728";
 const TITULAIRE = "Bouquet Nanhou";
+const EMAIL_CONTACT = "saveursdumboa237@gmail.com";
 const ACOMPTE_POURCENT = 50;
 const FRAIS_KM = 0.3;
 const KM_GRATUITS = 5;
