@@ -1,0 +1,86 @@
+<!doctype html><meta charset="utf-8"><body><pre id="R">…</pre>
+<script>
+/* Formulaire d'avis : un clic sur « Envoyer » doit TOUJOURS produire une réaction
+   visible, et la note doit être donnable au clavier (pas seulement à la souris). */
+const out=[]; const log=(ok,m)=>out.push((ok?'✅ ':'❌ ')+m);
+const f=document.createElement('iframe'); f.src='index.html';
+f.style.cssText='width:420px;height:900px'; document.body.appendChild(f);
+
+f.onload=()=>setTimeout(()=>{
+ const w=f.contentWindow, d=f.contentDocument;
+ try{
+  const etoiles = () => [...d.querySelectorAll('#avis-etoiles-choix .etoile-choix')];
+  const dessin  = () => etoiles().map(e=>e.textContent).join('');
+  const note    = () => w.eval('_noteAvisChoisie');
+  const clic    = (n) => etoiles()[n-1].dispatchEvent(new w.MouseEvent('click',{bubbles:true}));
+  const touche  = (n,k) => etoiles()[n-1].dispatchEvent(
+                      new w.KeyboardEvent('keydown',{key:k,bubbles:true,cancelable:true}));
+  const visible = (el) => !!el && el.style.display !== 'none' && !!el.textContent.trim();
+
+  let envois = [];
+  w.fetch = (url,opt) => { envois.push(JSON.parse(opt.body));
+                           return Promise.resolve({json:()=>Promise.resolve({success:true})}); };
+  const remplir = (nom,texte) => {
+    d.getElementById('av-nom').value = nom;
+    d.getElementById('av-texte').value = texte;
+  };
+  const envoyer = () => d.getElementById('avis-form')
+                        .dispatchEvent(new w.Event('submit',{bubbles:true,cancelable:true}));
+  const reset = () => { envois=[]; w.eval('setNoteAvis(0)'); remplir('',''); };
+
+  // ---------- 1. Un envoi refusé doit DIRE pourquoi ----------
+  reset(); remplir('', 'Un commentaire assez long.'); clic(4); envoyer();
+  log(visible(d.getElementById('avis-nom-err')) && envois.length===0,
+      'nom vide : message d\'erreur affiché sous le champ, rien n\'est envoyé');
+
+  reset(); remplir('M', 'Un commentaire assez long.'); clic(4); envoyer();
+  log(visible(d.getElementById('avis-nom-err')) && envois.length===0,
+      'nom d\'une seule lettre : message affiché, rien n\'est envoyé');
+
+  reset(); remplir('Marie L.', ''); clic(4); envoyer();
+  log(visible(d.getElementById('avis-texte-err')) && envois.length===0,
+      'commentaire vide : message affiché sous le commentaire, rien n\'est envoyé');
+
+  reset(); remplir('Marie L.', 'ok'); clic(4); envoyer();
+  log(visible(d.getElementById('avis-texte-err')) && envois.length===0,
+      'commentaire trop court : message affiché, rien n\'est envoyé');
+
+  // ---------- 2. Une fois corrigé, l'envoi passe et les messages disparaissent ----------
+  reset(); remplir('Marie L.', 'Excellent, je recommande vraiment.'); clic(5); envoyer();
+  log(envois.length===1, 'formulaire complet : l\'avis part bien vers Web3Forms');
+  log(envois[0] && envois[0].note==='5/5' && envois[0].nom==='Marie L.',
+      'contenu envoyé correct (nom + note sur 5)');
+  log(envois[0] && !!envois[0].access_key, 'la clé Web3Forms est bien jointe à l\'envoi');
+  log(!visible(d.getElementById('avis-nom-err')) && !visible(d.getElementById('avis-texte-err')),
+      'après un envoi valide, plus aucun message d\'erreur affiché');
+
+  // ---------- 3. La note doit être donnable au CLAVIER ----------
+  const e1 = etoiles()[0];
+  log(e1.getAttribute('tabindex')==='0', 'les étoiles sont atteignables au clavier (tabindex)');
+  log(!!e1.getAttribute('role') && !!e1.getAttribute('aria-label'),
+      'les étoiles ont un rôle et un libellé (lecteur d\'écran)');
+  log(/étoile/i.test(e1.getAttribute('aria-label')), 'le libellé annonce bien une note en étoiles');
+
+  reset(); touche(3,'Enter');
+  log(dessin()==='★★★☆☆' && note()===3, 'touche Entrée sur la 3e étoile : note = 3');
+  touche(3,'Enter');
+  log(dessin()==='☆☆☆☆☆' && note()===0, 'Entrée à nouveau sur la même étoile : note effacée');
+  touche(2,' ');
+  log(dessin()==='★★☆☆☆' && note()===2, 'barre d\'espace : note = 2');
+  log(etoiles()[1].getAttribute('aria-pressed')==='true'
+      && etoiles()[4].getAttribute('aria-pressed')==='false',
+      'aria-pressed reflète les étoiles allumées et éteintes');
+
+  // ---------- 4. L'utilisateur doit SAVOIR qu'il peut effacer ----------
+  const aide = d.getElementById('avis-note-aide');
+  log(visible(aide) && /effacer/i.test(aide.textContent),
+      'une aide indique qu\'on peut re-cliquer pour effacer la note');
+
+  // ---------- 5. Non-régression : le garde-fou « pas de note » tient toujours ----------
+  reset(); remplir('Marie L.', 'Un commentaire assez long.'); envoyer();
+  log(visible(d.getElementById('avis-note-err')) && envois.length===0,
+      'sans note : message « Choisissez une note. » et rien n\'est envoyé');
+ }catch(e){ log(false,'ERREUR : '+e.message); }
+ document.getElementById('R').textContent=out.join('\n');
+},1200);
+</script></body>

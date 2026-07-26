@@ -321,7 +321,7 @@ footer p{font-size:.95rem}
 .recap .r.total{font-family:var(--display);font-weight:800;font-size:1.2rem;border-top:1.5px solid #e4d3b6;margin-top:.4rem;padding-top:.5rem}
 .recap .r.acompte{color:var(--terracotta);font-weight:700}
 .recap .mini{font-size:.8rem;color:#6d5236;margin-top:.4rem}
-.vide{text-align:center;color:#8a7355;padding:2rem 0}
+.vide{text-align:center;color:#7d6647;padding:2rem 0}
 .form label{display:block;font-weight:700;font-size:.88rem;margin:.8rem 0 .25rem}
 .form input,.form select,.form textarea{width:100%;padding:.65rem .8rem;border:1.5px solid #d9c5a6;border-radius:10px;font-family:var(--body);font-size:.95rem;background:#fff}
 .form input:focus{outline:none;border-color:var(--or);box-shadow:0 0 0 3px rgba(227,163,46,.15)}
@@ -333,9 +333,9 @@ footer p{font-size:.95rem}
 .auto-liste > .addr-item:last-child, .auto-liste > div:last-child{border-bottom:none}
 .auto-liste .addr-icon{color:var(--terracotta);font-size:1.2rem;flex-shrink:0;margin-top:.05rem}
 .auto-liste .addr-info strong{display:block;color:var(--encre);font-weight:700;font-size:.98rem;line-height:1.25}
-.auto-liste .addr-info small{display:block;color:#8a7355;font-size:.82rem;margin-top:.18rem}
-.auto-liste .loading{padding:1.2rem;text-align:center;color:#8a7355;font-size:.92rem}
-.auto-liste .no-results{padding:1.2rem;text-align:center;color:#8a7355;font-size:.92rem}
+.auto-liste .addr-info small{display:block;color:#7d6647;font-size:.82rem;margin-top:.18rem}
+.auto-liste .loading{padding:1.2rem;text-align:center;color:#7d6647;font-size:.92rem}
+.auto-liste .no-results{padding:1.2rem;text-align:center;color:#7d6647;font-size:.92rem}
 
 /* Active / keyboard focused state */
 .auto-liste .addr-item.active{background:rgba(227,163,46,.12);border-left:4px solid var(--or);padding-left:calc(1rem - 4px)}
@@ -389,7 +389,7 @@ button:active, .btn-whatsapp:active, .btn-ajouter:active{transform:translateY(1p
 .avis-tete{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;margin-bottom:.4rem}
 .avis-etoiles{color:var(--or);letter-spacing:1px}
 .avis-nom{font-weight:700;color:var(--encre)}
-.avis-date{color:#8a7355;font-size:.9rem}
+.avis-date{color:#7d6647;font-size:.9rem}
 .avis-texte{margin:0;color:var(--brun);font-style:italic}
 .avis-note-globale{font-size:1.8rem;color:var(--or);letter-spacing:2px}
 .avis-note-chiffre{font-weight:700;color:var(--encre);margin-top:.2rem}
@@ -1084,7 +1084,7 @@ function rendreAvis(){
   const v = avisValides();
   if(!v.length){
     moy.innerHTML = '';
-    liste.innerHTML = `<p style="text-align:center;color:#8a7355">Soyez le premier à laisser un avis 💛</p>`;
+    liste.innerHTML = `<p style="text-align:center;color:#7d6647">Soyez le premier à laisser un avis 💛</p>`;
     return;
   }
   moy.innerHTML = `<div class="avis-note-globale">${etoilesHtml(Math.round(moyenneAvis()))}</div>
@@ -1111,10 +1111,27 @@ function setNoteAvis(n){
   // jamais revenir à « aucune note » une fois la 1re étoile allumée.
   _noteAvisChoisie = (n === _noteAvisChoisie) ? 0 : n;
   document.querySelectorAll('#avis-etoiles-choix .etoile-choix').forEach((el, i) => {
-    el.textContent = i < _noteAvisChoisie ? '★' : '☆';
+    const allumee = i < _noteAvisChoisie;
+    el.textContent = allumee ? '★' : '☆';
+    el.setAttribute('aria-pressed', allumee ? 'true' : 'false');
   });
   const err = document.getElementById('avis-note-err');
   if(err) err.style.display = 'none';
+}
+/* Les étoiles doivent aussi répondre au clavier : sans ça, impossible de noter
+   sans souris (et un lecteur d'écran ne voit qu'un caractère décoratif). */
+function toucheNoteAvis(ev, n){
+  if(ev.key === 'Enter' || ev.key === ' ' || ev.key === 'Spacebar'){
+    ev.preventDefault();
+    setNoteAvis(n);
+  }
+}
+/* Affiche/efface un message d'erreur sous un champ du formulaire d'avis. */
+function erreurAvis(id, message){
+  const el = document.getElementById(id);
+  if(!el) return;
+  el.textContent = message || '';
+  el.style.display = message ? 'block' : 'none';
 }
 function rendreFormAvis(){
   const bloc = document.getElementById('avis-form-bloc');
@@ -1122,22 +1139,26 @@ function rendreFormAvis(){
   const actif = typeof AVIS_FORM_KEY !== 'undefined' && AVIS_FORM_KEY;
   bloc.innerHTML = `
     <h2 class="section-titre" style="text-align:center">Laisser un avis</h2>
-    ${actif ? '' : `<p style="text-align:center;color:#8a7355;font-size:.88rem">Le formulaire sera bientôt actif. En attendant, écrivez-nous sur <a id="avis-demo-wa" href="#">WhatsApp</a>.</p>`}
+    ${actif ? '' : `<p style="text-align:center;color:#7d6647;font-size:.88rem">Le formulaire sera bientôt actif. En attendant, écrivez-nous sur <a id="avis-demo-wa" href="#">WhatsApp</a>.</p>`}
     <form id="avis-form" class="form" ${actif ? '' : 'style="opacity:.55;pointer-events:none"'}>
       <label for="av-nom">Votre prénom / nom *</label>
       <input id="av-nom" type="text" maxlength="60" placeholder="Ex. Marie L.">
-      <label>Votre note *</label>
-      <div id="avis-etoiles-choix" style="font-size:1.8rem;color:var(--or);cursor:pointer;letter-spacing:3px">
-        ${[1,2,3,4,5].map(n => `<span class="etoile-choix" onclick="setNoteAvis(${n})">☆</span>`).join('')}
+      <span id="avis-nom-err" style="display:none;color:var(--terracotta);font-size:.88rem"></span>
+      <label id="avis-note-label">Votre note *</label>
+      <div id="avis-etoiles-choix" role="group" aria-labelledby="avis-note-label"
+           style="font-size:1.8rem;color:var(--or);cursor:pointer;letter-spacing:3px">
+        ${[1,2,3,4,5].map(n => `<span class="etoile-choix" role="button" tabindex="0" aria-pressed="false" aria-label="${n} étoile${n > 1 ? 's' : ''} sur 5" title="Cliquez à nouveau pour effacer la note" onclick="setNoteAvis(${n})" onkeydown="toucheNoteAvis(event, ${n})">☆</span>`).join('')}
       </div>
+      <span id="avis-note-aide" style="color:#7d6647;font-size:.8rem">Cliquez sur l'étoile allumée pour effacer votre note.</span>
       <span id="avis-note-err" style="display:none;color:var(--terracotta);font-size:.88rem"></span>
       <label for="av-texte">Votre commentaire *</label>
       <textarea id="av-texte" maxlength="600" placeholder="Racontez votre expérience…"></textarea>
+      <span id="avis-texte-err" style="display:none;color:var(--terracotta);font-size:.88rem"></span>
       <label for="av-email">Votre e-mail (facultatif)</label>
       <input id="av-email" type="email" placeholder="Pour vous répondre si besoin">
       <input type="checkbox" name="botcheck" id="av-botcheck" style="display:none" tabindex="-1" autocomplete="off">
       <button type="submit" class="btn btn-primaire" style="width:100%;margin-top:.9rem" ${actif ? '' : 'disabled'}>Envoyer mon avis</button>
-      <p style="color:#8a7355;font-size:.8rem;margin-top:.6rem">En envoyant votre avis, vous acceptez qu'il soit transmis pour modération et publié sur le site.</p>
+      <p style="color:#7d6647;font-size:.8rem;margin-top:.6rem">En envoyant votre avis, vous acceptez qu'il soit transmis pour modération et publié sur le site.</p>
       <p id="avis-form-msg" style="display:none;margin-top:.8rem;text-align:center;font-weight:700"></p>
     </form>`;
   // Le lien WhatsApp est injecté après la boucle .js-wa : on le câble ici directement.
@@ -1154,10 +1175,22 @@ async function envoyerAvis(ev){
   const email = document.getElementById('av-email').value.trim();
   const botcheck = document.getElementById('av-botcheck').checked;
   const msg = document.getElementById('avis-form-msg');
-  const noteErr = document.getElementById('avis-note-err');
-  if(nom.length < 2){ document.getElementById('av-nom').focus(); return; }
-  if(!_noteAvisChoisie){ noteErr.textContent = 'Choisissez une note.'; noteErr.style.display = 'block'; return; }
-  if(texte.length < 3){ document.getElementById('av-texte').focus(); return; }
+  // Un refus doit toujours DIRE pourquoi : un simple focus() passait inaperçu et
+  // donnait l'impression que le bouton « Envoyer » ne marchait pas.
+  erreurAvis('avis-nom-err', ''); erreurAvis('avis-note-err', ''); erreurAvis('avis-texte-err', '');
+  msg.style.display = 'none';
+  if(nom.length < 2){
+    erreurAvis('avis-nom-err', 'Indiquez votre prénom ou votre nom (2 lettres minimum).');
+    document.getElementById('av-nom').focus(); return;
+  }
+  if(!_noteAvisChoisie){
+    erreurAvis('avis-note-err', 'Choisissez une note.');
+    document.getElementById('avis-etoiles-choix').scrollIntoView({block:'center'}); return;
+  }
+  if(texte.length < 3){
+    erreurAvis('avis-texte-err', 'Écrivez quelques mots sur votre expérience.');
+    document.getElementById('av-texte').focus(); return;
+  }
   if(botcheck) return; // honeypot : bot détecté, on ignore silencieusement
 
   const bouton = ev.target.querySelector('button[type=submit]');
