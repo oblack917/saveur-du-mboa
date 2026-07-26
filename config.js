@@ -1,5 +1,5 @@
-/* Fichier généré par la page d'administration — 26/07/2026 20:39:24 */
-const CONFIG_VERSION = 1785091164495;
+/* Fichier généré par la page d'administration — 26/07/2026 21:10:30 */
+const CONFIG_VERSION = 1785093030200;
 const NUMERO_WHATSAPP = "32489765828";
 const IBAN = "BE37 3632 7506 1728";
 const TITULAIRE = "Bouquet Nanhou";
@@ -53,14 +53,14 @@ const MENU = [
     desc:"Un plat emblématique du Cameroun, préparé avec du poulet mijoté, des bananes plantains frites, des légumes colorés et des épices savamment dosées. Une recette généreuse et savoureuse qui célèbre toute la richesse de la cuisine camerounaise.", allergenes:"" },
 
   { id:"accomp3", cat:"accomp", nom:"Banane plantain frie", prix:5.00, photo:"photos/banane-plantain.jpg",
-    desc:"Plantains mûrs frits et dorés, caramélisés à souhait. Irrésistibles.", allergenes:"" },
+    desc:"Plantains mûrs frits et dorés, caramélisés à souhait. Irrésistibles.", allergenes:"aucun" },
 
   { id:"p1784973822456", cat:"accomp", nom:"Beignet farine", prix:5.00, photo:"photos/p1784973822456.jpg",
     desc:"Beignets moelleux et dorés, préparés à base de farine pour une pause gourmande", allergenes:"Gluten" },
 
   { id:"p1784975651202", cat:"accomp", nom:"Tapioca", prix:3.00, photo:"photos/p1784975651202.jpg",
-    desc:"Une pâte légère et douce à base de manioc, idéale pour accompagner le Eru et en révéler toutes les saveurs.", allergenes:"" },
+    desc:"Une pâte légère et douce à base de manioc, idéale pour accompagner le Eru et en révéler toutes les saveurs.", allergenes:"aucun" },
 
   { id:"p1784975941281", cat:"accomp", nom:"Placali", prix:3.00, photo:"photos/p1784975941281.jpg",
-    desc:"Une pâte à base de manioc fermenté, proche du watafufu, parfaite pour accompagner le Eru et savourer pleinement sa sauce.", allergenes:"" }
+    desc:"Une pâte à base de manioc fermenté, proche du watafufu, parfaite pour accompagner le Eru et savourer pleinement sa sauce.", allergenes:"aucun" }
 ];
