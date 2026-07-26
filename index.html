@@ -1203,8 +1203,8 @@ async function envoyerAvis(ev){
         access_key: AVIS_FORM_KEY,
         subject: 'Nouvel avis — Saveurs du Mboa',
         from_name: nom,
-        // Ces noms de champs font des lignes « nom: … » dans l'e-mail reçu :
-        // c'est ce que lit le bouton « Coller l'avis reçu » de l'admin.
+        // Ces noms de champs servent de libellés dans l'e-mail reçu par la
+        // gérante, qui recopie l'avis dans l'admin avant de le publier.
         nom: nom,
         note: _noteAvisChoisie + '/5',
         avis: texte,

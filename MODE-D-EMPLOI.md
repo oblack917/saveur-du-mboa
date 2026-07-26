@@ -142,13 +142,17 @@ Mboa »). C'est vous qui décidez de le publier ou non.
 
 Pour publier un avis reçu :
 
-1. Ouvrez l'e-mail, **sélectionnez tout son contenu et copiez-le**
-2. Ouvrez la page d'administration → Réglages généraux → **📋 Coller
-   l'avis reçu**
-3. Collez, appuyez sur **Remplir les champs** → le nom, la note et le
-   commentaire se remplissent tout seuls (relisez-les !)
+1. Ouvrez la page d'administration → **Réglages généraux** → descendez
+   jusqu'à **Avis publiés sur le site**
+2. Appuyez sur **+ Ajouter un avis** → une ligne vide apparaît
+3. Recopiez depuis l'e-mail le **nom**, la **note** (menu ★) et le
+   **commentaire**. Le mois est déjà rempli.
 4. Appuyez sur **Publier les changements** en bas — l'avis apparaît sur le
    site 1 à 2 minutes plus tard
+
+Vous restez libre de raccourcir un commentaire trop long, de corriger une
+faute, ou de n'afficher que le prénom (« Lionel » plutôt que le nom
+complet) : vous recopiez ce que vous voulez publier, rien de plus.
 
 Pour retirer un avis : le bouton **✕** à côté de l'avis, puis Publier.
 
