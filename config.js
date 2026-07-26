@@ -1,5 +1,5 @@
-/* Fichier généré par la page d'administration — 26/07/2026 20:37:17 */
-const CONFIG_VERSION = 1785091037407;
+/* Fichier généré par la page d'administration — 26/07/2026 20:39:24 */
+const CONFIG_VERSION = 1785091164495;
 const NUMERO_WHATSAPP = "32489765828";
 const IBAN = "BE37 3632 7506 1728";
 const TITULAIRE = "Bouquet Nanhou";
@@ -29,7 +29,7 @@ const CRENEAUX_LIVRAISON = [
    AVIS = avis validés affichés sur le site : { nom, note (1-5), texte, date "AAAA-MM" }. */
 const AVIS_FORM_KEY = "76da7f6a-3471-44dd-b347-a0ab5b179fff";
 const AVIS = [
-  { nom:"Lionel", note:4, texte:"J'ai finalement pris les beignets haricot là. Vraiment très délicieux. Comme pour les mamans du cameroun. Merci pour le tuyau.", date:"2026-07" }
+
 ];
 
 /* Zones de livraison — réglées une fois dans le code (préservées à chaque publication). */
