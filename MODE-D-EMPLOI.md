@@ -47,6 +47,23 @@ Les 14 allergènes à déclarer en Europe : céréales contenant du gluten, crus
 œufs, poissons, arachides, soja, lait, fruits à coque, céleri, moutarde, graines
 de sésame, anhydride sulfureux/sulfites, lupin, mollusques.
 
+## 🕒 Les horaires de commande (ouverture et fermeture)
+
+Le site n'accepte les commandes que pendant une période fixe :
+
+- **Ouverture : le dimanche à 18h**
+- **Fermeture : le vendredi à 12h**
+
+En dehors de cette période, la bannière en haut du site affiche
+« 🔒 Commandes fermées — réouverture dimanche 18h ». Pendant la période
+ouverte, elle affiche un compte à rebours jusqu'à la fermeture.
+
+**Pour changer ces horaires**, dans la page d'administration, section
+**⚙️ Réglages généraux** → **Horaires des commandes** : choisissez le jour et
+l'heure d'ouverture, le jour et l'heure de fermeture, puis **Publier**.
+Tous les textes du site se mettent à jour tout seuls : la bannière, le menu,
+la FAQ et les conditions de vente. Vous n'avez rien d'autre à modifier.
+
 ## 🗺️ Les commandes et la localisation
 Chaque commande arrive sur WhatsApp avec un lien **"🗺️ Localisation"** :
 appuyez dessus → l'adresse du client s'ouvre dans Google Maps → lancez

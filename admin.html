@@ -102,6 +102,31 @@ textarea{resize:vertical;min-height:70px}
       <input type="number" id="g-frais" step="0.05" min="0">
 
       <div style="margin-top:1.2rem;padding-top:1rem;border-top:1.5px dashed #e4d3b6">
+        <label>Horaires des commandes</label>
+        <p style="font-size:.85rem;color:#8a7355;margin:.3rem 0 .8rem">En dehors de cette période, le site affiche « Commandes fermées » et annonce la réouverture.</p>
+        <div class="grille-prix">
+          <div>
+            <label>Ouverture — jour</label>
+            <select id="g-ouv-jour"></select>
+          </div>
+          <div>
+            <label>Ouverture — heure</label>
+            <input type="number" id="g-ouv-heure" min="0" max="23" step="1">
+          </div>
+        </div>
+        <div class="grille-prix">
+          <div>
+            <label>Fermeture — jour</label>
+            <select id="g-ferm-jour"></select>
+          </div>
+          <div>
+            <label>Fermeture — heure</label>
+            <input type="number" id="g-ferm-heure" min="0" max="23" step="1">
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:1.2rem;padding-top:1rem;border-top:1.5px dashed #e4d3b6">
         <label>Dernière heure de livraison (plafond)</label>
         <input type="number" id="g-fin-max" min="1" max="23" step="1" style="max-width:8rem">
         <p style="font-size:.85rem;color:#8a7355;margin:.3rem 0 .8rem">Aucun créneau ne pourra se terminer après cette heure.</p>
@@ -212,6 +237,10 @@ async function chargerConfig(){
         FACTEUR_ROUTE: (typeof FACTEUR_ROUTE !== "undefined" ? FACTEUR_ROUTE : null),
         ZONES: (typeof ZONES !== "undefined" ? ZONES : null),
         LIVRAISON_FIN_MAX: (typeof LIVRAISON_FIN_MAX !== "undefined" ? LIVRAISON_FIN_MAX : null),
+        OUVERTURE_JOUR: (typeof OUVERTURE_JOUR !== "undefined" ? OUVERTURE_JOUR : null),
+        OUVERTURE_HEURE: (typeof OUVERTURE_HEURE !== "undefined" ? OUVERTURE_HEURE : null),
+        FERMETURE_JOUR: (typeof FERMETURE_JOUR !== "undefined" ? FERMETURE_JOUR : null),
+        FERMETURE_HEURE: (typeof FERMETURE_HEURE !== "undefined" ? FERMETURE_HEURE : null),
         CRENEAUX_LIVRAISON: (typeof CRENEAUX_LIVRAISON !== "undefined" ? CRENEAUX_LIVRAISON : null),
         AVIS_FORM_KEY: (typeof AVIS_FORM_KEY !== "undefined" ? AVIS_FORM_KEY : ""),
         AVIS: (typeof AVIS !== "undefined" ? AVIS : []) };`);
@@ -231,6 +260,7 @@ function afficher(){
   document.getElementById("g-km").value = etat.KM_GRATUITS;
   document.getElementById("g-frais").value = etat.FRAIS_KM;
   document.getElementById("g-fin-max").value = (typeof etat.LIVRAISON_FIN_MAX === "number" ? etat.LIVRAISON_FIN_MAX : 18);
+  afficherHoraires();
   afficherCreneaux();
   document.getElementById("g-avis-key").value = etat.AVIS_FORM_KEY || "";
   afficherAvis();
@@ -241,6 +271,23 @@ function afficher(){
 function creneauxCourants(){
   return (Array.isArray(etat.CRENEAUX_LIVRAISON) && etat.CRENEAUX_LIVRAISON.length)
     ? etat.CRENEAUX_LIVRAISON : [{debut:10, fin:13}, {debut:14, fin:18}];
+}
+/* ===== Horaires des commandes ===== */
+const NOMS_JOURS = ["dimanche","lundi","mardi","mercredi","jeudi","vendredi","samedi"];
+const HORAIRES_DEFAUT = { OUVERTURE_JOUR:0, OUVERTURE_HEURE:18, FERMETURE_JOUR:5, FERMETURE_HEURE:12 };
+
+function horaireValide(v, cle){
+  const max = cle.endsWith("JOUR") ? 6 : 23;
+  return Number.isInteger(v) && v >= 0 && v <= max ? v : HORAIRES_DEFAUT[cle];
+}
+function afficherHoraires(){
+  [["g-ouv-jour","OUVERTURE_JOUR"], ["g-ferm-jour","FERMETURE_JOUR"]].forEach(([id, cle]) => {
+    const sel = document.getElementById(id);
+    sel.innerHTML = NOMS_JOURS.map((n, i) => `<option value="${i}">${n}</option>`).join("");
+    sel.value = horaireValide(etat[cle], cle);
+  });
+  document.getElementById("g-ouv-heure").value  = horaireValide(etat.OUVERTURE_HEURE,  "OUVERTURE_HEURE");
+  document.getElementById("g-ferm-heure").value = horaireValide(etat.FERMETURE_HEURE, "FERMETURE_HEURE");
 }
 function afficherCreneaux(){
   const zone = document.getElementById("zone-creneaux");
@@ -508,6 +555,12 @@ function changerPhoto(id, input){
 /* ================== PUBLICATION ================== */
 function texteConfig(){
   const s = v => '"' + String(v).replace(/\\/g,"\\\\").replace(/"/g,'\\"') + '"';
+  // Horaires : lus dans le formulaire, avec repli sur les valeurs par défaut
+  // si le champ est vide ou hors bornes (0-6 pour un jour, 0-23 pour une heure).
+  const hor = (id, defaut, max) => {
+    const v = parseInt(document.getElementById(id).value, 10);
+    return Number.isInteger(v) && v >= 0 && v <= max ? v : defaut;
+  };
   const lignes = etat.MENU.map(p =>
     `  { id:${s(p.id)}, cat:${s(p.cat)}, nom:${s(p.nom.trim())}, prix:${p.prix.toFixed(2)}, photo:${s(p.photo)},\n    desc:${s(p.desc.trim())}, allergenes:${s((p.allergenes || '').trim())} }`
   ).join(",\n\n");
@@ -541,6 +594,14 @@ const EMAIL_CONTACT = ${s(document.getElementById("g-email").value.trim())};
 const ACOMPTE_POURCENT = ${parseFloat(document.getElementById("g-acompte").value) || 0};
 const FRAIS_KM = ${parseFloat(document.getElementById("g-frais").value) || 0};
 const KM_GRATUITS = ${parseFloat(document.getElementById("g-km").value) || 0};
+
+/* Horaires des commandes — réglés depuis la page d'administration.
+   Les commandes ouvrent le OUVERTURE_JOUR à OUVERTURE_HEURE et ferment le
+   FERMETURE_JOUR à FERMETURE_HEURE. Jours : 0 = dimanche, 1 = lundi … 6 = samedi. */
+const OUVERTURE_JOUR = ${hor("g-ouv-jour", 0, 6)};
+const OUVERTURE_HEURE = ${hor("g-ouv-heure", 18, 23)};
+const FERMETURE_JOUR = ${hor("g-ferm-jour", 5, 6)};
+const FERMETURE_HEURE = ${hor("g-ferm-heure", 12, 23)};
 
 /* Créneaux de livraison — réglés depuis la page d'administration.
    Aucun créneau ne peut se terminer après LIVRAISON_FIN_MAX (la dernière heure de livraison). */

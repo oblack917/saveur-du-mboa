@@ -8,6 +8,14 @@ const ACOMPTE_POURCENT = 50;
 const FRAIS_KM = 0.3;
 const KM_GRATUITS = 5;
 
+/* Horaires des commandes — réglés depuis la page d'administration.
+   Les commandes ouvrent le OUVERTURE_JOUR à OUVERTURE_HEURE et ferment le
+   FERMETURE_JOUR à FERMETURE_HEURE. Jours : 0 = dimanche, 1 = lundi … 6 = samedi. */
+const OUVERTURE_JOUR = 0;
+const OUVERTURE_HEURE = 18;
+const FERMETURE_JOUR = 5;
+const FERMETURE_HEURE = 12;
+
 /* Créneaux de livraison — réglés depuis la page d'administration.
    Aucun créneau ne peut se terminer après LIVRAISON_FIN_MAX (la dernière heure de livraison). */
 const LIVRAISON_FIN_MAX = 18;
