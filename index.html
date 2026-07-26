@@ -1107,9 +1107,11 @@ function rendreApercuAvis(){
 /* ---- Formulaire « Laisser un avis » (envoi Web3Forms, modéré avant publication) ---- */
 let _noteAvisChoisie = 0;
 function setNoteAvis(n){
-  _noteAvisChoisie = n;
+  // Re-cliquer l'étoile déjà active éteint tout : sans ça, on ne pouvait plus
+  // jamais revenir à « aucune note » une fois la 1re étoile allumée.
+  _noteAvisChoisie = (n === _noteAvisChoisie) ? 0 : n;
   document.querySelectorAll('#avis-etoiles-choix .etoile-choix').forEach((el, i) => {
-    el.textContent = i < n ? '★' : '☆';
+    el.textContent = i < _noteAvisChoisie ? '★' : '☆';
   });
   const err = document.getElementById('avis-note-err');
   if(err) err.style.display = 'none';

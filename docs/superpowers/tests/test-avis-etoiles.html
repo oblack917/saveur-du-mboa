@@ -1,0 +1,70 @@
+<!doctype html><meta charset="utf-8"><body><pre id="R">…</pre>
+<script>
+/* Étoiles du formulaire d'avis : on doit pouvoir MONTER, BAISSER et TOUT EFFACER.
+   Le défaut corrigé ici : setNoteAvis() écrasait la note sans jamais permettre 0,
+   donc la 1re étoile restait allumée pour toujours. */
+const out=[]; const log=(ok,m)=>out.push((ok?'✅ ':'❌ ')+m);
+const f=document.createElement('iframe'); f.src='index.html';
+f.style.cssText='width:420px;height:900px'; document.body.appendChild(f);
+
+f.onload=()=>setTimeout(()=>{
+ const w=f.contentWindow, d=f.contentDocument;
+ try{
+  const etoiles = () => [...d.querySelectorAll('#avis-etoiles-choix .etoile-choix')];
+  const dessin  = () => etoiles().map(e=>e.textContent).join('');
+  const note    = () => w.eval('_noteAvisChoisie');
+  const clic    = (n) => etoiles()[n-1].dispatchEvent(new w.MouseEvent('click',{bubbles:true}));
+
+  log(etoiles().length===5, '5 étoiles cliquables affichées');
+
+  // --- État de départ ---
+  log(dessin()==='☆☆☆☆☆' && note()===0, 'au départ : aucune étoile allumée, note = 0');
+
+  // --- Monter ---
+  clic(4);
+  log(dessin()==='★★★★☆' && note()===4, 'clic sur la 4e : ★★★★☆ et note = 4');
+
+  // --- Baisser (ce qui marchait déjà) ---
+  clic(2);
+  log(dessin()==='★★☆☆☆' && note()===2, 'clic sur la 2e : on redescend à ★★☆☆☆, note = 2');
+
+  clic(1);
+  log(dessin()==='★☆☆☆☆' && note()===1, 'clic sur la 1re : ★☆☆☆☆, note = 1');
+
+  // --- LE DÉFAUT SIGNALÉ : la dernière étoile doit pouvoir s'éteindre ---
+  clic(1);
+  log(dessin()==='☆☆☆☆☆' && note()===0,
+      'RE-CLIC sur la 1re étoile allumée : tout s\'éteint, note = 0 (comme au début)');
+
+  // --- Le même geste doit marcher sur n'importe quelle étoile ---
+  clic(3);
+  clic(3);
+  log(dessin()==='☆☆☆☆☆' && note()===0, 're-clic sur l\'étoile active (la 3e) : remise à zéro aussi');
+
+  // --- Après remise à zéro, on peut re-noter normalement ---
+  clic(5);
+  log(dessin()==='★★★★★' && note()===5, 'après remise à zéro, on peut re-noter (5 étoiles)');
+
+  // --- Baisser d'un cran ne doit PAS tout effacer (non-régression) ---
+  clic(4);
+  log(dessin()==='★★★★☆' && note()===4, 'baisser de 5 à 4 ne remet pas à zéro');
+
+  // --- Non-régression : sans note, l'envoi reste bloqué et rien ne part sur le réseau ---
+  clic(4); // on éteint tout (re-clic sur l'étoile active)
+  let envoye = false;
+  w.fetch = () => { envoye = true; return Promise.resolve({json:()=>Promise.resolve({success:true})}); };
+  d.getElementById('av-nom').value = 'Testeur';
+  d.getElementById('av-texte').value = 'Un commentaire de test.';
+  d.getElementById('avis-form').dispatchEvent(new w.Event('submit',{bubbles:true,cancelable:true}));
+  const err = d.getElementById('avis-note-err');
+  log(note()===0 && err.style.display==='block' && /Choisissez une note/.test(err.textContent),
+      'note à 0 : le message « Choisissez une note. » s\'affiche');
+  log(envoye===false, 'note à 0 : aucun envoi vers Web3Forms');
+
+  // --- Et une fois la note remise, l'envoi repart ---
+  clic(5);
+  log(err.style.display==='none', 'dès qu\'on remet une note, le message d\'erreur disparaît');
+ }catch(e){ log(false,'ERREUR : '+e.message); }
+ document.getElementById('R').textContent=out.join('\n');
+},1200);
+</script></body>
