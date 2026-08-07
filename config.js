@@ -1,5 +1,5 @@
-/* Fichier généré par la page d'administration — 26/07/2026 21:14:38 */
-const CONFIG_VERSION = 1785093278279;
+/* Fichier généré par la page d'administration — 07/08/2026 22:53:00 */
+const CONFIG_VERSION = 1786135980262;
 const NUMERO_WHATSAPP = "32489765828";
 const IBAN = "BE37 3632 7506 1728";
 const TITULAIRE = "Bouquet Nanhou";
@@ -43,8 +43,8 @@ const ZONES = [
 ];
 
 const MENU = [
-  { id:"plat1", cat:"plat", nom:"Eru", prix:12.00, photo:"photos/ndole.jpg",
-    desc:"Un incontournable de la cuisine camerounaise, préparé avec des feuilles d’eru, des épinards, de la viande de bœuf, du poisson fumé et la peau de bœuf ,  mijotés dans une huile de palme savoureuse. Servi avec votre choix de placali ou de tapioca pour une expérience authentique.", allergenes:"Poisson , Crustacés" },
+  { id:"plat1", cat:"plat", nom:"Poisson braisé", prix:15.00, photo:"photos/ndole.jpg",
+    desc:"Choisissez votre poisson : maquereau, bar ou tilapia, mariné aux épices camerounaises puis braisé au feu pour une saveur fumée et authentique.", allergenes:"Poisson ," },
 
   { id:"plat2", cat:"plat", nom:"Beignet haricots (BH)", prix:15.00, photo:"photos/porc.jpg",
     desc:"Le célèbre petit-déjeuner camerounais composé de beignets moelleux et dorés, accompagnés de haricots mijotés dans une sauce savoureuse aux épices. Un plat généreux, réconfortant et riche en saveurs, idéal à tout moment de la journée.", allergenes:"Gluten" },
@@ -58,9 +58,12 @@ const MENU = [
   { id:"p1784973822456", cat:"accomp", nom:"Beignet farine", prix:5.00, photo:"photos/p1784973822456.jpg",
     desc:"Beignets moelleux et dorés, préparés à base de farine pour une pause gourmande", allergenes:"Gluten" },
 
-  { id:"p1784975651202", cat:"accomp", nom:"Tapioca", prix:3.00, photo:"photos/p1784975651202.jpg",
-    desc:"Une pâte légère et douce à base de manioc, idéale pour accompagner le Eru et en révéler toutes les saveurs.", allergenes:"aucun" },
+  { id:"p1784975651202", cat:"accomp", nom:"Beignet maïs ( banane )", prix:3.00, photo:"photos/p1784975651202.jpg",
+    desc:"De délicieux beignets de maïs, moelleux à l’intérieur et légèrement croustillants à l’extérieur, parfaits en accompagnement ou à partager.", allergenes:"aucun" },
 
-  { id:"p1784975941281", cat:"accomp", nom:"Placali", prix:3.00, photo:"photos/p1784975941281.jpg",
-    desc:"Une pâte à base de manioc fermenté, proche du watafufu, parfaite pour accompagner le Eru et savourer pleinement sa sauce.", allergenes:"aucun" }
+  { id:"p1786135630264", cat:"plat", nom:"Porc grillé", prix:15.00, photo:"photos/p1786135630264.jpg",
+    desc:"Morceaux de porc marinés aux épices, grillés à la perfection pour une viande tendre, savoureuse et légèrement fumée.", allergenes:"" },
+
+  { id:"p1786135784016", cat:"plat", nom:"Sauce d’arachide + riz", prix:15.00, photo:"photos/p1786135784016.jpg",
+    desc:"Un riz accompagné d’une onctueuse sauce d’arachide, mijotée avec des épices et une viande tendre pour un plat généreux et riche en saveurs.", allergenes:"Arachide" }
 ];
