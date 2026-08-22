@@ -35,6 +35,7 @@
       "description": "Cuisine camerounaise faite maison par Caroline et Viviane. Chaque semaine, 3 plats et leurs accompagnements, commandés en semaine et livrés le week-end en provinces de Liège et du Luxembourg.",
       "url": "https://saveursdumboa.com/",
       "image": "https://saveursdumboa.com/photos/ndole.jpg",
+      "logo": "https://saveursdumboa.com/icon-512.png",
       "telephone": "+32489765828",
       "email": "saveursdumboa237@gmail.com",
       "servesCuisine": ["Camerounaise", "Africaine"],
@@ -64,8 +65,12 @@
 }
 </script>
 
-<!-- Favicon local (emoji SVG, aucune ressource externe) -->
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='88'%3E%F0%9F%8D%B2%3C/text%3E%3C/svg%3E">
+<!-- Favicon : la toque du logo, en vrais fichiers. Un favicon en data: URI
+     n'est jamais récupéré par Google, qui affiche alors le globe gris. -->
+<link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48">
+<link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="/icon-192.png" sizes="192x192" type="image/png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <meta name="theme-color" content="#40200E">
 
 <link rel="stylesheet" href="fonts/fonts.css">
