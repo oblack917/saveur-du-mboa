@@ -386,6 +386,10 @@ button:active, .btn-whatsapp:active, .btn-ajouter:active{transform:translateY(1p
 
 /* ---- Avis clients ---- */
 .avis-carte{background:var(--creme);border:1.5px solid #e4d3b6;border-radius:var(--radius);padding:1.1rem 1.3rem;margin:0 auto 1rem;max-width:640px}
+.videos-grille{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.5rem;max-width:960px;margin:0 auto}
+.video-carte{background:var(--creme);border:1.5px solid #e4d3b6;border-radius:var(--radius);padding:.8rem;margin:0}
+.video-carte video{width:100%;aspect-ratio:16/10;object-fit:contain;background:#000;border-radius:10px;display:block}
+.video-carte figcaption{font-size:.95rem;color:var(--brun-2);margin-top:.6rem;text-align:center}
 .avis-tete{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;margin-bottom:.4rem}
 .avis-etoiles{color:var(--or);letter-spacing:1px}
 .avis-nom{font-weight:700;color:var(--encre)}
@@ -413,6 +417,7 @@ button:active, .btn-whatsapp:active, .btn-ajouter:active{transform:translateY(1p
       <a href="#/accueil" data-page="accueil">Accueil</a>
       <a href="#/menu" data-page="menu">Le Menu</a>
       <a href="#/histoire" data-page="histoire">Notre Histoire</a>
+      <a href="#/cuisine" data-page="cuisine" id="nav-cuisine" style="display:none">En cuisine</a>
       <a href="#/comment" data-page="comment">Comment ça marche</a>
       <a href="#/livraison" data-page="livraison">Livraison</a>
       <a href="#/faq" data-page="faq">FAQ</a>
@@ -575,6 +580,20 @@ button:active, .btn-whatsapp:active, .btn-ajouter:active{transform:translateY(1p
       <div id="avis-moyenne" style="text-align:center;margin-bottom:1.5rem"></div>
       <div id="avis-liste"></div>
       <div id="avis-form-bloc" style="max-width:560px;margin:2.5rem auto 0"></div>
+    </div>
+  </section>
+</div>
+
+<!-- ============ PAGE EN CUISINE ============ -->
+<div class="page" id="page-cuisine">
+  <section class="page-hero wax-bg">
+    <span class="fil-ariane">En cuisine</span>
+    <h1>La cuisine en <span class="fil">vidéo</span></h1>
+    <p>Un coup d'œil derrière les fourneaux : nos plats, en vrai.</p>
+  </section>
+  <section>
+    <div class="container">
+      <div id="videos-liste" class="videos-grille"></div>
     </div>
   </section>
 </div>
@@ -943,10 +962,11 @@ button:active, .btn-whatsapp:active, .btn-ajouter:active{transform:translateY(1p
 <script>document.write('<script src="config.js?v=' + Date.now() + '"><\/script>');</script>
 <script>
 /* ============ ROUTEUR DE PAGES ============ */
-const PAGES = ["accueil","menu","histoire","comment","livraison","faq","avis","legal"];
+const PAGES = ["accueil","menu","histoire","comment","livraison","faq","avis","cuisine","legal"];
 function router(){
   let cible = (location.hash || "#/accueil").replace("#/","");
   if(!PAGES.includes(cible)) cible = "accueil";
+  if(cible === "cuisine" && !videosValides().length) cible = "accueil"; // galerie vide = jamais montrée
   PAGES.forEach(p => document.getElementById("page-"+p).classList.toggle("active", p === cible));
   document.querySelectorAll("nav.principal a").forEach(a =>
     a.classList.toggle("actif", a.dataset.page === cible));
@@ -1027,6 +1047,7 @@ function majTextesConfig(){
   rendreAvis();
   rendreFormAvis();
   rendreApercuAvis();
+  rendreVideos();
 }
 
 /* ===== Créneaux de livraison (réglés dans config.js) =====
@@ -1102,6 +1123,26 @@ function rendreApercuAvis(){
     `<span class="avis-note-globale">${etoilesHtml(Math.round(moyenneAvis()))}</span>
      <div class="avis-note-chiffre">${moyenneAvis().toString().replace('.', ',')} / 5 · ${v.length} avis</div>`;
   document.getElementById('apercu-avis-liste').innerHTML = v.slice(0, 3).map(carteAvisHtml).join('');
+}
+
+/* ===== Vidéos « En cuisine » ===== */
+function videosValides(){
+  const src = (typeof VIDEOS !== 'undefined' && Array.isArray(VIDEOS)) ? VIDEOS : [];
+  return src.filter(v => v && typeof v.fichier === 'string' && v.fichier.trim());
+}
+function rendreVideos(){
+  const v = videosValides();
+  const lien = document.getElementById('nav-cuisine');
+  if(lien) lien.style.display = v.length ? '' : 'none';
+  const zone = document.getElementById('videos-liste');
+  if(!zone) return;
+  /* preload="metadata" : le visiteur ne télécharge que l'aperçu,
+     la vidéo complète ne part qu'à la lecture. */
+  zone.innerHTML = v.map(x => `
+    <figure class="video-carte">
+      <video controls preload="metadata" playsinline src="${photoUrl(x.fichier)}"></video>
+      ${x.titre ? `<figcaption>${escapeHtml(x.titre)}</figcaption>` : ''}
+    </figure>`).join('');
 }
 
 /* ---- Formulaire « Laisser un avis » (envoi Web3Forms, modéré avant publication) ---- */
