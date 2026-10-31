@@ -1,5 +1,5 @@
-/* Fichier généré par la page d'administration — 31/10/2026 20:29:24 */
-const CONFIG_VERSION = 1793474964785;
+/* Fichier généré par la page d'administration — 31/10/2026 20:32:51 */
+const CONFIG_VERSION = 1793475171902;
 const NUMERO_WHATSAPP = "32489765828";
 const IBAN = "BE37 3632 7506 1728";
 const TITULAIRE = "Bouquet Nanhou";
