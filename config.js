@@ -43,21 +43,21 @@ const ZONES = [
 ];
 
 const MENU = [
-  { id:"plat1", cat:"plat", nom:"Koki", prix:15.00, photo:"photos/ndole.jpg",
+  { id:"plat1", cat:"plat", nom:"Koki", prix:15.00, photo:"photos/koki.jpg", webp:true,
     desc:"Une délicieuse spécialité à base de haricots, cuite à la vapeur dans des feuilles. Fondant, savoureux et authentique, un vrai goût du Mboa !", allergenes:"" },
 
-  { id:"plat2", cat:"plat", nom:"Okok sucré", prix:15.00, photo:"photos/porc.jpg",
-    desc:"Une savoureuse spécialité camerounaise à base de feuilles d’okok, préparée avec du sucre et sublimée par une texture fondante. Un vrai délice", allergenes:"Arachide" },
+  { id:"plat2", cat:"plat", nom:"Okok sucré", prix:15.00, photo:"photos/okok-sucre.jpg", webp:true,
+    desc:"Une savoureuse spécialité camerounaise à base de feuilles d’okok, préparée avec du sucre et sublimée par une texture fondante. Un vrai délice.", allergenes:"Arachide" },
 
-  { id:"plat3", cat:"plat", nom:"Ndole royal", prix:15.00, photo:"photos/maquereau.jpg",
-    desc:"Un incontournable de la gastronomie camerounaise, préparé à base de feuilles de ndolé, accompagné de viande, de crevettes et d’arachides. Un plat généreux, riche en saveurs et digne d’un festin royal", allergenes:"Arachides , crustacés" },
+  { id:"plat3", cat:"plat", nom:"Ndolé royal", prix:15.00, photo:"photos/ndole-royal.jpg", webp:true,
+    desc:"Un incontournable de la gastronomie camerounaise, préparé à base de feuilles de ndolé, accompagné de viande, de crevettes et d’arachides. Un plat généreux, riche en saveurs et digne d’un festin royal.", allergenes:"Arachides, crustacés" },
 
-  { id:"accomp3", cat:"accomp", nom:"Manioc vapeur", prix:5.00, photo:"photos/banane-plantain.jpg",
+  { id:"accomp3", cat:"accomp", nom:"Manioc vapeur", prix:5.00, photo:"photos/manioc-vapeur.jpg", webp:true,
     desc:"", allergenes:"aucun" },
 
-  { id:"p1793474815949", cat:"accomp", nom:"Bâton de manioc", prix:5.00, photo:"photos/p1793474815949.jpg",
+  { id:"p1793474815949", cat:"accomp", nom:"Bâton de manioc", prix:5.00, photo:"photos/baton-de-manioc.jpg", webp:true,
     desc:"", allergenes:"" },
 
-  { id:"p1793474869638", cat:"accomp", nom:"Banane vapeur", prix:5.00, photo:"photos/p1793474869638.jpg",
+  { id:"p1793474869638", cat:"accomp", nom:"Banane vapeur", prix:5.00, photo:"photos/banane-vapeur.jpg", webp:true,
     desc:"", allergenes:"" }
 ];

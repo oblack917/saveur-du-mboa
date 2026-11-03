@@ -3,28 +3,31 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Saveurs du Mboa — Le goût authentique, fait maison avec amour</title>
-<meta name="description" content="Chaque semaine, 3 plats camerounais faits maison par Caroline et Viviane. Commandez avant vendredi 12h, livraison le week-end en provinces de Liège et du Luxembourg.">
+<title>Saveurs du Mboa — Cuisine camerounaise faite maison, Liège et Luxembourg</title>
+<meta name="description" content="Chaque semaine, un menu de plats camerounais faits maison par Caroline et Viviane. Commandez avant vendredi 12h, livraison le week-end dans les provinces de Liège et de Luxembourg.">
 
 <!-- Aperçu de partage (Open Graph / Twitter) -->
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Saveurs du Mboa">
 <meta property="og:title" content="Saveurs du Mboa — Cuisine camerounaise faite maison">
-<meta property="og:description" content="Chaque semaine, 3 plats camerounais faits maison par Caroline et Viviane, livrés le week-end en provinces de Liège et du Luxembourg.">
-<meta property="og:image" content="https://saveursdumboa.com/photos/ndole.jpg">
+<meta property="og:description" content="Chaque semaine, un menu de plats camerounais faits maison par Caroline et Viviane, livrés le week-end dans les provinces de Liège et de Luxembourg.">
+<meta property="og:image" content="https://saveursdumboa.com/og-image.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Un plat de ndolé aux crevettes, spécialité camerounaise">
 <meta property="og:url" content="https://saveursdumboa.com/">
 <meta property="og:locale" content="fr_BE">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Saveurs du Mboa — Cuisine camerounaise faite maison">
-<meta name="twitter:description" content="3 plats camerounais faits maison chaque semaine, livrés le week-end (Liège & Luxembourg).">
-<meta name="twitter:image" content="https://saveursdumboa.com/photos/ndole.jpg">
+<meta name="twitter:description" content="Un menu de plats camerounais faits maison chaque semaine, livré le week-end dans les provinces de Liège et de Luxembourg.">
+<meta name="twitter:image" content="https://saveursdumboa.com/og-image.jpg">
 <link rel="canonical" href="https://saveursdumboa.com/">
 <meta name="robots" content="index, follow">
 <meta name="keywords" content="cuisine camerounaise, plats africains, traiteur camerounais, livraison repas Liège, livraison repas Luxembourg belge, ndolé, eru, poulet DG, plats faits maison, Saveurs du Mboa">
 
 <!-- Données structurées : dit à Google que nous sommes un traiteur qui LIVRE,
      ce qu'on cuisine et où. C'est ce qui permet un affichage enrichi. -->
-<script type="application/ld+json">
+<script type="application/ld+json" id="donnees-structurees">
 {
   "@context": "https://schema.org",
   "@graph": [
@@ -32,14 +35,14 @@
       "@type": "FoodEstablishment",
       "@id": "https://saveursdumboa.com/#business",
       "name": "Saveurs du Mboa",
-      "description": "Cuisine camerounaise faite maison par Caroline et Viviane. Chaque semaine, 3 plats et leurs accompagnements, commandés en semaine et livrés le week-end en provinces de Liège et du Luxembourg.",
+      "description": "Cuisine camerounaise faite maison par Caroline et Viviane. Chaque semaine, un menu de plats et leurs accompagnements, commandés en semaine et livrés le week-end dans les provinces de Liège et de Luxembourg.",
       "url": "https://saveursdumboa.com/",
-      "image": "https://saveursdumboa.com/photos/ndole.jpg",
+      "image": "https://saveursdumboa.com/og-image.jpg",
       "logo": "https://saveursdumboa.com/icon-512.png",
       "telephone": "+32489765828",
       "email": "saveursdumboa237@gmail.com",
       "servesCuisine": ["Camerounaise", "Africaine"],
-      "priceRange": "12-15 €",
+      "priceRange": "5-15 €",
       "currenciesAccepted": "EUR",
       "paymentAccepted": "Virement bancaire",
       "sameAs": [
@@ -96,9 +99,11 @@ button{font-family:var(--body);cursor:pointer}
 .wax-bg{
   background-color:var(--brun);
   background-image:linear-gradient(rgba(64,32,14,.84),rgba(64,32,14,.84)),url(photos/wax.jpg);
+  background-image:linear-gradient(rgba(64,32,14,.84),rgba(64,32,14,.84)),image-set(url(photos/wax.webp) type("image/webp"),url(photos/wax.jpg) type("image/jpeg"));
   background-size:auto,340px auto;background-repeat:repeat;
 }
-.wax-band{background-image:url(photos/wax.jpg);background-size:200px auto;height:16px}
+.wax-band{background-image:url(photos/wax.jpg);background-image:image-set(url(photos/wax.webp) type("image/webp"),url(photos/wax.jpg) type("image/jpeg"));background-size:200px auto;height:16px}
+.sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 
 /* ===== Bannière défilante ===== */
 .marquee{background:var(--terracotta);color:var(--creme);overflow:hidden;font-size:.85rem;font-weight:600;letter-spacing:.4px}
@@ -115,7 +120,8 @@ header{position:sticky;top:0;z-index:50;background:var(--brun);color:var(--creme
 .logo .s{font-family:var(--script);font-size:1.5rem;color:var(--creme)}
 .logo .m{font-family:var(--display);font-weight:800;font-size:1.25rem;color:var(--or);letter-spacing:1px}
 .logo .toque{width:2.1em;height:auto;align-self:center;transform:translateY(-2px)}
-.hero-titre{position:relative;display:inline-block}
+.hero-titre{position:relative;display:inline-block;font:inherit;line-height:inherit;margin:0}
+.hero .titre-promesse{display:block;font-family:var(--body);font-weight:600;font-size:clamp(.95rem,2.4vw,1.15rem);letter-spacing:.3px;color:var(--creme);margin-top:.9rem;opacity:.95}
 .hero-titre .titre-script,.hero-titre .titre-mboa{position:relative;z-index:1}
 .hero .toque{position:absolute;top:-3.4rem;right:-2.1rem;width:clamp(74px,12.5vw,118px);height:auto;filter:drop-shadow(0 6px 14px rgba(0,0,0,.35));pointer-events:none;z-index:0}
 @media(max-width:560px){.hero .toque{right:-1.25rem;top:-2rem;width:70px}}
@@ -132,7 +138,8 @@ nav.principal a.actif{background:var(--or);color:var(--brun);opacity:1}
 }
 .btn-panier:hover{background:var(--or-clair)}
 #cart-count{background:var(--brun);color:var(--or);border-radius:999px;min-width:1.4em;height:1.4em;display:inline-flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700}
-.burger{display:none;background:none;border:2px solid rgba(251,241,224,.4);border-radius:10px;color:var(--creme);font-size:1.25rem;padding:.3rem .6rem;line-height:1}
+.burger{display:none;background:none;border:2px solid rgba(251,241,224,.4);border-radius:10px;color:var(--creme);font-size:1.25rem;padding:.3rem .6rem;line-height:1;min-width:2.6rem}
+.burger[aria-expanded="true"]{border-color:var(--or);color:var(--or)}
 @media(max-width:940px){
   nav.principal{
     display:none;position:absolute;top:100%;left:0;right:0;background:var(--brun);
@@ -182,7 +189,17 @@ nav.principal a.actif{background:var(--or);color:var(--brun);opacity:1}
 .ruban{background:var(--or);color:var(--brun);padding:1.1rem 1.5rem}
 .ruban-grid{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:1.2rem;text-align:center}
 @media(max-width:900px){.ruban-grid{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:520px){.ruban-grid{grid-template-columns:1fr}}
+@media(max-width:520px){
+  .ruban{padding:.9rem 1rem}
+  .ruban-grid{gap:.8rem .6rem}
+  .ruban-item .ic{font-size:1.2rem;margin-bottom:.1rem}
+  .ruban-item strong{font-size:.78rem;letter-spacing:.2px}
+  .ruban-item span{font-size:.8rem;line-height:1.35}
+  .hero{padding:3.2rem 1.2rem 2.6rem}
+  .hero .slogan{margin:.7rem auto 1rem}
+  .hero p.intro{font-size:.98rem;margin-bottom:1.2rem}
+  .marquee{font-size:.78rem}
+}
 .ruban-item .ic{font-size:1.5rem;display:block;margin-bottom:.25rem}
 .ruban-item strong{display:block;font-size:.95rem;text-transform:uppercase;letter-spacing:.5px}
 .ruban-item span{font-size:.88rem}
@@ -208,6 +225,7 @@ section{padding:3.6rem 1.5rem}
 .plat{background:var(--creme);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);display:flex;flex-direction:column;border:1px solid rgba(168,72,28,.14)}
 .fond-blanc .plat{background:var(--blanc)}
 .plat-photo{aspect-ratio:4/3;overflow:hidden;background:#e8dcc6}
+.plat-photo picture{display:block;width:100%;height:100%}
 .plat-photo img{width:100%;height:100%;object-fit:cover;transition:transform .35s}
 .plat:hover .plat-photo img{transform:scale(1.04)}
 .plat-corps{padding:1.25rem;display:flex;flex-direction:column;gap:.55rem;flex:1}
@@ -370,6 +388,8 @@ footer p{font-size:.95rem}
 .mini-cart-flottant{position:fixed;bottom:1.2rem;left:1.2rem;z-index:110;background:var(--brun);color:var(--or);padding:.7rem 1rem;border-radius:999px;display:flex;align-items:center;gap:.6rem;box-shadow:0 10px 30px rgba(0,0,0,.18);font-weight:800;border:3px solid rgba(255,255,255,.06);cursor:pointer}
 .mini-cart-flottant .count{background:var(--or);color:var(--brun);padding:.12rem .5rem;border-radius:6px;font-size:.95rem}
 @media(min-width:800px){.mini-cart-flottant{display:none}}
+body.panier-ouvert .mini-cart-flottant,body.panier-ouvert .wa-flottant{display:none}
+body.panier-ouvert{overflow:hidden}
 
 /* Buttons and interactive polish */
 button, .btn-whatsapp, .btn-ajouter{transition:transform .12s ease, box-shadow .12s ease}
@@ -413,8 +433,8 @@ button:active, .btn-whatsapp:active, .btn-ajouter:active{transform:translateY(1p
 
 <header>
   <div class="header-inner">
-    <a class="logo" href="#/accueil"><img class="toque" src="photos/toque.png" alt=""><span class="s">Saveurs du</span><span class="m">MBOA</span></a>
-    <nav class="principal" id="nav">
+    <a class="logo" href="#/accueil" aria-label="Saveurs du Mboa — accueil"><img class="toque" src="photos/toque.png" alt="" width="204" height="149"><span class="s">Saveurs du</span><span class="m">MBOA</span></a>
+    <nav class="principal" id="nav" aria-label="Navigation principale">
       <a href="#/accueil" data-page="accueil">Accueil</a>
       <a href="#/menu" data-page="menu">Le Menu</a>
       <a href="#/histoire" data-page="histoire">Notre Histoire</a>
@@ -424,8 +444,8 @@ button:active, .btn-whatsapp:active, .btn-ajouter:active{transform:translateY(1p
       <a href="#/avis" data-page="avis">Avis</a>
     </nav>
     <div class="header-actions">
-      <button class="btn-panier" onclick="ouvrirPanier()">🧺 <span id="cart-count">0</span></button>
-      <button class="burger" id="burger" aria-label="Ouvrir le menu" onclick="toggleNav()">☰</button>
+      <button class="btn-panier" id="btn-panier" onclick="ouvrirPanier()" aria-controls="drawer" aria-haspopup="dialog"><span aria-hidden="true">🧺</span> <span class="sr-only">Panier, articles :</span> <span id="cart-count">0</span></button>
+      <button class="burger" id="burger" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="nav" onclick="toggleNav()">☰</button>
     </div>
   </div>
 </header>
@@ -435,14 +455,15 @@ button:active, .btn-whatsapp:active, .btn-ajouter:active{transform:translateY(1p
 <!-- ============ PAGE ACCUEIL ============ -->
 <div class="page" id="page-accueil">
   <section class="hero wax-bg">
-    <div class="hero-titre">
-      <img class="toque" src="photos/toque.png" alt="">
+    <h1 class="hero-titre">
+      <img class="toque" src="photos/toque.png" alt="" width="204" height="149">
       <span class="titre-script">Saveurs du</span>
       <span class="titre-mboa">MBOA</span>
-    </div>
+      <span class="titre-promesse">Cuisine camerounaise faite maison — provinces de Liège et de Luxembourg</span>
+    </h1>
     <p class="slogan">Le goût authentique, fait maison avec amour</p>
     <div class="compteur" id="compteur">⏳ <span>Commandes ouvertes</span></div>
-    <p class="intro">Chaque semaine, Caroline et Viviane cuisinent pour vous 3 plats camerounais faits maison, dans le respect des recettes traditionnelles — livrés chez vous le week-end.</p>
+    <p class="intro">Chaque semaine, Caroline et Viviane cuisinent pour vous <span class="js-nb-plats">un menu de plats</span> camerounais faits maison, dans le respect des recettes traditionnelles — livrés chez vous le week-end.</p>
     <div class="hero-cta">
       <a class="btn btn-primaire" href="#/menu">Commander le menu de la semaine</a>
       <a class="btn btn-secondaire" href="#/comment">Comment ça marche</a>
@@ -453,7 +474,7 @@ button:active, .btn-whatsapp:active, .btn-ajouter:active{transform:translateY(1p
     <div class="ruban-grid">
       <div class="ruban-item"><span class="ic">🗓️</span><strong>Commandes ouvertes</strong><span>du <span class="js-ouverture">dimanche 18h</span> au <span class="js-fermeture">vendredi 12h</span></span></div>
       <div class="ruban-item"><span class="ic">🚚</span><strong>Livraison le week-end</strong><span>à partir de 10h</span></div>
-      <div class="ruban-item"><span class="ic">📍</span><strong>Liège &amp; Luxembourg</strong><span>provinces desservies</span></div>
+      <div class="ruban-item"><span class="ic">📍</span><strong>Liège et Luxembourg</strong><span>les deux provinces desservies</span></div>
       <div class="ruban-item"><span class="ic">💶</span><strong>Livraison gratuite</strong><span>jusqu'à <span class="js-km-gratuits">5</span> km — puis <span class="js-frais-km">0,30</span> €/km</span></div>
     </div>
   </div>
@@ -462,9 +483,9 @@ button:active, .btn-whatsapp:active, .btn-ajouter:active{transform:translateY(1p
     <div class="container centre">
       <span class="badge">Cette semaine</span>
       <h2 class="section-titre">Le menu du <span class="accent">week-end</span></h2>
-      <p class="section-sous" style="margin-left:auto;margin-right:auto">Trois plats emblématiques <span class="js-prix-plat">dès 15 €</span>, et leurs accompagnements <span class="js-prix-accomp">dès 5 €</span>.</p>
+      <p class="section-sous" style="margin-left:auto;margin-right:auto" id="accroche-menu">Nos plats de la semaine et leurs accompagnements.</p>
       <div class="plats" id="teaser-plats" style="text-align:left"></div>
-      <a class="btn btn-terre" href="#/menu" style="margin-top:2.2rem">Voir tout le menu &amp; commander</a>
+      <a class="btn btn-terre" href="#/menu" style="margin-top:2.2rem">Voir les accompagnements</a>
     </div>
   </section>
 
@@ -472,7 +493,7 @@ button:active, .btn-whatsapp:active, .btn-ajouter:active{transform:translateY(1p
 
   <section>
     <div class="container deux-col">
-      <div class="photo-cadre"><img src="photos/drapeau-cameroun.svg" alt="Drapeau du Cameroun"></div>
+      <div class="photo-cadre"><img src="photos/drapeau-cameroun.svg" alt="Drapeau du Cameroun" width="800" height="600" loading="lazy" decoding="async"></div>
       <div>
         <span class="badge or">Notre histoire</span>
         <h2 class="section-titre">Le <span class="accent">Mboa</span>, c'est la maison</h2>
@@ -501,7 +522,7 @@ button:active, .btn-whatsapp:active, .btn-ajouter:active{transform:translateY(1p
   <section class="page-hero wax-bg">
     <span class="fil-ariane">Le menu</span>
     <h1>Menu de la <span class="fil">semaine</span></h1>
-    <p>Trois plats faits maison et leurs accompagnements. Choisissez, ajustez les quantités, et envoyez votre commande en un clic.</p>
+    <p><span class="js-nb-plats-maj">Nos plats</span> faits maison et leurs accompagnements. Choisissez, ajustez les quantités, et envoyez votre commande en un clic.</p>
   </section>
   <section class="fond-blanc" style="background:var(--blanc)">
     <div class="container">
@@ -534,11 +555,11 @@ button:active, .btn-whatsapp:active, .btn-ajouter:active{transform:translateY(1p
   </section>
   <section>
     <div class="container deux-col">
-      <div class="photo-cadre"><img src="photos/drapeau-cameroun.svg" alt="Drapeau du Cameroun"></div>
+      <div class="photo-cadre"><img src="photos/drapeau-cameroun.svg" alt="Drapeau du Cameroun" width="800" height="600" loading="lazy" decoding="async"></div>
       <div>
         <h2 class="section-titre">De nos cuisines <span class="accent">à votre table</span></h2>
         <p style="margin-bottom:1rem">Tout a commencé avec <strong>Caroline et Viviane</strong>, deux passionnées de cuisine animées par la même envie : faire voyager les papilles jusqu'au Cameroun.</p>
-        <p>Chaque semaine, elles sélectionnent trois plats emblématiques et les préparent comme à la maison : produits frais, épices authentiques et recettes transmises de génération en génération. Pas de raccourci, pas de compromis — juste le vrai goût du pays.</p>
+        <p>Chaque semaine, elles composent un menu de plats emblématiques et les préparent comme à la maison : produits frais, épices authentiques et recettes transmises de génération en génération. Pas de raccourci, pas de compromis — juste le vrai goût du pays.</p>
       </div>
     </div>
   </section>
@@ -637,7 +658,7 @@ button:active, .btn-whatsapp:active, .btn-ajouter:active{transform:translateY(1p
   <section class="page-hero wax-bg">
     <span class="fil-ariane">Livraison</span>
     <h1>On vient <span class="fil">jusqu'à vous</span></h1>
-    <p>Chaque week-end à partir de 10h, en provinces de Liège et du Luxembourg.</p>
+    <p>Chaque week-end à partir de 10h, dans les provinces de Liège et de Luxembourg.</p>
   </section>
   <section>
     <div class="container livraison-grid">
@@ -645,7 +666,7 @@ button:active, .btn-whatsapp:active, .btn-ajouter:active{transform:translateY(1p
         <h3>📍 Zones desservies &amp; conditions</h3>
         <ul>
           <li><strong>Province de Liège</strong> — toutes communes, depuis la cuisine de Viviane</li>
-          <li><strong>Province du Luxembourg</strong> — toutes communes, depuis la cuisine de Caroline</li>
+          <li><strong>Province de Luxembourg</strong> — toutes communes, depuis la cuisine de Caroline</li>
           <li>Livraison le <strong>samedi et dimanche</strong>, créneaux : <strong class="js-creneaux">10h–13h ou 14h–18h</strong></li>
           <li><strong>Venir chercher</strong> possible dans les deux zones — <strong>0 €</strong></li>
           <li><strong>Gratuite jusqu'à <span class="js-km-gratuits">5</span> km</strong> de la cuisine de votre zone</li>
@@ -693,11 +714,11 @@ button:active, .btn-whatsapp:active, .btn-ajouter:active{transform:translateY(1p
   <section>
     <div class="faq-liste">
       <details class="faq"><summary>Quand puis-je commander ?</summary><div class="rep">Les commandes ouvrent le <strong class="js-ouverture">dimanche 18h</strong> et ferment le <strong class="js-fermeture">vendredi 12h</strong>. Passé ce délai, il faudra attendre la réouverture et le menu de la semaine suivante — nos plats sont préparés en quantité juste, avec des produits frais.</div></details>
-      <details class="faq"><summary>Où livrez-vous exactement ?</summary><div class="rep">Dans les <strong>provinces de Liège et du Luxembourg</strong>. La livraison est gratuite jusqu'à <span class="js-km-gratuits">5</span> km de notre cuisine, puis <span class="js-frais-km">0,30</span> € par kilomètre supplémentaire. Utilisez le calculateur sur la page Livraison pour estimer vos frais.</div></details>
+      <details class="faq"><summary>Où livrez-vous exactement ?</summary><div class="rep">Dans les <strong>provinces de Liège et de Luxembourg</strong>. La livraison est gratuite jusqu'à <span class="js-km-gratuits">5</span> km de notre cuisine, puis <span class="js-frais-km">0,30</span> € par kilomètre supplémentaire. Utilisez le calculateur sur la page Livraison pour estimer vos frais.</div></details>
       <details class="faq"><summary>Quand suis-je livré ?</summary><div class="rep">Le <strong>week-end, samedi ou dimanche à partir de 10h</strong> — vous choisissez le jour au moment de la commande. Nous confirmons le créneau précis la veille par WhatsApp.</div></details>
       <details class="faq"><summary>Pourquoi un acompte de <span class="pct-acompte">50</span> % ?</summary><div class="rep">Nos plats sont cuisinés sur commande, en petite quantité, avec des produits frais. L'acompte confirme votre réservation et nous évite le gaspillage. Il se verse par virement bancaire après confirmation sur WhatsApp. <strong>En cas de désistement après confirmation, l'acompte reste acquis.</strong> Le solde se règle à la livraison.</div></details>
       <details class="faq"><summary>Comment payer le solde ?</summary><div class="rep">À la livraison, en <strong>espèces</strong> ou par <strong>virement instantané</strong>. Simple et sans surprise : le montant exact figure dans votre récapitulatif de commande.</div></details>
-      <details class="faq"><summary>Le menu change-t-il chaque semaine ?</summary><div class="rep">Oui ! Chaque semaine, Caroline et Viviane sélectionnent <strong>3 plats emblématiques</strong> du Cameroun. Suivez-nous sur Instagram et TikTok pour découvrir le menu dès sa publication.</div></details>
+      <details class="faq"><summary>Le menu change-t-il chaque semaine ?</summary><div class="rep">Oui ! Chaque semaine, Caroline et Viviane composent un nouveau menu de <strong>plats emblématiques</strong> du Cameroun — cette semaine, <strong class="js-nb-plats">plusieurs plats</strong> au choix. Suivez-nous sur Instagram et TikTok pour découvrir le menu dès sa publication.</div></details>
       <details class="faq"><summary>Comment réchauffer les plats ?</summary><div class="rep">Réchauffez vos plats à la casserole à feu doux ou au micro-ondes quelques minutes. Ils se conservent <strong>2 à 3 jours au réfrigérateur</strong>.</div></details>
       <details class="faq"><summary>Avez-vous des options pour les allergies ?</summary><div class="rep">Certains plats contiennent des arachides, du poisson ou des crustacés. Indiquez vos allergies dans le champ « Remarques » de la commande : nous vous confirmerons si le plat convient ou vous proposerons une alternative.</div></details>
       <details class="faq"><summary>Puis-je commander pour un événement ou en grande quantité ?</summary><div class="rep">Avec plaisir ! Pour les commandes de groupe, fêtes ou événements, contactez-nous directement sur <strong>WhatsApp au <span class="js-phone">0489 76 58 28</span></strong> — nous préparerons un devis sur mesure.</div></details>
@@ -722,21 +743,23 @@ button:active, .btn-whatsapp:active, .btn-ajouter:active{transform:translateY(1p
       <div style="background:var(--blanc);border-radius:var(--radius);box-shadow:var(--shadow);padding:1.8rem 1.6rem">
 
         <h2 style="color:var(--brun)">Mentions légales</h2>
-        <!-- ⚠️ À METTRE À JOUR DÈS L'OBTENTION DU NUMÉRO BCE : remplacer les trois mentions
-             « en cours d'immatriculation » ci-dessous par la dénomination exacte, le n° BCE
-             et l'adresse du siège / de l'unité d'établissement. Obligatoire en vente à distance. -->
+        <!-- ⚠️ À COMPLÉTER DÈS L'IMMATRICULATION : remplacer chaque mention
+             « en cours » ci-dessous par la dénomination exacte, le n° BCE (et de TVA
+             s'il y en a un), l'adresse de l'unité d'établissement et le nom du
+             responsable. Ces informations sont obligatoires en vente à distance
+             (SPF Économie) et doivent rester accessibles en permanence. -->
         <p style="margin:.6rem 0 1.4rem">
-          <strong>Éditeur du site :</strong> Saveurs du Mboa —
+          <strong>Dénomination :</strong> Saveurs du Mboa —
           <em style="color:var(--brun-2)">activité en cours d'immatriculation à la Banque-Carrefour
           des Entreprises</em>.<br>
           <strong>Numéro d'entreprise (BCE / TVA) :</strong>
           <em style="color:var(--brun-2)">en cours d'attribution — publié ici dès l'immatriculation</em>.<br>
-          <strong>Adresse :</strong>
-          <em style="color:var(--brun-2)">nos cuisines sont situées en provinces de Liège et du
-          Luxembourg ; l'adresse complète est communiquée sur simple demande</em>.<br>
+          <strong>Adresse d'établissement :</strong>
+          <em style="color:var(--brun-2)">publiée ici dès l'immatriculation ; nos deux cuisines sont
+          situées à Fauvillers (province de Luxembourg) et à Saint-Nicolas (province de Liège)</em>.<br>
           <strong>Contact :</strong>
           <a class="js-email" href="mailto:saveursdumboa237@gmail.com">saveursdumboa237@gmail.com</a> —
-          WhatsApp <span class="js-phone">0489 76 58 28</span>.<br>
+          téléphone et WhatsApp <span class="js-phone">0489 76 58 28</span>.<br>
           <strong>Hébergement :</strong> GitHub Pages, fourni par GitHub, Inc.
           (88 Colin P. Kelly Jr. Street, San Francisco, CA 94107, États-Unis).
         </p>
@@ -747,73 +770,122 @@ button:active, .btn-whatsapp:active, .btn-ajouter:active{transform:translateY(1p
           <strong class="js-fermeture">vendredi 12h</strong>, pour une livraison le
           week-end suivant. Nos plats sont cuisinés sur commande, en quantité
           limitée, avec des produits frais.</p>
+        <p style="margin:.4rem 0"><strong>Confirmation.</strong> Le message WhatsApp
+          envoyé depuis le site est une demande de commande. Elle devient ferme
+          lorsque nous y répondons par écrit sur WhatsApp, avec sa référence (MB-…),
+          le détail des plats, le total, l'acompte et le créneau : ce message de
+          confirmation, que vous conservez dans votre téléphone, fait foi.</p>
         <p style="margin:.4rem 0"><strong>Prix.</strong> Plats <span class="js-plage-plat">de 12 à 15 €</span>,
           accompagnements <span class="js-plage-accomp">de 3 à 5 €</span>. Les prix sont indiqués en euros et
           correspondent au montant final à payer par article, hors frais de livraison éventuels. La fourchette
-          ci-dessus reflète automatiquement le menu publié : elle ne peut pas se désynchroniser des prix réels.</p>
+          ci-dessus reflète automatiquement le menu publié.</p>
         <p style="margin:.4rem 0"><strong>Acompte &amp; paiement.</strong> Un acompte
           de <span class="pct-acompte">50</span> % est demandé par virement pour confirmer et réserver la commande.
-          Le solde se règle à la livraison, en espèces ou par virement.
-          <strong>En cas de désistement après confirmation, l'acompte reste
-          acquis</strong> (denrées déjà engagées).</p>
+          Le solde se règle à la livraison, en espèces ou par virement.</p>
+        <p style="margin:.4rem 0"><strong>Annulation.</strong> Vous pouvez annuler
+          gratuitement tant que nous n'avons pas confirmé votre commande. Après
+          confirmation, les ingrédients sont achetés pour vous :
+          <strong>l'acompte reste acquis</strong>. Si c'est nous qui devons annuler
+          (indisponibilité d'un produit, empêchement), l'acompte vous est
+          <strong>intégralement remboursé</strong> sous 7 jours.</p>
         <p style="margin:.4rem 0"><strong>Livraison.</strong> Le samedi ou le
-          dimanche à partir de 10h, en provinces de Liège et du Luxembourg.
+          dimanche à partir de 10h, dans les provinces de Liège et de Luxembourg.
           Gratuite jusqu'à <span class="js-km-gratuits">5</span> km de la cuisine, puis <span class="js-frais-km">0,30</span> €/km. Le créneau est
-          confirmé la veille par WhatsApp.</p>
+          confirmé la veille par WhatsApp. Le retrait sur place est gratuit.</p>
+        <p style="margin:.4rem 0"><strong>Conservation.</strong> Les plats sont à placer
+          au réfrigérateur dès réception et à consommer dans les 2 à 3 jours, après
+          un réchauffage complet. Nous ne pouvons être tenus responsables d'une
+          mauvaise conservation après la remise de la commande.</p>
         <p style="margin:.4rem 0"><strong>Droit de rétractation.</strong> S'agissant
           de <strong>denrées alimentaires périssables préparées sur commande</strong>,
           le droit de rétractation de 14 jours ne s'applique pas (exception légale
           prévue pour ce type de produits).</p>
-        <p style="margin:.4rem 0 1.4rem"><strong>Allergies.</strong> Les informations
-          sur les allergènes sont indiquées à titre indicatif sur la page menu.
-          Nos plats sont préparés dans une cuisine manipulant divers allergènes :
-          en cas d'allergie, signalez-le impérativement lors de la commande.</p>
+        <p style="margin:.4rem 0"><strong>Allergies.</strong> Les informations
+          sur les allergènes sont indiquées sur la page menu. Nos plats sont préparés
+          dans une cuisine manipulant divers allergènes : en cas d'allergie,
+          signalez-le impérativement lors de la commande.</p>
+        <p style="margin:.4rem 0 1.4rem"><strong>Réclamations.</strong> Un souci avec
+          votre commande ? Écrivez-nous dans les 24 heures sur WhatsApp ou à
+          <a class="js-email" href="mailto:saveursdumboa237@gmail.com">saveursdumboa237@gmail.com</a>,
+          si possible avec une photo : nous cherchons toujours une solution à
+          l'amiable. À défaut d'accord, vous pouvez vous adresser gratuitement au
+          <a href="https://mediationconsommateur.be" target="_blank" rel="noopener">Service de Médiation pour le Consommateur</a>.</p>
 
         <h2 style="color:var(--brun)">Politique de confidentialité</h2>
         <p style="margin:.6rem 0 .8rem">
           Nous attachons de l'importance à la protection de vos données
-          personnelles (conformément au RGPD).
+          personnelles, conformément au Règlement général sur la protection des
+          données (RGPD).
         </p>
-        <p style="margin:.4rem 0"><strong>Quelles données et pourquoi ?</strong>
-          Lorsque vous passez commande via WhatsApp, vous nous communiquez votre
-          <strong>nom</strong>, votre <strong>numéro de téléphone</strong> et votre
-          <strong>adresse de livraison</strong>. Ces informations servent
-          uniquement à <strong>préparer et livrer votre commande</strong> et à
-          vous contacter à son sujet.</p>
-        <p style="margin:.4rem 0"><strong>Recherche d'adresse.</strong> Lorsque vous
-          tapez votre adresse dans le champ de livraison, le texte saisi est envoyé
-          au service <strong>OpenStreetMap / Nominatim</strong> afin de vous
-          proposer des suggestions. Aucune autre donnée n'y est transmise.</p>
-        <p style="margin:.4rem 0"><strong>Avis clients.</strong> Lorsque vous
-          laissez un avis, votre nom, votre note et votre commentaire (et, si vous
-          le fournissez, votre e-mail) sont transmis à notre prestataire d'envoi de
-          formulaires <strong>Web3Forms</strong> puis publiés sur le site après
-          modération. Vous pouvez demander la suppression de votre avis en nous
-          écrivant sur WhatsApp.</p>
-        <p style="margin:.4rem 0"><strong>Conservation.</strong> Vos données de
-          commande sont conservées le temps nécessaire au traitement de la commande
-          et au respect de nos éventuelles obligations comptables, puis supprimées.</p>
+        <p style="margin:.4rem 0"><strong>Responsable du traitement.</strong>
+          Saveurs du Mboa (voir les mentions légales ci-dessus), joignable à
+          <a class="js-email" href="mailto:saveursdumboa237@gmail.com">saveursdumboa237@gmail.com</a>.</p>
+        <p style="margin:.4rem 0"><strong>Commandes.</strong> Lorsque vous passez
+          commande, vous nous communiquez votre <strong>nom</strong>, votre
+          <strong>numéro de téléphone</strong>, votre <strong>adresse de livraison</strong>
+          et, si vous le souhaitez, des remarques (allergies, étage…). Ces données
+          servent uniquement à <strong>préparer, livrer et facturer votre commande</strong>
+          et à vous contacter à son sujet. Base juridique : l'exécution du contrat
+          que vous concluez avec nous.</p>
+        <p style="margin:.4rem 0"><strong>Avis clients.</strong> Si vous laissez un
+          avis, votre nom, votre note, votre commentaire (et votre e-mail si vous le
+          donnez) sont utilisés pour modérer et publier l'avis. Base juridique : votre
+          consentement, que vous pouvez retirer à tout moment en demandant la
+          suppression de l'avis.</p>
+        <p style="margin:.4rem 0"><strong>Destinataires.</strong> Vos données ne sont
+          accessibles qu'à Caroline et Viviane, et transitent par les services
+          suivants : <strong>WhatsApp</strong> (Meta) pour l'envoi de la commande,
+          <strong>OpenStreetMap / Nominatim</strong> pour la recherche d'adresse
+          (seul le texte tapé dans le champ adresse leur est envoyé),
+          <strong>Web3Forms</strong> pour la transmission des avis, et
+          <strong>GitHub</strong> qui héberge le site. Certains de ces prestataires
+          sont établis hors de l'Union européenne (notamment aux États-Unis) ; les
+          transferts sont alors encadrés par les garanties prévues par le RGPD
+          (cadre de protection des données UE–États-Unis ou clauses contractuelles
+          types).</p>
+        <p style="margin:.4rem 0"><strong>Durée de conservation.</strong> Les
+          messages de commande sont conservés le temps du traitement de la commande
+          et d'un éventuel litige, puis supprimés ; les informations nécessaires à
+          la comptabilité sont conservées pendant la durée imposée par la loi
+          comptable belge. Les avis restent publiés jusqu'à ce que vous en demandiez
+          le retrait.</p>
         <p style="margin:.4rem 0"><strong>Pas de revente, pas de publicité.</strong>
           Vos données ne sont ni vendues, ni louées, ni utilisées à des fins
           publicitaires.</p>
         <p style="margin:.4rem 0 1.4rem"><strong>Vos droits.</strong> Vous pouvez
-          demander l'accès, la rectification ou l'effacement de vos données en nous
-          écrivant à
-          <a class="js-email" href="mailto:saveursdumboa237@gmail.com">saveursdumboa237@gmail.com</a>.</p>
+          demander l'accès à vos données, leur rectification, leur effacement, la
+          limitation de leur traitement ou vous y opposer, en nous écrivant à
+          <a class="js-email" href="mailto:saveursdumboa237@gmail.com">saveursdumboa237@gmail.com</a>.
+          Si vous estimez que vos droits ne sont pas respectés, vous pouvez
+          introduire une plainte auprès de l'<a href="https://www.autoriteprotectiondonnees.be" target="_blank" rel="noopener">Autorité de protection des données</a>.</p>
 
-        <h2 style="color:var(--brun)">Cookies</h2>
+        <h2 style="color:var(--brun)" id="donnees-appareil">Cookies &amp; données enregistrées sur votre appareil</h2>
+        <p style="margin:.6rem 0 .4rem">
+          Ce site n'utilise <strong>aucun cookie</strong>, ni outil de statistiques,
+          ni publicité. Les polices et les images sont hébergées sur le site
+          lui-même : aucune ressource n'est chargée depuis un service tiers à
+          l'ouverture de la page.</p>
+        <p style="margin:.4rem 0">Pour qu'un appel ou un retour en arrière ne vous
+          fasse pas perdre votre commande en cours, votre navigateur garde
+          <strong>localement, sur votre appareil</strong> :</p>
+        <ul style="margin:.3rem 0 .6rem 1.3rem">
+          <li>le contenu de votre <strong>panier</strong>, la <strong>zone</strong> choisie,
+            l'<strong>adresse de livraison</strong> tapée et sa position sur la carte
+            (latitude/longitude) — pendant <strong>7 jours</strong> au maximum,
+            effacés dès que le panier est vidé ;</li>
+          <li>les dernières <strong>recherches d'adresse</strong> — jusqu'à la fermeture de
+            l'onglet (1 heure au maximum).</li>
+        </ul>
+        <p style="margin:.4rem 0">Ces informations ne nous sont <strong>jamais envoyées</strong> :
+          elles restent dans votre navigateur. Vous pouvez les effacer à tout moment :</p>
         <p style="margin:.6rem 0 0">
-          Ce site n'utilise <strong>aucun cookie de pistage, de statistiques ni de
-          publicité</strong>. Seul un petit enregistrement technique, stocké
-          localement dans votre navigateur, peut mémoriser vos préférences
-          d'affichage. Les polices d'écriture et les images sont hébergées
-          directement sur le site : aucune ressource n'est chargée depuis un service
-          tiers au chargement de la page.
+          <button type="button" class="btn btn-terre" onclick="effacerDonneesLocales()" style="font-size:.92rem;padding:.65rem 1.3rem">🧹 Effacer mes données de cet appareil</button>
+          <span id="msg-effacement" role="status" style="display:block;margin-top:.5rem;font-size:.9rem;color:#1c5b2b"></span>
         </p>
 
       </div>
       <p class="mini" style="text-align:center;margin-top:1.4rem;opacity:.7">
-        Dernière mise à jour : juillet 2026.
+        Dernière mise à jour : novembre 2026.
       </p>
     </div>
   </section>
@@ -826,7 +898,7 @@ button:active, .btn-whatsapp:active, .btn-ajouter:active{transform:translateY(1p
   <div class="footer-grid">
     <div>
       <h4>Saveurs du Mboa</h4>
-      <p style="opacity:.88;max-width:40ch">Cuisine camerounaise faite maison par Caroline et Viviane. Chaque semaine 3 plats et leurs accompagnements, livrés le week-end en provinces de Liège et du Luxembourg.</p>
+      <p style="opacity:.88;max-width:40ch">Cuisine camerounaise faite maison par Caroline et Viviane. Chaque semaine, un menu de plats et leurs accompagnements, livré le week-end dans les provinces de Liège et de Luxembourg.</p>
     </div>
     <div>
       <h4>Contact</h4>
@@ -840,14 +912,14 @@ button:active, .btn-whatsapp:active, .btn-ajouter:active{transform:translateY(1p
       <p><a href="#/menu">Le menu</a></p>
       <p><a href="#/livraison">Livraison</a></p>
       <p><a href="#/faq">FAQ</a></p>
-      <p><a href="#/legal">Mentions légales &amp; confidentialité</a></p>
-      <p><a href="#/legal">Cookies</a></p>
+      <p><a href="#/legal">Mentions légales &amp; conditions de vente</a></p>
+      <p><a href="#/legal" onclick="setTimeout(()=>document.getElementById('donnees-appareil').scrollIntoView(),60)">Confidentialité &amp; données</a></p>
     </div>
   </div>
   <div class="footer-bas">
     <span class="slogan">Le goût authentique, fait maison avec amour</span>
     © 2026 Saveurs du Mboa — Tous droits réservés<br>
-    Provinces de Liège &amp; du Luxembourg
+    Provinces de Liège et de Luxembourg
   </div>
 </footer>
 
@@ -876,10 +948,10 @@ button:active, .btn-whatsapp:active, .btn-ajouter:active{transform:translateY(1p
 .suivi{background:var(--creme);border-radius:var(--radius);padding:1rem 1.1rem;margin-top:1rem}
 .suivi-note{font-size:.85rem;color:#6d5236;margin-top:.9rem;line-height:1.45}
 </style>
-<aside id="drawer" aria-label="Panier">
+<aside id="drawer" role="dialog" aria-modal="true" aria-labelledby="drawer-titre" aria-hidden="true" inert>
   <div class="drawer-tete">
-    <h3>Votre commande</h3>
-    <button onclick="fermerPanier()" aria-label="Fermer le panier">✕</button>
+    <h3 id="drawer-titre">Votre commande</h3>
+    <button id="btn-fermer-panier" onclick="fermerPanier()" aria-label="Fermer le panier">✕</button>
   </div>
   <div class="drawer-corps">
     <div id="lignes"></div>
@@ -954,18 +1026,43 @@ button:active, .btn-whatsapp:active, .btn-ajouter:active{transform:translateY(1p
 <script>
 /* ============ ROUTEUR DE PAGES ============ */
 const PAGES = ["accueil","menu","histoire","comment","livraison","faq","avis","legal"];
+/* Un titre d'onglet par page : plus clair dans l'historique, les favoris et
+   pour les lecteurs d'écran, qui annoncent le titre à chaque changement. */
+const TITRES = {
+  accueil:   "Saveurs du Mboa — Cuisine camerounaise faite maison, Liège et Luxembourg",
+  menu:      "Menu de la semaine — Saveurs du Mboa",
+  histoire:  "Notre histoire — Saveurs du Mboa",
+  comment:   "Comment commander — Saveurs du Mboa",
+  livraison: "Livraison à Liège et dans le Luxembourg — Saveurs du Mboa",
+  faq:       "Questions fréquentes — Saveurs du Mboa",
+  avis:      "Avis clients — Saveurs du Mboa",
+  legal:     "Mentions légales, conditions de vente et confidentialité — Saveurs du Mboa"
+};
 function router(){
   let cible = (location.hash || "#/accueil").replace("#/","");
   if(!PAGES.includes(cible)) cible = "accueil";
   PAGES.forEach(p => document.getElementById("page-"+p).classList.toggle("active", p === cible));
-  document.querySelectorAll("nav.principal a").forEach(a =>
-    a.classList.toggle("actif", a.dataset.page === cible));
-  document.getElementById("nav").classList.remove("ouvert");
+  document.querySelectorAll("nav.principal a").forEach(a => {
+    const actif = a.dataset.page === cible;
+    a.classList.toggle("actif", actif);
+    if(actif) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current");
+  });
+  document.title = TITRES[cible];
+  fermerNav();
   window.scrollTo({top:0, behavior:"instant"});
 }
 window.addEventListener("hashchange", router);
 
-function toggleNav(){ document.getElementById("nav").classList.toggle("ouvert"); }
+/* Menu mobile : l'état ouvert/fermé est annoncé aux aides techniques. */
+function majNav(ouvert){
+  document.getElementById("nav").classList.toggle("ouvert", ouvert);
+  const b = document.getElementById("burger");
+  b.setAttribute("aria-expanded", ouvert ? "true" : "false");
+  b.setAttribute("aria-label", ouvert ? "Fermer le menu" : "Ouvrir le menu");
+  b.textContent = ouvert ? "✕" : "☰";
+}
+function toggleNav(){ majNav(!document.getElementById("nav").classList.contains("ouvert")); }
+function fermerNav(){ majNav(false); }
 
 /* ============ PANIER ============ */
 const panier = {};
@@ -1029,6 +1126,7 @@ function majTextesConfig(){
   document.querySelectorAll('.js-prix-accomp').forEach(el => el.textContent = prixCat('accomp'));
   document.querySelectorAll('.js-plage-plat').forEach(el => el.textContent = prixPlage('plat'));
   document.querySelectorAll('.js-plage-accomp').forEach(el => el.textContent = prixPlage('accomp'));
+  majTextesMenu();
   document.querySelectorAll('.js-ouverture').forEach(el => el.textContent = libelleOuverture());
   document.querySelectorAll('.js-fermeture').forEach(el => el.textContent = libelleFermeture());
   remplirCreneaux();
@@ -1037,6 +1135,51 @@ function majTextesConfig(){
   rendreAvis();
   rendreFormAvis();
   rendreApercuAvis();
+}
+
+/* ===== Textes qui dépendent du nombre de plats =====
+   Le menu change chaque semaine : aucun texte ne doit annoncer « 3 plats » en
+   dur, sinon il contredit le menu dès qu'il en compte 2 ou 5. */
+const NOMBRES = ['zéro','un','deux','trois','quatre','cinq','six','sept','huit','neuf','dix'];
+function nbPlatsTexte(){
+  const n = MENU.filter(p => p.cat === 'plat').length;
+  if(!n) return 'des plats';
+  return (NOMBRES[n] || String(n)) + (n > 1 ? ' plats' : ' plat');
+}
+function majTextesMenu(){
+  const t = nbPlatsTexte();
+  document.querySelectorAll('.js-nb-plats').forEach(el => el.textContent = t);
+  document.querySelectorAll('.js-nb-plats-maj').forEach(el => el.textContent = t.charAt(0).toUpperCase() + t.slice(1));
+  const acc = document.getElementById('accroche-menu');
+  const plats = MENU.filter(p => p.cat === 'plat').map(p => p.prix);
+  if(acc && plats.length){
+    const mn = Math.min(...plats), mx = Math.max(...plats);
+    const prix = mn === mx ? `à ${euroCourt(mn)} chacun` : `de ${euroCourt(mn)} à ${euroCourt(mx)}`;
+    const accomp = prixCat('accomp');
+    acc.textContent = `${t.charAt(0).toUpperCase() + t.slice(1)} cette semaine, ${prix}` +
+      (accomp ? `, et leurs accompagnements ${accomp.startsWith('dès') ? accomp : 'à ' + accomp}.` : '.');
+  }
+  majDonneesStructurees();
+}
+/* Les données lues par Google (fourchette de prix, menu) suivent le menu publié. */
+function majDonneesStructurees(){
+  const el = document.getElementById('donnees-structurees');
+  if(!el || !MENU.length) return;
+  try{
+    const d = JSON.parse(el.textContent);
+    const biz = d['@graph'].find(x => x['@type'] === 'FoodEstablishment');
+    const prix = MENU.map(p => p.prix);
+    biz.priceRange = `${Math.min(...prix)}-${Math.max(...prix)} €`;
+    biz.hasMenu = {
+      '@type':'Menu', name:'Menu de la semaine',
+      hasMenuItem: MENU.map(p => ({
+        '@type':'MenuItem', name:p.nom, ...(p.desc ? {description:p.desc} : {}),
+        image: new URL(p.photo, location.href).href,
+        offers:{ '@type':'Offer', price:p.prix.toFixed(2), priceCurrency:'EUR' }
+      }))
+    };
+    el.textContent = JSON.stringify(d);
+  }catch(e){ /* JSON-LD statique conservé tel quel */ }
 }
 
 /* ===== Créneaux de livraison (réglés dans config.js) =====
@@ -1261,17 +1404,34 @@ function infoAllergenes(p){
     txt:`<strong>Allergènes non renseignés</strong> — demandez-nous avant de commander` };
   if(v.toLowerCase() === 'aucun') return { cls:'allerg-aucun', ic:'🥜',
     txt:`Aucun allergène majeur — confirmé par la cuisine` };
-  return { cls:'', ic:'🥜', txt:`<strong>Allergènes :</strong> ${v}` };
+  return { cls:'', ic:'🥜', txt:`<strong>Allergènes :</strong> ${escapeHtml(listeAllergenes(v))}` };
+}
+
+/* « Arachides , crustacés, » -> « arachides, crustacés » : la saisie de l'admin
+   est libre, on la remet en forme pour l'affichage. */
+function listeAllergenes(v){
+  return v.split(/[,;]/).map(x => x.trim().toLowerCase()).filter(Boolean).join(', ');
+}
+
+/* Photo d'un plat : WebP en deux tailles quand il existe (webp:true dans config.js),
+   JPEG sinon. width/height réservent la place et évitent les sauts de mise en page. */
+function photoHtml(p){
+  const alt = escapeHtml(p.nom + (p.cat === 'plat' ? ' — plat camerounais fait maison' : ' — accompagnement'));
+  const img = `<img src="${photoUrl(p.photo)}" alt="${alt}" width="600" height="450" loading="lazy" decoding="async">`;
+  if(!p.webp) return img;
+  const base = p.photo.replace(/\.jpg$/, '');
+  return `<picture><source type="image/webp" srcset="${photoUrl(base + '-480.webp')} 480w, ${photoUrl(base + '.webp')} 900w"
+    sizes="(max-width:880px) 100vw, 350px">${img}</picture>`;
 }
 
 function carte(p){
   const a = infoAllergenes(p);
   return `
     <article class="plat">
-      <div class="plat-photo"><img src="${photoUrl(p.photo)}" alt="${p.nom}" loading="lazy"></div>
+      <div class="plat-photo">${photoHtml(p)}</div>
       <div class="plat-corps">
-        <h3>${p.nom}</h3>
-        <p class="desc">${p.desc}</p>
+        <h3>${escapeHtml(p.nom)}</h3>
+        ${p.desc ? `<p class="desc">${escapeHtml(p.desc)}</p>` : ''}
         <p class="allergenes ${a.cls}">${a.ic} ${a.txt}</p>
         <div class="plat-pied"><span class="prix">${euro(p.prix)}</span></div>
         <div id="action-${p.id}"></div>
@@ -1282,12 +1442,12 @@ function carte(p){
 function carteTeaser(p){
   return `
     <article class="plat">
-      <div class="plat-photo"><img src="${photoUrl(p.photo)}" alt="${p.nom}" loading="lazy"></div>
+      <div class="plat-photo">${photoHtml(p)}</div>
       <div class="plat-corps">
-        <h3>${p.nom}</h3>
-        <p class="desc">${p.desc}</p>
+        <h3>${escapeHtml(p.nom)}</h3>
+        ${p.desc ? `<p class="desc">${escapeHtml(p.desc)}</p>` : ''}
         <div class="plat-pied"><span class="prix">${euro(p.prix)}</span></div>
-        <a class="btn-ajouter" href="#/menu" style="text-align:center;text-decoration:none">Commander</a>
+        <a class="btn-ajouter" href="#/menu" style="text-align:center;text-decoration:none">Commander ce plat</a>
       </div>
     </article>`;
 }
@@ -1343,6 +1503,22 @@ function sauverPanier(){
 
 function oublierPanier(){
   try{ localStorage.removeItem(CLE_PANIER); }catch(e){}
+}
+
+/* Bouton de la page Confidentialité : efface tout ce que le site garde sur
+   l'appareil (panier, zone, adresse, coordonnées, recherches d'adresse). */
+function effacerDonneesLocales(){
+  Object.keys(panier).forEach(k => delete panier[k]);
+  Object.keys(AUTO).forEach(k => { AUTO[k].coords = null; });
+  ['f-adresse','liv-adresse'].forEach(id => { const el = document.getElementById(id); if(el) el.value = ''; });
+  ['f-zone','liv-zone'].forEach(id => { const el = document.getElementById(id); if(el) el.value = ''; });
+  try{ localStorage.removeItem(CLE_PANIER); sessionStorage.removeItem(CACHE_KEY); }catch(e){}
+  changerZone('panier'); changerZone('livraison');
+  majLienCarte();
+  majTout();
+  oublierPanier();
+  const msg = document.getElementById('msg-effacement');
+  if(msg) msg.textContent = '✅ C\'est fait : plus rien n\'est enregistré par ce site sur cet appareil.';
 }
 
 function restaurerPanier(){
@@ -1426,15 +1602,46 @@ function rendrePanier(){
   sauverPanier();
 }
 
+/* Panier = boîte de dialogue. Fermé, il est « inert » : invisible pour les
+   lecteurs d'écran et impossible à atteindre au clavier. Ouvert, c'est le reste
+   de la page qui devient inerte, et le focus revient où il était à la fermeture. */
+let _focusAvantPanier = null;
+function panierOuvert(){ return document.getElementById('drawer').classList.contains('open'); }
+function fondInerte(actif){
+  ['header','main','footer','.wa-flottant','.mini-cart-flottant','.marquee'].forEach(sel => {
+    const el = document.querySelector(sel);
+    if(el) el.inert = actif;
+  });
+}
 function ouvrirPanier(){
-  document.getElementById('drawer').classList.add('open');
+  const d = document.getElementById('drawer');
+  if(!panierOuvert()) _focusAvantPanier = document.activeElement;
+  fermerNav();
+  d.inert = false;
+  d.setAttribute('aria-hidden', 'false');
+  d.classList.add('open');
   document.getElementById('overlay').classList.add('open');
+  document.body.classList.add('panier-ouvert');
+  fondInerte(true);
+  document.getElementById('btn-fermer-panier').focus({preventScroll:true});
 }
 function fermerPanier(){
-  document.getElementById('drawer').classList.remove('open');
+  const d = document.getElementById('drawer');
+  const etaitOuvert = panierOuvert();
+  d.classList.remove('open');
+  d.setAttribute('aria-hidden', 'true');
+  d.inert = true;
   document.getElementById('overlay').classList.remove('open');
+  document.body.classList.remove('panier-ouvert');
+  fondInerte(false);
+  if(etaitOuvert && _focusAvantPanier && document.contains(_focusAvantPanier)) _focusAvantPanier.focus({preventScroll:true});
+  _focusAvantPanier = null;
 }
-document.addEventListener('keydown', e => { if(e.key === 'Escape') fermerPanier(); });
+document.addEventListener('keydown', e => {
+  if(e.key !== 'Escape') return;
+  if(panierOuvert()) fermerPanier();
+  else if(document.getElementById('nav').classList.contains('ouvert')){ fermerNav(); document.getElementById('burger').focus(); }
+});
 
 /* ============ BANNIÈRE AUTO ============ */
 function remplirMarquee(attempt = 0){
@@ -1460,7 +1667,7 @@ function remplirMarquee(attempt = 0){
   const messages = [
     `🍽️ Menu de la semaine : ${plats} — ${prixCat('plat')}`,
     `⏰ Commandes ouvertes du ${libelleOuverture()} au ${libelleFermeture()}`,
-    `🚚 Livraison le week-end à partir de 10h — Liège & Luxembourg`,
+    `🚚 Livraison le week-end à partir de 10h — provinces de Liège et de Luxembourg`,
     `💛 Le goût authentique, fait maison avec amour`
   ];
   const bloc = messages.map(m => `<span>${m}</span><span class="sep">✦</span>`).join('');
@@ -2051,7 +2258,8 @@ function createMiniCartButton(){
   const btn = document.createElement('button');
   btn.className = 'mini-cart-flottant';
   btn.type = 'button';
-  btn.innerHTML = `<span class="label">Panier</span> <span class="count" id="mini-cart-count">0</span>`;
+  btn.setAttribute('aria-controls', 'drawer');
+  btn.innerHTML = `<span class="label">Panier</span> <span class="count" id="mini-cart-count">0</span><span class="sr-only"> article(s)</span>`;
   btn.addEventListener('click', ()=>{ ouvrirPanier(); });
   document.body.appendChild(btn);
 }

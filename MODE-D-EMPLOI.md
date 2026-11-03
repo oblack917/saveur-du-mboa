@@ -214,3 +214,14 @@ Le site fonctionne, mais il n'est **pas prêt à encaisser**. Dans l'ordre :
 6. 🟡 Les liens **Instagram / TikTok** sont encore vides (`href="#"` dans
    `index.html`, pied de page).
 7. 🟡 Nom de domaine perso (`saveursdumboa.be`) — confort, pas urgent.
+
+## 🛠️ Pour Yann : photos et informations légales
+
+- **Photos** : la page d'administration nomme désormais chaque photo d'après le plat
+  (`photos/ndole-royal.jpg`) et envoie aussi deux versions WebP plus légères
+  (`.webp` et `-480.webp`), signalées par `webp:true` dans `config.js`.
+  Pour réoptimiser les photos à la main et régénérer l'image de partage
+  `og-image.jpg` : `python3 outils/optimiser-photos.py photos/ndole-royal.jpg`
+- **Mentions légales** : dès l'immatriculation, compléter dans `index.html`
+  (section « PAGE LÉGAL ») la dénomination exacte, le numéro BCE/TVA et l'adresse
+  d'établissement — un commentaire ⚠️ indique l'endroit.
